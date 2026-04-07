@@ -1,0 +1,84 @@
+name: Update Trends
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */3 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update-trends:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Fetch Search Console data
+        env:
+          GSC_CLIENT_ID: ${{ secrets.GSC_CLIENT_ID }}
+          GSC_CLIENT_SECRET: ${{ secrets.GSC_CLIENT_SECRET }}
+          GSC_REFRESH_TOKEN: ${{ secrets.GSC_REFRESH_TOKEN }}
+          GSC_SITE_A: ${{ secrets.GSC_SITE_A }}
+          GSC_SITE_B: ${{ secrets.GSC_SITE_B }}
+        run: npm run fetch:gsc
+
+      - name: Fetch GA4 site search
+        env:
+          GA4_PROPERTY_ID_SITE_A: ${{ secrets.GA4_PROPERTY_ID_SITE_A }}
+          GA4_PROPERTY_ID_SITE_B: ${{ secrets.GA4_PROPERTY_ID_SITE_B }}
+          GA4_CLIENT_EMAIL: ${{ secrets.GA4_CLIENT_EMAIL }}
+          GA4_PRIVATE_KEY: ${{ secrets.GA4_PRIVATE_KEY }}
+        run: npm run fetch:ga4-site-search
+
+      - name: Fetch Reddit data
+        env:
+          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+          REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
+          REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
+        run: npm run fetch:reddit
+
+      - name: Fetch HasData Google Trends
+        env:
+          HASDATA_API_KEY: ${{ secrets.HASDATA_API_KEY }}
+        run: npm run fetch:hasdata-trends
+
+      - name: Fetch TrendHunter via Apify
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+        run: npm run fetch:trendhunter
+
+      - name: Fetch Google News trends
+        env:
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+          RAPIDAPI_HOST: ${{ secrets.RAPIDAPI_HOST }}
+        run: npm run fetch:google-news-trends
+
+      - name: Normalize data
+        run: npm run normalize:data
+
+      - name: Build summary
+        run: npm run build:summary
+
+      - name: Commit data updates
+        run: |
+          if [[ -n "$(git status --porcelain public/data)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add public/data
+            git commit -m "chore: refresh trend data"
+            git push
+          else
+            echo "No data changes to commit."
+          fi

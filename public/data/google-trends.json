@@ -1,0 +1,95 @@
+{
+  "generatedAt": "2026-04-07T00:00:00.000Z",
+  "keywords": [
+    {
+      "keyword": "animal cruelty",
+      "normalizedTerm": "animal cruelty",
+      "geo": "US",
+      "timeWindow": "today 1-m",
+      "series": [
+        {
+          "timestamp": "2026-03-08",
+          "value": 34
+        },
+        {
+          "timestamp": "2026-03-15",
+          "value": 38
+        },
+        {
+          "timestamp": "2026-03-22",
+          "value": 42
+        },
+        {
+          "timestamp": "2026-03-29",
+          "value": 57
+        },
+        {
+          "timestamp": "2026-04-05",
+          "value": 68
+        }
+      ],
+      "momentumPct": 100,
+      "breakout": true
+    },
+    {
+      "keyword": "factory farming",
+      "normalizedTerm": "factory farming",
+      "geo": "US",
+      "timeWindow": "today 1-m",
+      "series": [
+        {
+          "timestamp": "2026-03-08",
+          "value": 41
+        },
+        {
+          "timestamp": "2026-03-15",
+          "value": 44
+        },
+        {
+          "timestamp": "2026-03-22",
+          "value": 46
+        },
+        {
+          "timestamp": "2026-03-29",
+          "value": 49
+        },
+        {
+          "timestamp": "2026-04-05",
+          "value": 61
+        }
+      ],
+      "momentumPct": 48.8,
+      "breakout": false
+    },
+    {
+      "keyword": "puppy mills",
+      "normalizedTerm": "puppy mills",
+      "geo": "US",
+      "timeWindow": "today 1-m",
+      "series": [
+        {
+          "timestamp": "2026-03-08",
+          "value": 22
+        },
+        {
+          "timestamp": "2026-03-15",
+          "value": 24
+        },
+        {
+          "timestamp": "2026-03-22",
+          "value": 27
+        },
+        {
+          "timestamp": "2026-03-29",
+          "value": 33
+        },
+        {
+          "timestamp": "2026-04-05",
+          "value": 44
+        }
+      ],
+      "momentumPct": 100,
+      "breakout": true
+    }
+  ]
+}

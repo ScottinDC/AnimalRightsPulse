@@ -1,0 +1,102 @@
+{
+  "generatedAt": "2026-04-07T18:44:24.147Z",
+  "summaryCards": [
+    {
+      "id": "top-signal",
+      "title": "Top signal",
+      "metric": "slaughterhouse conditions",
+      "change": "rising at 55.0",
+      "narrative": "The highest scoring signal blends momentum, novelty, and cross-source confirmation."
+    },
+    {
+      "id": "cross-source",
+      "title": "Cross-source confirmed",
+      "metric": "0",
+      "change": "Signals seen in three or more source families",
+      "narrative": "These are the safest candidates for immediate editorial action."
+    },
+    {
+      "id": "internal-search",
+      "title": "Internal demand gaps",
+      "metric": "4",
+      "change": "GA4 terms with rising on-site demand",
+      "narrative": "These terms often point to navigation gaps or missing explainers."
+    },
+    {
+      "id": "watch-list",
+      "title": "Watch list",
+      "metric": "1",
+      "change": "New or breakout topics",
+      "narrative": "These deserve a faster newsroom review loop than steady demand terms."
+    }
+  ],
+  "storyIdeas": [
+    {
+      "id": "write-now",
+      "category": "Write now",
+      "headline": "Move on slaughterhouse conditions before the broader cycle catches up",
+      "rationale": "High-scoring, cross-source confirmed terms should convert into quick-turn coverage or refreshed explainers.",
+      "relatedTerms": [
+        "slaughterhouse conditions",
+        "wildlife trafficking law",
+        "factory farming protest"
+      ],
+      "sources": [
+        "gsc",
+        "gsc",
+        "ga4"
+      ],
+      "priority": 1
+    },
+    {
+      "id": "monitor",
+      "category": "Monitor",
+      "headline": "Track whether fur ban states graduates from social chatter to search demand",
+      "rationale": "Signals with strong Reddit or TrendHunter movement but lighter site demand may be early indicators rather than immediate assignments.",
+      "relatedTerms": [
+        "fur ban states",
+        "foie gras ban",
+        "state fur bans"
+      ],
+      "sources": [
+        "gsc",
+        "gsc",
+        "ga4"
+      ],
+      "priority": 2
+    },
+    {
+      "id": "evergreen",
+      "category": "Evergreen update",
+      "headline": "Refresh foundational coverage around animal testing cosmetics ",
+      "rationale": "If a term rises in GSC and internal search at the same time, a clearer evergreen explainer or FAQ often pays off faster than net-new reporting.",
+      "relatedTerms": [
+        "animal testing cosmetics",
+        "animal cruelty laws",
+        "puppy mills"
+      ],
+      "sources": [
+        "ga4",
+        "gsc",
+        "google-trends"
+      ],
+      "priority": 2
+    },
+    {
+      "id": "ux",
+      "category": "Improve navigation/search UX",
+      "headline": "Reduce friction where visitors search for topics the site still hides",
+      "rationale": "Repeated internal-search demand with weak organic landing-page alignment usually means the content exists but the path to it is poor.",
+      "relatedTerms": [
+        "factory farming protest",
+        "state fur bans",
+        "animal testing cosmetics",
+        "puppy mills map"
+      ],
+      "sources": [
+        "ga4"
+      ],
+      "priority": 3
+    }
+  ]
+}

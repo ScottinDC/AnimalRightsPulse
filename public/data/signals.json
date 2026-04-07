@@ -1,0 +1,465 @@
+{
+  "generatedAt": "2026-04-07T18:44:04.983Z",
+  "signals": [
+    {
+      "id": "gsc:site-b:slaughterhouse conditions",
+      "term": "slaughterhouse conditions",
+      "normalizedTerm": "slaughterhouse conditions",
+      "source": "gsc",
+      "site": "site-b",
+      "sourceLabel": "GSC SITE-B",
+      "trendScore": 55.016,
+      "trendLabel": "rising",
+      "crossSourceCount": 2,
+      "timeWindow": "current:2026-03-31:2026-04-06|previous:2026-03-24:2026-03-30",
+      "metrics": {
+        "clicks": 126.9,
+        "impressions": 128.6,
+        "ctr": 15.6,
+        "position": 38.6,
+        "novelty": 0,
+        "sourceCount": 2
+      },
+      "flags": [
+        "breakout",
+        "page-linked"
+      ],
+      "context": "/slaughterhouse-conditions-report",
+      "url": "/slaughterhouse-conditions-report"
+    },
+    {
+      "id": "gsc:site-b:wildlife trafficking law",
+      "term": "wildlife trafficking law",
+      "normalizedTerm": "wildlife trafficking law",
+      "source": "gsc",
+      "site": "site-b",
+      "sourceLabel": "GSC SITE-B",
+      "trendScore": 53,
+      "trendLabel": "new",
+      "crossSourceCount": 1,
+      "timeWindow": "current:2026-03-31:2026-04-06|previous:2026-03-24:2026-03-30",
+      "metrics": {
+        "clicks": 100,
+        "impressions": 100,
+        "ctr": 100,
+        "position": 0,
+        "novelty": 1,
+        "sourceCount": 1
+      },
+      "flags": [
+        "new",
+        "page-linked"
+      ],
+      "context": "/wildlife-trafficking-law",
+      "url": "/wildlife-trafficking-law"
+    },
+    {
+      "id": "ga4:site-b:factory farming protest",
+      "term": "factory farming protest",
+      "normalizedTerm": "factory farming protest",
+      "source": "ga4",
+      "site": "site-b",
+      "sourceLabel": "GA4 SITE-B",
+      "trendScore": 48,
+      "trendLabel": "rising",
+      "crossSourceCount": 1,
+      "timeWindow": "current:2026-03-31:2026-04-06|previous:2026-03-24:2026-03-30",
+      "metrics": {
+        "searches": 200,
+        "repeatRate": 250,
+        "novelty": 0,
+        "sourceCount": 1
+      },
+      "flags": [
+        "new",
+        "internal-demand"
+      ],
+      "context": "Internal site search"
+    },
+    {
+      "id": "gsc:site-a:fur ban states",
+      "term": "fur ban states",
+      "normalizedTerm": "fur ban states",
+      "source": "gsc",
+      "site": "site-a",
+      "sourceLabel": "GSC SITE-A",
+      "trendScore": 41.364000000000004,
+      "trendLabel": "rising",
+      "crossSourceCount": 1,
+      "timeWindow": "current:2026-03-31:2026-04-06|previous:2026-03-24:2026-03-30",
+      "metrics": {
+        "clicks": 120.3,
+        "impressions": 77.7,
+        "ctr": 23.2,
+        "position": 37.9,
+        "novelty": 0,
+        "sourceCount": 1
+      },
+      "flags": [
+        "breakout",
+        "page-linked"
+      ],
+      "context": "/fur-ban-states",
+      "url": "/fur-ban-states"
+    },
+    {
+      "id": "gsc:site-a:foie gras ban",
+      "term": "foie gras ban",
+      "normalizedTerm": "foie gras ban",
+      "source": "gsc",
+      "site": "site-a",
+      "sourceLabel": "GSC SITE-A",
+      "trendScore": 38.071999999999996,
+      "trendLabel": "rising",
+      "crossSourceCount": 1,
+      "timeWindow": "current:2026-03-31:2026-04-06|previous:2026-03-24:2026-03-30",
+      "metrics": {
+        "clicks": 124.4,
+        "impressions": 45.1,
+        "ctr": 55.6,
+        "position": 26.7,
+        "novelty": 0,
+        "sourceCount": 1
+      },
+      "flags": [
+        "new",
+        "page-linked"
+      ],
+      "context": "/foie-gras-ban-explainer",
+      "url": "/foie-gras-ban-explainer"
+    },
+    {
+      "id": "ga4:site-a:state fur bans",
+      "term": "state fur bans",
+      "normalizedTerm": "state fur bans",
+      "source": "ga4",
+      "site": "site-a",
+      "sourceLabel": "GA4 SITE-A",
+      "trendScore": 31.151999999999997,
+      "trendLabel": "rising",
+      "crossSourceCount": 1,
+      "timeWindow": "current:2026-03-31:2026-04-06|previous:2026-03-24:2026-03-30",
+      "metrics": {
+        "searches": 134.6,
+        "repeatRate": 137.5,
+        "novelty": 0,
+        "sourceCount": 1
+      },
+      "flags": [
+        "breakout",
+        "internal-demand"
+      ],
+      "context": "Internal site search"
+    },
+    {
+      "id": "ga4:site-a:animal testing cosmetics",
+      "term": "animal testing cosmetics",
+      "normalizedTerm": "animal testing cosmetics",
+      "source": "ga4",
+      "site": "site-a",
+      "sourceLabel": "GA4 SITE-A",
+      "trendScore": 30.336,
+      "trendLabel": "rising",
+      "crossSourceCount": 1,
+      "timeWindow": "current:2026-03-31:2026-04-06|previous:2026-03-24:2026-03-30",
+      "metrics": {
+        "searches": 112.8,
+        "repeatRate": 160,
+        "novelty": 0,
+        "sourceCount": 1
+      },
+      "flags": [
+        "breakout",
+        "internal-demand"
+      ],
+      "context": "Internal site search"
+    },
+    {
+      "id": "gsc:site-a:animal cruelty laws",
+      "term": "animal cruelty laws",
+      "normalizedTerm": "animal cruelty laws",
+      "source": "gsc",
+      "site": "site-a",
+      "sourceLabel": "GSC SITE-A",
+      "trendScore": 26.913999999999998,
+      "trendLabel": "rising",
+      "crossSourceCount": 1,
+      "timeWindow": "current:2026-03-31:2026-04-06|previous:2026-03-24:2026-03-30",
+      "metrics": {
+        "clicks": 63.8,
+        "impressions": 61.1,
+        "ctr": 1.7,
+        "position": 26.2,
+        "novelty": 0,
+        "sourceCount": 1
+      },
+      "flags": [
+        "rising",
+        "page-linked"
+      ],
+      "context": "/animal-cruelty-laws",
+      "url": "/animal-cruelty-laws"
+    },
+    {
+      "id": "google-trends:global:puppy mills",
+      "term": "puppy mills",
+      "normalizedTerm": "puppy mills",
+      "source": "google-trends",
+      "site": "global",
+      "sourceLabel": "Google Trends",
+      "trendScore": 23,
+      "trendLabel": "rising",
+      "crossSourceCount": 2,
+      "timeWindow": "today 1-m",
+      "metrics": {
+        "googleTrendsVelocity": 100,
+        "sourceCount": 2,
+        "novelty": 1
+      },
+      "flags": [
+        "breakout"
+      ],
+      "context": "US"
+    },
+    {
+      "id": "reddit:global:slaughterhouse conditions",
+      "term": "slaughterhouse conditions",
+      "normalizedTerm": "slaughterhouse conditions",
+      "source": "reddit",
+      "site": "global",
+      "sourceLabel": "Reddit",
+      "trendScore": 20.962,
+      "trendLabel": "rising",
+      "crossSourceCount": 2,
+      "timeWindow": "reddit:24h",
+      "metrics": {
+        "redditVelocity": 54.2,
+        "sourceCount": 2,
+        "novelty": 1
+      },
+      "flags": [
+        "community-topic"
+      ],
+      "context": "3 repeated title matches"
+    },
+    {
+      "id": "google-news:global:animal testing",
+      "term": "animal testing",
+      "normalizedTerm": "animal testing",
+      "source": "google-news",
+      "site": "global",
+      "sourceLabel": "Google News",
+      "trendScore": 20.1,
+      "trendLabel": "rising",
+      "crossSourceCount": 1,
+      "timeWindow": "google-news:30d",
+      "metrics": {
+        "googleNewsVelocity": 130,
+        "sourceCount": 1,
+        "novelty": 1
+      },
+      "flags": [
+        "news-momentum"
+      ],
+      "context": "18 coverage units"
+    },
+    {
+      "id": "ga4:site-b:puppy mills map",
+      "term": "puppy mills map",
+      "normalizedTerm": "puppy mills map",
+      "source": "ga4",
+      "site": "site-b",
+      "sourceLabel": "GA4 SITE-B",
+      "trendScore": 19.356,
+      "trendLabel": "steady",
+      "crossSourceCount": 1,
+      "timeWindow": "current:2026-03-31:2026-04-06|previous:2026-03-24:2026-03-30",
+      "metrics": {
+        "searches": 90.9,
+        "repeatRate": 55.6,
+        "novelty": 0,
+        "sourceCount": 1
+      },
+      "flags": [
+        "rising",
+        "internal-demand"
+      ],
+      "context": "Internal site search"
+    },
+    {
+      "id": "google-trends:global:animal cruelty",
+      "term": "animal cruelty",
+      "normalizedTerm": "animal cruelty",
+      "source": "google-trends",
+      "site": "global",
+      "sourceLabel": "Google Trends",
+      "trendScore": 19,
+      "trendLabel": "steady",
+      "crossSourceCount": 1,
+      "timeWindow": "today 1-m",
+      "metrics": {
+        "googleTrendsVelocity": 100,
+        "sourceCount": 1,
+        "novelty": 1
+      },
+      "flags": [
+        "breakout"
+      ],
+      "context": "US"
+    },
+    {
+      "id": "gsc:site-b:factory farming facts",
+      "term": "factory farming facts",
+      "normalizedTerm": "factory farming facts",
+      "source": "gsc",
+      "site": "site-b",
+      "sourceLabel": "GSC SITE-B",
+      "trendScore": 17.560000000000002,
+      "trendLabel": "steady",
+      "crossSourceCount": 1,
+      "timeWindow": "current:2026-03-31:2026-04-06|previous:2026-03-24:2026-03-30",
+      "metrics": {
+        "clicks": 42.1,
+        "impressions": 23,
+        "ctr": 15.7,
+        "position": 23.8,
+        "novelty": 0,
+        "sourceCount": 1
+      },
+      "flags": [
+        "rising",
+        "page-linked"
+      ],
+      "context": "/factory-farming-facts",
+      "url": "/factory-farming-facts"
+    },
+    {
+      "id": "google-news:global:fur ban",
+      "term": "fur ban",
+      "normalizedTerm": "fur ban",
+      "source": "google-news",
+      "site": "global",
+      "sourceLabel": "Google News",
+      "trendScore": 16.054000000000002,
+      "trendLabel": "steady",
+      "crossSourceCount": 1,
+      "timeWindow": "google-news:30d",
+      "metrics": {
+        "googleNewsVelocity": 72.2,
+        "sourceCount": 1,
+        "novelty": 1
+      },
+      "flags": [
+        "news-momentum"
+      ],
+      "context": "12 coverage units"
+    },
+    {
+      "id": "trendhunter:global:cruelty free policy trackers gain traction",
+      "term": "Cruelty-free policy trackers gain traction",
+      "normalizedTerm": "cruelty free policy trackers gain traction",
+      "source": "trendhunter",
+      "site": "global",
+      "sourceLabel": "TrendHunter",
+      "trendScore": 15.92,
+      "trendLabel": "steady",
+      "crossSourceCount": 1,
+      "timeWindow": "trendhunter:recent",
+      "metrics": {
+        "trendHunterFreshness": 82,
+        "sourceCount": 1,
+        "novelty": 1
+      },
+      "flags": [
+        "Policy"
+      ],
+      "context": "Policy tracker products are surfacing as repeat concepts in animal-rights adjacent coverage.",
+      "url": "https://www.trendhunter.com/trends/cruelty-free-policy-trackers"
+    },
+    {
+      "id": "reddit:global:puppy mills",
+      "term": "puppy mills",
+      "normalizedTerm": "puppy mills",
+      "source": "reddit",
+      "site": "global",
+      "sourceLabel": "Reddit",
+      "trendScore": 12.818,
+      "trendLabel": "steady",
+      "crossSourceCount": 2,
+      "timeWindow": "reddit:24h",
+      "metrics": {
+        "redditVelocity": 43.8,
+        "sourceCount": 2,
+        "novelty": 0
+      },
+      "flags": [
+        "community-topic"
+      ],
+      "context": "2 repeated title matches"
+    },
+    {
+      "id": "reddit:global:factory farming",
+      "term": "factory farming",
+      "normalizedTerm": "factory farming",
+      "source": "reddit",
+      "site": "global",
+      "sourceLabel": "Reddit",
+      "trendScore": 12.367,
+      "trendLabel": "steady",
+      "crossSourceCount": 2,
+      "timeWindow": "reddit:24h",
+      "metrics": {
+        "redditVelocity": 39.7,
+        "sourceCount": 2,
+        "novelty": 0
+      },
+      "flags": [
+        "community-topic"
+      ],
+      "context": "2 repeated title matches"
+    },
+    {
+      "id": "google-trends:global:factory farming",
+      "term": "factory farming",
+      "normalizedTerm": "factory farming",
+      "source": "google-trends",
+      "site": "global",
+      "sourceLabel": "Google Trends",
+      "trendScore": 11.904,
+      "trendLabel": "steady",
+      "crossSourceCount": 2,
+      "timeWindow": "today 1-m",
+      "metrics": {
+        "googleTrendsVelocity": 48.8,
+        "sourceCount": 2,
+        "novelty": 0
+      },
+      "flags": [
+        "watchlist"
+      ],
+      "context": "US"
+    },
+    {
+      "id": "trendhunter:global:animal welfare law explainers become classroom trend",
+      "term": "Animal welfare law explainers become classroom trend",
+      "normalizedTerm": "animal welfare law explainers become classroom trend",
+      "source": "trendhunter",
+      "site": "global",
+      "sourceLabel": "TrendHunter",
+      "trendScore": 9.28,
+      "trendLabel": "steady",
+      "crossSourceCount": 1,
+      "timeWindow": "trendhunter:recent",
+      "metrics": {
+        "trendHunterFreshness": 88,
+        "sourceCount": 1,
+        "novelty": 0
+      },
+      "flags": [
+        "Education"
+      ],
+      "context": "Educators are packaging animal-rights policy explainers into classroom media kits.",
+      "url": "https://www.trendhunter.com/trends/animal-welfare-law"
+    }
+  ]
+}

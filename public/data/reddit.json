@@ -1,0 +1,102 @@
+{
+  "generatedAt": "2026-04-07T00:00:00.000Z",
+  "subreddit": "AnimalRights",
+  "posts": [
+    {
+      "id": "r1",
+      "title": "New undercover footage sparks debate over slaughterhouse conditions",
+      "score": 328,
+      "numComments": 74,
+      "createdUtc": "2026-04-06T18:00:00.000Z",
+      "permalink": "/r/AnimalRights/comments/r1",
+      "url": "https://example.org/story/slaughterhouse-conditions",
+      "author": "signalwatcher",
+      "flair": "News",
+      "linkedDomain": "example.org",
+      "velocityScore": 54.2
+    },
+    {
+      "id": "r2",
+      "title": "Why are puppy mills still legal in so many states?",
+      "score": 271,
+      "numComments": 52,
+      "createdUtc": "2026-04-06T12:00:00.000Z",
+      "permalink": "/r/AnimalRights/comments/r2",
+      "url": "https://example.com/puppy-mills",
+      "author": "justiceforall",
+      "flair": "Discussion",
+      "linkedDomain": "example.com",
+      "velocityScore": 43.8
+    },
+    {
+      "id": "r3",
+      "title": "Factory farming protest turnout grows after new report",
+      "score": 219,
+      "numComments": 49,
+      "createdUtc": "2026-04-06T09:00:00.000Z",
+      "permalink": "/r/AnimalRights/comments/r3",
+      "url": "https://newsroom.org/factory-farming-protest",
+      "author": "veganfieldnotes",
+      "flair": "Activism",
+      "linkedDomain": "newsroom.org",
+      "velocityScore": 39.7
+    }
+  ],
+  "repeatedPhrases": [
+    {
+      "phrase": "slaughterhouse conditions",
+      "normalizedTerm": "slaughterhouse conditions",
+      "count": 3,
+      "postIds": [
+        "r1"
+      ],
+      "velocityScore": 54.2
+    },
+    {
+      "phrase": "puppy mills",
+      "normalizedTerm": "puppy mills",
+      "count": 2,
+      "postIds": [
+        "r2"
+      ],
+      "velocityScore": 43.8
+    },
+    {
+      "phrase": "factory farming",
+      "normalizedTerm": "factory farming",
+      "count": 2,
+      "postIds": [
+        "r3"
+      ],
+      "velocityScore": 39.7
+    }
+  ],
+  "linkedDomains": [
+    {
+      "domain": "example.org",
+      "count": 1
+    },
+    {
+      "domain": "example.com",
+      "count": 1
+    },
+    {
+      "domain": "newsroom.org",
+      "count": 1
+    }
+  ],
+  "recurringTopics": [
+    {
+      "topic": "slaughterhouse conditions",
+      "count": 3
+    },
+    {
+      "topic": "puppy mills",
+      "count": 2
+    },
+    {
+      "topic": "factory farming",
+      "count": 2
+    }
+  ]
+}

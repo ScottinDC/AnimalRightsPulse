@@ -1,0 +1,38 @@
+{
+  "name": "animal-rights-signal-monitor",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "lint": "tsc --noEmit",
+    "fetch:gsc": "node scripts/fetch-gsc.mjs",
+    "fetch:ga4-site-search": "node scripts/fetch-ga4-site-search.mjs",
+    "fetch:reddit": "node scripts/fetch-reddit.mjs",
+    "fetch:hasdata-trends": "node scripts/fetch-hasdata-trends.mjs",
+    "fetch:trendhunter": "node scripts/fetch-trendhunter.mjs",
+    "fetch:google-news-trends": "node scripts/fetch-google-news-trends.mjs",
+    "normalize:data": "node scripts/normalize-data.mjs",
+    "build:summary": "node scripts/build-summary.mjs",
+    "pipeline": "npm run fetch:gsc && npm run fetch:ga4-site-search && npm run fetch:reddit && npm run fetch:hasdata-trends && npm run fetch:trendhunter && npm run fetch:google-news-trends && npm run normalize:data && npm run build:summary"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "recharts": "^2.15.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.2",
+    "@types/react": "^18.3.20",
+    "@types/react-dom": "^18.3.6",
+    "@vitejs/plugin-react": "^4.4.1",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.3",
+    "vite": "^5.4.19"
+  }
+}

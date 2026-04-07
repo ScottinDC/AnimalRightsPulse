@@ -1,0 +1,64 @@
+{
+  "generatedAt": "2026-04-07T18:44:01.643Z",
+  "site": "global",
+  "window": {
+    "currentStart": "2026-03-31",
+    "currentEnd": "2026-04-06",
+    "previousStart": "2026-03-24",
+    "previousEnd": "2026-03-30"
+  },
+  "searches": [
+    {
+      "term": "factory farming protest",
+      "normalizedTerm": "factory farming protest",
+      "site": "site-b",
+      "currentSearches": 54,
+      "previousSearches": 18,
+      "currentRepeatUsers": 21,
+      "previousRepeatUsers": 6,
+      "searchGrowthPct": 200,
+      "repeatDemandPct": 250,
+      "trendScore": 59.4,
+      "trendLabel": "new"
+    },
+    {
+      "term": "state fur bans",
+      "normalizedTerm": "state fur bans",
+      "site": "site-a",
+      "currentSearches": 61,
+      "previousSearches": 26,
+      "currentRepeatUsers": 19,
+      "previousRepeatUsers": 8,
+      "searchGrowthPct": 134.6,
+      "repeatDemandPct": 137.5,
+      "trendScore": 47.8,
+      "trendLabel": "breakout"
+    },
+    {
+      "term": "animal testing cosmetics",
+      "normalizedTerm": "animal testing cosmetics",
+      "site": "site-a",
+      "currentSearches": 83,
+      "previousSearches": 39,
+      "currentRepeatUsers": 26,
+      "previousRepeatUsers": 10,
+      "searchGrowthPct": 112.8,
+      "repeatDemandPct": 160,
+      "trendScore": 45.2,
+      "trendLabel": "breakout"
+    },
+    {
+      "term": "puppy mills map",
+      "normalizedTerm": "puppy mills map",
+      "site": "site-b",
+      "currentSearches": 42,
+      "previousSearches": 22,
+      "currentRepeatUsers": 14,
+      "previousRepeatUsers": 9,
+      "searchGrowthPct": 90.9,
+      "repeatDemandPct": 55.6,
+      "trendScore": 31.3,
+      "trendLabel": "rising"
+    }
+  ]
+}

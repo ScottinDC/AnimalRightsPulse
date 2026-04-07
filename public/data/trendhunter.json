@@ -1,0 +1,47 @@
+{
+  "generatedAt": "2026-04-07T00:00:00.000Z",
+  "items": [
+    {
+      "id": "th1",
+      "title": "Animal welfare law explainers become classroom trend",
+      "normalizedTerm": "animal welfare law explainers become classroom trend",
+      "url": "https://www.trendhunter.com/trends/animal-welfare-law",
+      "category": "Education",
+      "summary": "Educators are packaging animal-rights policy explainers into classroom media kits.",
+      "freshnessHours": 12,
+      "recurrenceCount": 3,
+      "region": "US"
+    },
+    {
+      "id": "th2",
+      "title": "Cruelty-free policy trackers gain traction",
+      "normalizedTerm": "cruelty free policy trackers gain traction",
+      "url": "https://www.trendhunter.com/trends/cruelty-free-policy-trackers",
+      "category": "Policy",
+      "summary": "Policy tracker products are surfacing as repeat concepts in animal-rights adjacent coverage.",
+      "freshnessHours": 18,
+      "recurrenceCount": 2,
+      "region": "Global"
+    }
+  ],
+  "repeatedConcepts": [
+    {
+      "concept": "animal welfare",
+      "count": 2
+    },
+    {
+      "concept": "policy trackers",
+      "count": 2
+    }
+  ],
+  "topicClusters": [
+    {
+      "cluster": "Education",
+      "count": 1
+    },
+    {
+      "cluster": "Policy",
+      "count": 1
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "generatedAt": "2026-04-07T00:00:00.000Z",
+  "site": "site-b",
+  "window": {
+    "currentStart": "2026-03-31",
+    "currentEnd": "2026-04-06",
+    "previousStart": "2026-03-24",
+    "previousEnd": "2026-03-30"
+  },
+  "queries": [
+    {
+      "term": "factory farming facts",
+      "normalizedTerm": "factory farming facts",
+      "site": "site-b",
+      "page": "/factory-farming-facts",
+      "currentClicks": 189,
+      "previousClicks": 133,
+      "currentImpressions": 3210,
+      "previousImpressions": 2610,
+      "currentCtr": 0.059,
+      "previousCtr": 0.051,
+      "currentPosition": 4.8,
+      "previousPosition": 6.3,
+      "clickGrowthPct": 42.1,
+      "impressionGrowthPct": 23,
+      "ctrGrowthPct": 15.7,
+      "positionGainPct": 23.8,
+      "trendScore": 31.6,
+      "trendLabel": "rising"
+    },
+    {
+      "term": "slaughterhouse conditions",
+      "normalizedTerm": "slaughterhouse conditions",
+      "site": "site-b",
+      "page": "/slaughterhouse-conditions-report",
+      "currentClicks": 118,
+      "previousClicks": 52,
+      "currentImpressions": 1600,
+      "previousImpressions": 700,
+      "currentCtr": 0.074,
+      "previousCtr": 0.064,
+      "currentPosition": 5.4,
+      "previousPosition": 8.8,
+      "clickGrowthPct": 126.9,
+      "impressionGrowthPct": 128.6,
+      "ctrGrowthPct": 15.6,
+      "positionGainPct": 38.6,
+      "trendScore": 61.8,
+      "trendLabel": "breakout"
+    },
+    {
+      "term": "wildlife trafficking law",
+      "normalizedTerm": "wildlife trafficking law",
+      "site": "site-b",
+      "page": "/wildlife-trafficking-law",
+      "currentClicks": 67,
+      "previousClicks": 0,
+      "currentImpressions": 940,
+      "previousImpressions": 0,
+      "currentCtr": 0.071,
+      "previousCtr": 0,
+      "currentPosition": 11.6,
+      "previousPosition": 11.6,
+      "clickGrowthPct": 100,
+      "impressionGrowthPct": 100,
+      "ctrGrowthPct": 100,
+      "positionGainPct": 0,
+      "trendScore": 58.9,
+      "trendLabel": "new"
+    }
+  ],
+  "pages": [
+    {
+      "page": "/slaughterhouse-conditions-report",
+      "site": "site-b",
+      "currentClicks": 118,
+      "previousClicks": 52,
+      "currentImpressions": 1600,
+      "previousImpressions": 700,
+      "clickGrowthPct": 126.9,
+      "impressionGrowthPct": 128.6,
+      "associatedTerms": [
+        "slaughterhouse conditions"
+      ],
+      "opportunity": "Expand supporting coverage"
+    },
+    {
+      "page": "/factory-farming-facts",
+      "site": "site-b",
+      "currentClicks": 189,
+      "previousClicks": 133,
+      "currentImpressions": 3210,
+      "previousImpressions": 2610,
+      "clickGrowthPct": 42.1,
+      "impressionGrowthPct": 23,
+      "associatedTerms": [
+        "factory farming facts"
+      ],
+      "opportunity": "Refresh ranking signals"
+    }
+  ]
+}

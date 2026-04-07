@@ -1,0 +1,61 @@
+{
+  "generatedAt": "2026-04-07T00:00:00.000Z",
+  "keywords": [
+    {
+      "keyword": "animal testing",
+      "normalizedTerm": "animal testing",
+      "series": [
+        {
+          "timestamp": "2026-03-08",
+          "value": 20
+        },
+        {
+          "timestamp": "2026-03-15",
+          "value": 24
+        },
+        {
+          "timestamp": "2026-03-22",
+          "value": 29
+        },
+        {
+          "timestamp": "2026-03-29",
+          "value": 35
+        },
+        {
+          "timestamp": "2026-04-05",
+          "value": 46
+        }
+      ],
+      "movementPct": 130,
+      "coverageCount": 18
+    },
+    {
+      "keyword": "fur ban",
+      "normalizedTerm": "fur ban",
+      "series": [
+        {
+          "timestamp": "2026-03-08",
+          "value": 18
+        },
+        {
+          "timestamp": "2026-03-15",
+          "value": 22
+        },
+        {
+          "timestamp": "2026-03-22",
+          "value": 21
+        },
+        {
+          "timestamp": "2026-03-29",
+          "value": 27
+        },
+        {
+          "timestamp": "2026-04-05",
+          "value": 31
+        }
+      ],
+      "movementPct": 72.2,
+      "coverageCount": 12
+    }
+  ]
+}

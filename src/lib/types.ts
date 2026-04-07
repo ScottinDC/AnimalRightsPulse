@@ -1,0 +1,238 @@
+export type SiteScope = "site-a" | "site-b" | "global";
+export type SourceType =
+  | "gsc"
+  | "ga4"
+  | "reddit"
+  | "google-trends"
+  | "trendhunter"
+  | "google-news";
+export type TrendLabel = "new" | "breakout" | "rising" | "steady" | "declining";
+
+export interface DateWindow {
+  currentStart: string;
+  currentEnd: string;
+  previousStart: string;
+  previousEnd: string;
+}
+
+export interface DeltaMetrics {
+  clicks?: number;
+  impressions?: number;
+  ctr?: number;
+  position?: number;
+  searches?: number;
+  repeatRate?: number;
+  redditVelocity?: number;
+  googleTrendsVelocity?: number;
+  trendHunterFreshness?: number;
+  googleNewsVelocity?: number;
+  sourceCount?: number;
+  novelty?: number;
+}
+
+export interface GscQueryTrendRow {
+  term: string;
+  normalizedTerm: string;
+  site: SiteScope;
+  page?: string;
+  currentClicks: number;
+  previousClicks: number;
+  currentImpressions: number;
+  previousImpressions: number;
+  currentCtr: number;
+  previousCtr: number;
+  currentPosition: number;
+  previousPosition: number;
+  clickGrowthPct: number;
+  impressionGrowthPct: number;
+  ctrGrowthPct: number;
+  positionGainPct: number;
+  trendScore: number;
+  trendLabel: TrendLabel;
+}
+
+export interface GscPageTrendRow {
+  page: string;
+  site: SiteScope;
+  currentClicks: number;
+  previousClicks: number;
+  currentImpressions: number;
+  previousImpressions: number;
+  clickGrowthPct: number;
+  impressionGrowthPct: number;
+  associatedTerms: string[];
+  opportunity: string;
+}
+
+export interface Ga4InternalSearchRow {
+  term: string;
+  normalizedTerm: string;
+  site: SiteScope;
+  currentSearches: number;
+  previousSearches: number;
+  currentRepeatUsers: number;
+  previousRepeatUsers: number;
+  searchGrowthPct: number;
+  repeatDemandPct: number;
+  trendScore: number;
+  trendLabel: TrendLabel;
+}
+
+export interface RedditPostRow {
+  id: string;
+  title: string;
+  score: number;
+  numComments: number;
+  createdUtc: string;
+  permalink: string;
+  url: string;
+  author: string;
+  flair?: string;
+  linkedDomain: string;
+  velocityScore: number;
+}
+
+export interface RedditPhraseRow {
+  phrase: string;
+  normalizedTerm: string;
+  count: number;
+  postIds: string[];
+  velocityScore: number;
+}
+
+export interface GoogleTrendsSeriesPoint {
+  timestamp: string;
+  value: number;
+}
+
+export interface GoogleTrendsRow {
+  keyword: string;
+  normalizedTerm: string;
+  geo: string;
+  timeWindow: string;
+  series: GoogleTrendsSeriesPoint[];
+  momentumPct: number;
+  breakout: boolean;
+}
+
+export interface TrendHunterRow {
+  id: string;
+  title: string;
+  normalizedTerm: string;
+  url: string;
+  category?: string;
+  summary?: string;
+  freshnessHours: number;
+  recurrenceCount: number;
+  region?: string;
+}
+
+export interface GoogleNewsTrendRow {
+  keyword: string;
+  normalizedTerm: string;
+  series: GoogleTrendsSeriesPoint[];
+  movementPct: number;
+  coverageCount: number;
+}
+
+export interface NormalizedSignalRow {
+  id: string;
+  term: string;
+  normalizedTerm: string;
+  source: SourceType;
+  site?: SiteScope;
+  sourceLabel: string;
+  trendScore: number;
+  trendLabel: TrendLabel;
+  crossSourceCount: number;
+  timeWindow: string;
+  metrics: DeltaMetrics;
+  flags: string[];
+  context?: string;
+  url?: string;
+}
+
+export interface SummaryCard {
+  id: string;
+  title: string;
+  metric: string;
+  change: string;
+  narrative: string;
+}
+
+export interface StoryIdea {
+  id: string;
+  category: "Write now" | "Monitor" | "Evergreen update" | "Refresh old page" | "Improve navigation/search UX" | "Watch for mainstream breakout";
+  headline: string;
+  rationale: string;
+  relatedTerms: string[];
+  sources: SourceType[];
+  priority: number;
+}
+
+export interface GscDataFile {
+  generatedAt: string;
+  site: SiteScope;
+  window: DateWindow;
+  queries: GscQueryTrendRow[];
+  pages: GscPageTrendRow[];
+}
+
+export interface Ga4DataFile {
+  generatedAt: string;
+  site: SiteScope;
+  window: DateWindow;
+  searches: Ga4InternalSearchRow[];
+}
+
+export interface RedditDataFile {
+  generatedAt: string;
+  subreddit: string;
+  posts: RedditPostRow[];
+  repeatedPhrases: RedditPhraseRow[];
+  linkedDomains: Array<{ domain: string; count: number }>;
+  recurringTopics: Array<{ topic: string; count: number }>;
+}
+
+export interface GoogleTrendsDataFile {
+  generatedAt: string;
+  keywords: GoogleTrendsRow[];
+}
+
+export interface TrendHunterDataFile {
+  generatedAt: string;
+  items: TrendHunterRow[];
+  repeatedConcepts: Array<{ concept: string; count: number }>;
+  topicClusters: Array<{ cluster: string; count: number }>;
+}
+
+export interface GoogleNewsDataFile {
+  generatedAt: string;
+  keywords: GoogleNewsTrendRow[];
+}
+
+export interface SignalsDataFile {
+  generatedAt: string;
+  signals: NormalizedSignalRow[];
+}
+
+export interface SummaryDataFile {
+  generatedAt: string;
+  summaryCards: SummaryCard[];
+  storyIdeas: StoryIdea[];
+}
+
+export interface DashboardData {
+  gscSiteA: GscDataFile;
+  gscSiteB: GscDataFile;
+  gscCombined: GscDataFile;
+  ga4SiteA: Ga4DataFile;
+  ga4SiteB: Ga4DataFile;
+  ga4Combined: Ga4DataFile;
+  reddit: RedditDataFile;
+  googleTrends: GoogleTrendsDataFile;
+  trendhunter: TrendHunterDataFile;
+  googleNews: GoogleNewsDataFile;
+  signals: SignalsDataFile;
+  summary: SummaryDataFile;
+}
