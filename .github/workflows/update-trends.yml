@@ -43,27 +43,18 @@ jobs:
 
       - name: Fetch Reddit data
         env:
-          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
-          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
-          REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
-          REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
         run: npm run fetch:reddit
 
-      - name: Fetch HasData Google Trends
-        env:
-          HASDATA_API_KEY: ${{ secrets.HASDATA_API_KEY }}
-        run: npm run fetch:hasdata-trends
-
-      - name: Fetch TrendHunter via Apify
+      - name: Fetch Google Trends
         env:
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
-        run: npm run fetch:trendhunter
+        run: npm run fetch:google-trends
 
-      - name: Fetch Google News trends
+      - name: Fetch Google News
         env:
-          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
-          RAPIDAPI_HOST: ${{ secrets.RAPIDAPI_HOST }}
-        run: npm run fetch:google-news-trends
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+        run: npm run fetch:google-news
 
       - name: Normalize data
         run: npm run normalize:data

@@ -30,18 +30,10 @@ const DEFAULT_FILTERS: Filters = {
 
 function filterSignals(rows: NormalizedSignalRow[], filters: Filters): NormalizedSignalRow[] {
   return rows.filter((row) => {
-    if (filters.source !== "all" && row.source !== filters.source) {
-      return false;
-    }
-    if (filters.site !== "all" && row.site !== filters.site) {
-      return false;
-    }
-    if (filters.trendLabel !== "all" && row.trendLabel !== filters.trendLabel) {
-      return false;
-    }
-    if (filters.dateWindow !== "all" && !row.timeWindow.includes(filters.dateWindow)) {
-      return false;
-    }
+    if (filters.source !== "all" && row.source !== filters.source) return false;
+    if (filters.site !== "all" && row.site !== filters.site) return false;
+    if (filters.trendLabel !== "all" && row.trendLabel !== filters.trendLabel) return false;
+    if (filters.dateWindow !== "all" && !row.timeWindow.includes(filters.dateWindow)) return false;
     return true;
   });
 }
@@ -81,18 +73,14 @@ export function Dashboard() {
 
   const topSignals = useMemo(() => filteredSignals.slice(0, 15), [filteredSignals]);
 
-  if (error) {
-    return <ErrorState message={error} />;
-  }
-
+  if (error) return <ErrorState message={error} />;
   if (!data) {
     return <EmptyState title="Loading signal files" body="The dashboard is reading committed JSON from /public/data." />;
   }
 
-  const gscOpportunitySignals = filteredSignals.filter((signal) => signal.source === "gsc").slice(0, 8);
+  const gscSignals = filteredSignals.filter((signal) => signal.source === "gsc").slice(0, 8);
   const ga4Signals = filteredSignals.filter((signal) => signal.source === "ga4").slice(0, 8);
   const redditSignals = filteredSignals.filter((signal) => signal.source === "reddit").slice(0, 8);
-  const trendHunterSignals = filteredSignals.filter((signal) => signal.source === "trendhunter").slice(0, 8);
   const googleNewsSignals = filteredSignals.filter((signal) => signal.source === "google-news").slice(0, 8);
 
   const googleTrendsLead = data.googleTrends.keywords[0];
@@ -101,21 +89,20 @@ export function Dashboard() {
   return (
     <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
       <Header />
-
       <FilterBar filters={filters} onChange={setFilters} />
 
       <SectionShell
         id="overview"
         eyebrow="Overview"
         title="Top rising signals"
-        subtitle="Rule-based scoring merges committed source files into a single editorial signal view without making any browser-side API calls."
+        subtitle="Rule-based scoring merges committed source files into a single editorial view without any live browser-side API calls."
       >
         <SummaryCards cards={data.summary.summaryCards} />
         <div className="mt-6">
           {topSignals.length > 0 ? (
             <TrendTable title="Top 15 rising signals across all sources" rows={topSignals} />
           ) : (
-            <EmptyState title="No signals match these filters" body="Try widening the site or source filters to bring more rows back into view." />
+            <EmptyState title="No signals match these filters" body="Try widening the source, site, or trend filters." />
           )}
         </div>
       </SectionShell>
@@ -150,8 +137,8 @@ export function Dashboard() {
           ))}
         </div>
         <div className="mt-6">
-          {gscOpportunitySignals.length > 0 ? (
-            <TrendTable title="Combined GSC overlaps and page opportunities" rows={gscOpportunitySignals} />
+          {gscSignals.length > 0 ? (
+            <TrendTable title="Combined GSC overlaps and page opportunities" rows={gscSignals} />
           ) : (
             <EmptyState title="No GSC rows available" body="Run the Search Console fetch script or keep using the mock files for layout work." />
           )}
@@ -194,7 +181,7 @@ export function Dashboard() {
         id="reddit"
         eyebrow="Reddit"
         title="Editorial and community momentum from r/AnimalRights"
-        subtitle="The Reddit panel tracks recent posts, repeated title phrases, linked domains, and recurring topics while keeping the raw social signal separate from search data."
+        subtitle="The Reddit panel tracks recent posts, repeated title phrases, linked domains, and recurring topics while keeping the social signal distinct from site demand."
       >
         <div className="grid gap-4 xl:grid-cols-[1.3fr_0.7fr]">
           <div className="rounded-[1.75rem] border border-moss/10 bg-white p-5">
@@ -202,7 +189,7 @@ export function Dashboard() {
             <div className="mt-4 space-y-4">
               {topPosts(data.reddit.posts).map((post) => (
                 <article key={post.id} className="rounded-2xl bg-sand px-4 py-4">
-                  <a href={`https://reddit.com${post.permalink}`} target="_blank" rel="noreferrer" className="font-semibold text-ink">
+                  <a href={post.url || `https://reddit.com${post.permalink}`} target="_blank" rel="noreferrer" className="font-semibold text-ink">
                     {post.title}
                   </a>
                   <p className="mt-2 text-xs text-moss/70">
@@ -240,7 +227,7 @@ export function Dashboard() {
           {redditSignals.length > 0 ? (
             <TrendTable title="Recurring Reddit topics and phrases" rows={redditSignals} />
           ) : (
-            <EmptyState title="No Reddit topic rows" body="The mock dataset will populate this until Reddit credentials are available." />
+            <EmptyState title="No Reddit topic rows" body="The mock dataset will populate this until the Apify Reddit actor is configured." />
           )}
         </div>
       </SectionShell>
@@ -249,14 +236,10 @@ export function Dashboard() {
         id="google-trends"
         eyebrow="Google Trends"
         title="Interest-over-time for a seeded animal-rights watchlist"
-        subtitle="HasData runs asynchronously, so the fetch script is designed around job creation, polling, and normalization before the frontend ever reads the results."
+        subtitle="Google Trends is fetched through Apify on a schedule, then normalized into a stable time-series shape before the frontend reads any local JSON."
       >
         <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
-          <TrendChart
-            title={googleTrendsLead.keyword}
-            points={toSeriesPoints(googleTrendsLead)}
-            color="#234338"
-          />
+          <TrendChart title={googleTrendsLead.keyword} points={toSeriesPoints(googleTrendsLead)} color="#234338" />
           <div className="rounded-[1.75rem] border border-moss/10 bg-white p-5">
             <h3 className="font-display text-2xl text-ink">Fast-rising watchlist terms</h3>
             <div className="mt-4 space-y-3">
@@ -275,66 +258,13 @@ export function Dashboard() {
       </SectionShell>
 
       <SectionShell
-        id="trendhunter"
-        eyebrow="TrendHunter"
-        title="Emerging story ideas and innovation themes"
-        subtitle="TrendHunter stays isolated behind its own fetch-and-normalize script so actor response changes do not leak complexity into the UI."
-      >
-        <div className="grid gap-4 lg:grid-cols-2">
-          <div className="rounded-[1.75rem] border border-moss/10 bg-white p-5">
-            <h3 className="font-display text-2xl text-ink">Recent story items</h3>
-            <div className="mt-4 space-y-3">
-              {data.trendhunter.items.slice(0, 5).map((item) => (
-                <article key={item.id} className="rounded-2xl bg-sand px-4 py-3">
-                  <a href={item.url} target="_blank" rel="noreferrer" className="font-semibold text-ink">
-                    {item.title}
-                  </a>
-                  <p className="mt-1 text-xs text-moss/70">
-                    {item.category ?? "Uncategorized"} | freshness {item.freshnessHours}h | recurrence {item.recurrenceCount}
-                  </p>
-                </article>
-              ))}
-            </div>
-          </div>
-          <div className="rounded-[1.75rem] border border-moss/10 bg-white p-5">
-            <h3 className="font-display text-2xl text-ink">Clusters and repeated concepts</h3>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {data.trendhunter.topicClusters.map((cluster) => (
-                <span key={cluster.cluster} className="rounded-full bg-purple-100 px-3 py-2 text-xs text-purple-900">
-                  {cluster.cluster} ({cluster.count})
-                </span>
-              ))}
-            </div>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {data.trendhunter.repeatedConcepts.map((concept) => (
-                <span key={concept.concept} className="rounded-full bg-sky/50 px-3 py-2 text-xs text-ink">
-                  {concept.concept} ({concept.count})
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="mt-6">
-          {trendHunterSignals.length > 0 ? (
-            <TrendTable title="TrendHunter story signals" rows={trendHunterSignals} />
-          ) : (
-            <EmptyState title="No TrendHunter signals" body="The UI will populate once the Apify actor response is normalized into trend rows." />
-          )}
-        </div>
-      </SectionShell>
-
-      <SectionShell
         id="google-news"
-        eyebrow="Google News Trends"
+        eyebrow="Google News"
         title="News momentum and mainstream breakout monitoring"
-        subtitle="RapidAPI keyword time series are normalized into the same signal model while keeping their news-source identity intact."
+        subtitle="Google News is fetched through Apify, then normalized into topic-level coverage and trend lines that can be compared against search and Reddit demand."
       >
         <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
-          <TrendChart
-            title={googleNewsLead.keyword}
-            points={toSeriesPoints(googleNewsLead)}
-            color="#c45d37"
-          />
+          <TrendChart title={googleNewsLead.keyword} points={toSeriesPoints(googleNewsLead)} color="#c45d37" />
           <div className="rounded-[1.75rem] border border-moss/10 bg-white p-5">
             <h3 className="font-display text-2xl text-ink">Rising news topics</h3>
             <div className="mt-4 space-y-3">
@@ -342,6 +272,7 @@ export function Dashboard() {
                 <div key={row.keyword} className="rounded-2xl bg-sand px-4 py-3">
                   <p className="font-semibold text-ink">{row.keyword}</p>
                   <p className="mt-1 text-xs text-moss/70">Movement {row.movementPct.toFixed(1)}% | coverage {row.coverageCount}</p>
+                  {row.sampleHeadlines?.length ? <p className="mt-2 text-xs text-moss/70">{row.sampleHeadlines[0]}</p> : null}
                 </div>
               ))}
             </div>
@@ -351,7 +282,7 @@ export function Dashboard() {
           {googleNewsSignals.length > 0 ? (
             <TrendTable title="News overlap with search and social momentum" rows={googleNewsSignals} />
           ) : (
-            <EmptyState title="No Google News signals" body="Validate the RapidAPI response shape, then normalize it into /public/data/google-news-trends.json." />
+            <EmptyState title="No Google News signals" body="Validate the Apify actor output, then normalize it into /public/data/google-news.json." />
           )}
         </div>
       </SectionShell>
@@ -377,7 +308,7 @@ export function Dashboard() {
       <footer className="rounded-[2rem] border border-moss/10 bg-white/75 p-5 text-sm text-moss/80">
         <p className="font-semibold text-ink">Source coverage</p>
         <div className="mt-3 flex flex-wrap gap-2">
-          {(["gsc", "ga4", "reddit", "google-trends", "trendhunter", "google-news"] as SourceType[]).map((source) => (
+          {(["gsc", "ga4", "reddit", "google-trends", "google-news"] as SourceType[]).map((source) => (
             <SourceBadge key={source} source={source} />
           ))}
         </div>

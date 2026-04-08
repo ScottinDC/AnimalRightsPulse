@@ -102,3 +102,15 @@ export async function fetchJson(url, options = {}) {
   }
   return response.json();
 }
+
+export async function runApifyActor(actorId, input, token) {
+  const result = await fetchJson(`https://api.apify.com/v2/acts/${actorId}/run-sync-get-dataset-items?token=${token}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(input)
+  });
+
+  return Array.isArray(result) ? result : [];
+}

@@ -4,7 +4,6 @@ export type SourceType =
   | "ga4"
   | "reddit"
   | "google-trends"
-  | "trendhunter"
   | "google-news";
 export type TrendLabel = "new" | "breakout" | "rising" | "steady" | "declining";
 
@@ -24,7 +23,6 @@ export interface DeltaMetrics {
   repeatRate?: number;
   redditVelocity?: number;
   googleTrendsVelocity?: number;
-  trendHunterFreshness?: number;
   googleNewsVelocity?: number;
   sourceCount?: number;
   novelty?: number;
@@ -115,24 +113,13 @@ export interface GoogleTrendsRow {
   breakout: boolean;
 }
 
-export interface TrendHunterRow {
-  id: string;
-  title: string;
-  normalizedTerm: string;
-  url: string;
-  category?: string;
-  summary?: string;
-  freshnessHours: number;
-  recurrenceCount: number;
-  region?: string;
-}
-
 export interface GoogleNewsTrendRow {
   keyword: string;
   normalizedTerm: string;
   series: GoogleTrendsSeriesPoint[];
   movementPct: number;
   coverageCount: number;
+  sampleHeadlines?: string[];
 }
 
 export interface NormalizedSignalRow {
@@ -199,16 +186,10 @@ export interface GoogleTrendsDataFile {
   keywords: GoogleTrendsRow[];
 }
 
-export interface TrendHunterDataFile {
-  generatedAt: string;
-  items: TrendHunterRow[];
-  repeatedConcepts: Array<{ concept: string; count: number }>;
-  topicClusters: Array<{ cluster: string; count: number }>;
-}
-
 export interface GoogleNewsDataFile {
   generatedAt: string;
   keywords: GoogleNewsTrendRow[];
+  recurringTopics?: Array<{ topic: string; count: number }>;
 }
 
 export interface SignalsDataFile {
@@ -231,7 +212,6 @@ export interface DashboardData {
   ga4Combined: Ga4DataFile;
   reddit: RedditDataFile;
   googleTrends: GoogleTrendsDataFile;
-  trendhunter: TrendHunterDataFile;
   googleNews: GoogleNewsDataFile;
   signals: SignalsDataFile;
   summary: SummaryDataFile;

@@ -4,7 +4,6 @@ const NAV_ITEMS = [
   ["ga4", "Internal search"],
   ["reddit", "Reddit"],
   ["google-trends", "Google Trends"],
-  ["trendhunter", "TrendHunter"],
   ["google-news", "Google News"],
   ["story-ideas", "Action queue"]
 ];

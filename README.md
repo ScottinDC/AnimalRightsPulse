@@ -1,8 +1,8 @@
 # Animal Rights Signal Monitor
 
-Animal Rights Signal Monitor is a static single-page dashboard for tracking rising animal-rights signals across Google Search Console, GA4 internal site search, Reddit, Google Trends via HasData, TrendHunter via Apify, and Google News trend data via RapidAPI.
+Animal Rights Signal Monitor is a static single-page dashboard for tracking rising animal-rights signals across Google Search Console, GA4 internal site search, Reddit via Apify, Google Trends via Apify, and Google News via Apify.
 
-The frontend is a Vite + React + TypeScript app that reads only committed JSON files from [`/public/data`](/Users/scottstadum/Desktop/Projects/Apps/Animal Rights Pulse/public/data). External APIs are called only by server-side Node scripts in [`/scripts`](/Users/scottstadum/Desktop/Projects/Apps/Animal Rights Pulse/scripts), typically through GitHub Actions.
+The frontend is a Vite + React + TypeScript app that reads only committed JSON files from [`/public/data`](/Users/scottstadum/Desktop/Projects/Apps/Animal%20Rights%20Pulse/public/data). External APIs are called only by server-side Node scripts in [`/scripts`](/Users/scottstadum/Desktop/Projects/Apps/Animal%20Rights%20Pulse/scripts), typically through GitHub Actions.
 
 ## Stack
 
@@ -12,18 +12,7 @@ The frontend is a Vite + React + TypeScript app that reads only committed JSON f
 - Tailwind CSS
 - Recharts
 - GitHub Actions
-
-## Project structure
-
-```text
-animal-rights-signal-monitor/
-  public/data/
-  src/components/
-  src/lib/
-  src/pages/
-  scripts/
-  .github/workflows/
-```
+- Apify actors for Reddit, Google Trends, and Google News
 
 ## Local development
 
@@ -53,28 +42,26 @@ animal-rights-signal-monitor/
 
 ## Data pipeline
 
-Each script writes deterministic JSON into [`/public/data`](/Users/scottstadum/Desktop/Projects/Apps/Animal Rights Pulse/public/data):
+Each script writes deterministic JSON into [`/public/data`](/Users/scottstadum/Desktop/Projects/Apps/Animal%20Rights%20Pulse/public/data):
 
-- [`scripts/fetch-gsc.mjs`](/Users/scottstadum/Desktop/Projects/Apps/Animal Rights Pulse/scripts/fetch-gsc.mjs)
-- [`scripts/fetch-ga4-site-search.mjs`](/Users/scottstadum/Desktop/Projects/Apps/Animal Rights Pulse/scripts/fetch-ga4-site-search.mjs)
-- [`scripts/fetch-reddit.mjs`](/Users/scottstadum/Desktop/Projects/Apps/Animal Rights Pulse/scripts/fetch-reddit.mjs)
-- [`scripts/fetch-hasdata-trends.mjs`](/Users/scottstadum/Desktop/Projects/Apps/Animal Rights Pulse/scripts/fetch-hasdata-trends.mjs)
-- [`scripts/fetch-trendhunter.mjs`](/Users/scottstadum/Desktop/Projects/Apps/Animal Rights Pulse/scripts/fetch-trendhunter.mjs)
-- [`scripts/fetch-google-news-trends.mjs`](/Users/scottstadum/Desktop/Projects/Apps/Animal Rights Pulse/scripts/fetch-google-news-trends.mjs)
-- [`scripts/normalize-data.mjs`](/Users/scottstadum/Desktop/Projects/Apps/Animal Rights Pulse/scripts/normalize-data.mjs)
-- [`scripts/build-summary.mjs`](/Users/scottstadum/Desktop/Projects/Apps/Animal Rights Pulse/scripts/build-summary.mjs)
+- [`scripts/fetch-gsc.mjs`](/Users/scottstadum/Desktop/Projects/Apps/Animal%20Rights%20Pulse/scripts/fetch-gsc.mjs)
+- [`scripts/fetch-ga4-site-search.mjs`](/Users/scottstadum/Desktop/Projects/Apps/Animal%20Rights%20Pulse/scripts/fetch-ga4-site-search.mjs)
+- [`scripts/fetch-reddit.mjs`](/Users/scottstadum/Desktop/Projects/Apps/Animal%20Rights%20Pulse/scripts/fetch-reddit.mjs)
+- [`scripts/fetch-google-trends.mjs`](/Users/scottstadum/Desktop/Projects/Apps/Animal%20Rights%20Pulse/scripts/fetch-google-trends.mjs)
+- [`scripts/fetch-google-news.mjs`](/Users/scottstadum/Desktop/Projects/Apps/Animal%20Rights%20Pulse/scripts/fetch-google-news.mjs)
+- [`scripts/normalize-data.mjs`](/Users/scottstadum/Desktop/Projects/Apps/Animal%20Rights%20Pulse/scripts/normalize-data.mjs)
+- [`scripts/build-summary.mjs`](/Users/scottstadum/Desktop/Projects/Apps/Animal%20Rights%20Pulse/scripts/build-summary.mjs)
 
 ## GitHub Actions
 
-[`/.github/workflows/update-trends.yml`](/Users/scottstadum/Desktop/Projects/Apps/Animal Rights Pulse/.github/workflows/update-trends.yml) runs on `workflow_dispatch` plus a 3-hour cron. It:
+[`/.github/workflows/update-trends.yml`](/Users/scottstadum/Desktop/Projects/Apps/Animal%20Rights%20Pulse/.github/workflows/update-trends.yml) runs on `workflow_dispatch` plus a recurring cron. It:
 
 - installs dependencies
-- fetches each external source
+- fetches Search Console and GA4 data
+- fetches Reddit, Google Trends, and Google News via Apify
 - normalizes signals
 - builds summary data
 - commits changed JSON files back into the repo
-
-If you want different cadences per source later, split the workflow into source-specific jobs or separate workflows. This v1 keeps scheduling simple in one file.
 
 ## Required secrets
 
@@ -89,22 +76,14 @@ Store these in GitHub repository or environment secrets:
 - `GA4_PROPERTY_ID_SITE_B`
 - `GA4_CLIENT_EMAIL`
 - `GA4_PRIVATE_KEY`
-- `REDDIT_CLIENT_ID`
-- `REDDIT_CLIENT_SECRET`
-- `REDDIT_USERNAME`
-- `REDDIT_PASSWORD`
-- `HASDATA_API_KEY`
 - `APIFY_TOKEN`
-- `RAPIDAPI_KEY`
-- `RAPIDAPI_HOST`
 
 ## Notes by source
 
-- Search Console data returns top rows rather than every possible row, so trend detection is intentionally based on top-row comparison windows.
-- GA4 internal site search depends on correct site-search instrumentation for each property. Without that, the pipeline will keep falling back to mock JSON.
-- HasData runs asynchronously, so the implementation uses polling with retry/backoff.
-- TrendHunter is isolated behind a fetch/normalize layer so changes in the actor payload do not break the frontend shape.
-- Google News trend lines are normalized into a common series structure for charts.
+- Search Console returns top rows rather than every possible row, so trend detection is intentionally based on comparison windows.
+- GA4 internal site search depends on correct site-search instrumentation for each property.
+- Reddit is sourced through the Apify Reddit scraper rather than direct Reddit OAuth.
+- Google Trends and Google News are sourced through Apify actors and normalized into stable local JSON so the frontend remains static.
 
 ## Deployment
 
@@ -117,4 +96,4 @@ The frontend is static and can be deployed to GitHub Pages after running `npm ru
 3. Verify GA4 internal search is instrumented correctly on both sites.
 4. Enable GitHub Pages and point it at the built static output.
 5. Test manual workflow runs from Actions before relying on the schedule.
-6. Validate the output JSON shape from Apify and RapidAPI against live responses and adjust the normalization layer if those providers change fields.
+6. Validate the output JSON shape from the Apify Reddit, Google Trends, and Google News actors and adjust the normalization layer if fields drift.

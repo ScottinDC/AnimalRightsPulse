@@ -11,7 +11,6 @@ export function scoreTrend(metrics) {
   const ga4RepeatDemand = metrics.repeatRate ?? 0;
   const redditVelocity = metrics.redditVelocity ?? 0;
   const googleTrendsMovement = metrics.googleTrendsVelocity ?? 0;
-  const trendHunterFreshness = metrics.trendHunterFreshness ?? 0;
   const googleNewsMovement = metrics.googleNewsVelocity ?? 0;
   const sourceBonus = (metrics.sourceCount ?? 1) * 4;
   const noveltyBonus = (metrics.novelty ?? 0) * 7;
@@ -25,7 +24,6 @@ export function scoreTrend(metrics) {
     ga4RepeatDemand * 0.08 +
     redditVelocity * 0.11 +
     googleTrendsMovement * 0.08 +
-    trendHunterFreshness * 0.06 +
     googleNewsMovement * 0.07 +
     sourceBonus +
     noveltyBonus;

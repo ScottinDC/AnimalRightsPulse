@@ -53,7 +53,6 @@ export function FilterBar({ filters, onChange }: FilterBarProps) {
           { label: "GA4 internal search", value: "ga4" },
           { label: "Reddit", value: "reddit" },
           { label: "Google Trends", value: "google-trends" },
-          { label: "TrendHunter", value: "trendhunter" },
           { label: "Google News", value: "google-news" }
         ]}
         onChange={(source) => onChange({ ...filters, source })}

@@ -6,8 +6,7 @@ import type {
   GscDataFile,
   RedditDataFile,
   SignalsDataFile,
-  SummaryDataFile,
-  TrendHunterDataFile
+  SummaryDataFile
 } from "./types";
 
 async function safeReadJson<T>(path: string): Promise<T> {
@@ -29,7 +28,6 @@ export async function loadDashboardData(): Promise<DashboardData> {
     ga4Combined,
     reddit,
     googleTrends,
-    trendhunter,
     googleNews,
     signals,
     summary
@@ -42,8 +40,7 @@ export async function loadDashboardData(): Promise<DashboardData> {
     safeReadJson<Ga4DataFile>(`${base}data/ga4-combined-search.json`),
     safeReadJson<RedditDataFile>(`${base}data/reddit.json`),
     safeReadJson<GoogleTrendsDataFile>(`${base}data/google-trends.json`),
-    safeReadJson<TrendHunterDataFile>(`${base}data/trendhunter.json`),
-    safeReadJson<GoogleNewsDataFile>(`${base}data/google-news-trends.json`),
+    safeReadJson<GoogleNewsDataFile>(`${base}data/google-news.json`),
     safeReadJson<SignalsDataFile>(`${base}data/signals.json`),
     safeReadJson<SummaryDataFile>(`${base}data/summary.json`)
   ]);
@@ -57,7 +54,6 @@ export async function loadDashboardData(): Promise<DashboardData> {
     ga4Combined,
     reddit,
     googleTrends,
-    trendhunter,
     googleNews,
     signals,
     summary

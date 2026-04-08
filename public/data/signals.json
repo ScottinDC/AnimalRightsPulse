@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-07T18:44:04.983Z",
+  "generatedAt": "2026-04-08T17:10:36.158Z",
   "signals": [
     {
       "id": "gsc:site-b:slaughterhouse conditions",
@@ -252,7 +252,7 @@
       "trendScore": 20.1,
       "trendLabel": "rising",
       "crossSourceCount": 1,
-      "timeWindow": "google-news:30d",
+      "timeWindow": "google-news:recent",
       "metrics": {
         "googleNewsVelocity": 130,
         "sourceCount": 1,
@@ -343,7 +343,7 @@
       "trendScore": 16.054000000000002,
       "trendLabel": "steady",
       "crossSourceCount": 1,
-      "timeWindow": "google-news:30d",
+      "timeWindow": "google-news:recent",
       "metrics": {
         "googleNewsVelocity": 72.2,
         "sourceCount": 1,
@@ -353,28 +353,6 @@
         "news-momentum"
       ],
       "context": "12 coverage units"
-    },
-    {
-      "id": "trendhunter:global:cruelty free policy trackers gain traction",
-      "term": "Cruelty-free policy trackers gain traction",
-      "normalizedTerm": "cruelty free policy trackers gain traction",
-      "source": "trendhunter",
-      "site": "global",
-      "sourceLabel": "TrendHunter",
-      "trendScore": 15.92,
-      "trendLabel": "steady",
-      "crossSourceCount": 1,
-      "timeWindow": "trendhunter:recent",
-      "metrics": {
-        "trendHunterFreshness": 82,
-        "sourceCount": 1,
-        "novelty": 1
-      },
-      "flags": [
-        "Policy"
-      ],
-      "context": "Policy tracker products are surfacing as repeat concepts in animal-rights adjacent coverage.",
-      "url": "https://www.trendhunter.com/trends/cruelty-free-policy-trackers"
     },
     {
       "id": "reddit:global:puppy mills",
@@ -438,28 +416,6 @@
         "watchlist"
       ],
       "context": "US"
-    },
-    {
-      "id": "trendhunter:global:animal welfare law explainers become classroom trend",
-      "term": "Animal welfare law explainers become classroom trend",
-      "normalizedTerm": "animal welfare law explainers become classroom trend",
-      "source": "trendhunter",
-      "site": "global",
-      "sourceLabel": "TrendHunter",
-      "trendScore": 9.28,
-      "trendLabel": "steady",
-      "crossSourceCount": 1,
-      "timeWindow": "trendhunter:recent",
-      "metrics": {
-        "trendHunterFreshness": 88,
-        "sourceCount": 1,
-        "novelty": 0
-      },
-      "flags": [
-        "Education"
-      ],
-      "context": "Educators are packaging animal-rights policy explainers into classroom media kits.",
-      "url": "https://www.trendhunter.com/trends/animal-welfare-law"
     }
   ]
 }

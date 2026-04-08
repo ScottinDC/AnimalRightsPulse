@@ -25,7 +25,6 @@ async function main() {
     ga4SiteB,
     reddit,
     googleTrends,
-    trendhunter,
     googleNews
   ] = await Promise.all([
     safeReadJson(path.join(DATA_DIR, "gsc-site-a.json")),
@@ -34,8 +33,7 @@ async function main() {
     safeReadJson(path.join(DATA_DIR, "ga4-site-b-search.json")),
     safeReadJson(path.join(DATA_DIR, "reddit.json")),
     safeReadJson(path.join(DATA_DIR, "google-trends.json")),
-    safeReadJson(path.join(DATA_DIR, "trendhunter.json")),
-    safeReadJson(path.join(DATA_DIR, "google-news-trends.json"))
+    safeReadJson(path.join(DATA_DIR, "google-news.json"))
   ]);
 
   const signals = [];
@@ -141,31 +139,6 @@ async function main() {
     });
   }
 
-  for (const row of trendhunter.items) {
-    const metrics = {
-      trendHunterFreshness: Math.max(0, 100 - row.freshnessHours),
-      sourceCount: 1,
-      novelty: row.recurrenceCount <= 2 ? 1 : 0
-    };
-    const trendScore = scoreTrend(metrics);
-    signals.push({
-      id: buildSignalId("trendhunter", "global", row.normalizedTerm),
-      term: row.title,
-      normalizedTerm: row.normalizedTerm,
-      source: "trendhunter",
-      site: "global",
-      sourceLabel: "TrendHunter",
-      trendScore,
-      trendLabel: classifyTrend(trendScore, metrics),
-      crossSourceCount: 1,
-      timeWindow: "trendhunter:recent",
-      metrics,
-      flags: [row.category ?? "story-discovery"],
-      context: row.summary,
-      url: row.url
-    });
-  }
-
   for (const row of googleNews.keywords) {
     const metrics = {
       googleNewsVelocity: row.movementPct,
@@ -183,7 +156,7 @@ async function main() {
       trendScore,
       trendLabel: classifyTrend(trendScore, metrics),
       crossSourceCount: 1,
-      timeWindow: "google-news:30d",
+      timeWindow: "google-news:recent",
       metrics,
       flags: ["news-momentum"],
       context: `${row.coverageCount} coverage units`

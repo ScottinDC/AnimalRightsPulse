@@ -1,5 +1,5 @@
 import path from "node:path";
-import { DATA_DIR, extractPhrasesFromTitles, normalizeTerm, safeReadJson, safeWriteJson } from "./lib.mjs";
+import { DATA_DIR, extractPhrasesFromTitles, normalizeTerm, runApifyActor, safeReadJson, safeWriteJson } from "./lib.mjs";
 
 function linkedDomain(url) {
   try {
@@ -10,65 +10,40 @@ function linkedDomain(url) {
 }
 
 async function fetchReddit() {
-  if (
-    !process.env.REDDIT_CLIENT_ID ||
-    !process.env.REDDIT_CLIENT_SECRET ||
-    !process.env.REDDIT_USERNAME ||
-    !process.env.REDDIT_PASSWORD
-  ) {
+  if (!process.env.APIFY_TOKEN) {
     return safeReadJson(path.join(DATA_DIR, "reddit.json"));
   }
 
-  const authToken = Buffer.from(
-    `${process.env.REDDIT_CLIENT_ID}:${process.env.REDDIT_CLIENT_SECRET}`
-  ).toString("base64");
-
-  const tokenResponse = await fetch("https://www.reddit.com/api/v1/access_token", {
-    method: "POST",
-    headers: {
-      Authorization: `Basic ${authToken}`,
-      "Content-Type": "application/x-www-form-urlencoded",
-      "User-Agent": "animal-rights-signal-monitor/0.1"
+  const items = await runApifyActor(
+    "spry_wholemeal~reddit-scraper",
+    {
+      subredditUrls: ["https://www.reddit.com/r/AnimalRights/"],
+      sort: "new",
+      maxItems: 50
     },
-    body: new URLSearchParams({
-      grant_type: "password",
-      username: process.env.REDDIT_USERNAME,
-      password: process.env.REDDIT_PASSWORD
-    })
-  });
+    process.env.APIFY_TOKEN
+  );
 
-  if (!tokenResponse.ok) {
-    throw new Error(`Failed Reddit OAuth request: ${await tokenResponse.text()}`);
-  }
+  const posts = items.map((post, index) => {
+    const createdRaw = post.createdAt ?? post.created_utc ?? post.timestamp ?? Date.now();
+    const createdAt = typeof createdRaw === "number" && createdRaw < 10_000_000_000 ? createdRaw * 1000 : Number(new Date(createdRaw));
+    const ageHours = Math.max((Date.now() - createdAt) / 3_600_000, 1);
+    const score = Number(post.score ?? post.upvotes ?? 0);
+    const numComments = Number(post.numComments ?? post.num_comments ?? 0);
+    const url = post.url ?? post.outboundUrl ?? post.permalink ?? "";
 
-  const { access_token: accessToken } = await tokenResponse.json();
-  const listingResponse = await fetch("https://oauth.reddit.com/r/AnimalRights/new?limit=50", {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      "User-Agent": "animal-rights-signal-monitor/0.1"
-    }
-  });
-
-  if (!listingResponse.ok) {
-    throw new Error(`Failed Reddit listing request: ${await listingResponse.text()}`);
-  }
-
-  const listing = await listingResponse.json();
-  const posts = listing.data.children.map((child) => {
-    const post = child.data;
-    const ageHours = Math.max((Date.now() / 1000 - post.created_utc) / 3600, 1);
     return {
-      id: post.id,
-      title: post.title,
-      score: post.score,
-      numComments: post.num_comments,
-      createdUtc: new Date(post.created_utc * 1000).toISOString(),
-      permalink: post.permalink,
-      url: post.url,
-      author: post.author,
-      flair: post.link_flair_text,
-      linkedDomain: linkedDomain(post.url),
-      velocityScore: Number(((post.score + post.num_comments * 2) / ageHours).toFixed(2))
+      id: post.id ?? `reddit-${index}`,
+      title: post.title ?? "Untitled Reddit post",
+      score,
+      numComments,
+      createdUtc: new Date(createdAt).toISOString(),
+      permalink: post.permalink ?? "",
+      url,
+      author: post.author ?? "unknown",
+      flair: post.flair ?? post.link_flair_text,
+      linkedDomain: linkedDomain(url),
+      velocityScore: Number(((score + numComments * 2) / ageHours).toFixed(2))
     };
   });
 

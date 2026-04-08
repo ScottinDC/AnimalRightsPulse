@@ -53,7 +53,7 @@ async function main() {
       "monitor",
       "Monitor",
       `Track whether ${topSignals[3]?.term ?? "a rising topic"} graduates from social chatter to search demand`,
-      "Signals with strong Reddit or TrendHunter movement but lighter site demand may be early indicators rather than immediate assignments.",
+      "Signals with strong Reddit, Google News, or Google Trends movement but lighter site demand may be early indicators rather than immediate assignments.",
       topSignals.slice(3, 6).map((signal) => signal.term),
       topSignals.slice(3, 6).map((signal) => signal.source),
       2

@@ -11,12 +11,11 @@
     "fetch:gsc": "node scripts/fetch-gsc.mjs",
     "fetch:ga4-site-search": "node scripts/fetch-ga4-site-search.mjs",
     "fetch:reddit": "node scripts/fetch-reddit.mjs",
-    "fetch:hasdata-trends": "node scripts/fetch-hasdata-trends.mjs",
-    "fetch:trendhunter": "node scripts/fetch-trendhunter.mjs",
-    "fetch:google-news-trends": "node scripts/fetch-google-news-trends.mjs",
+    "fetch:google-trends": "node scripts/fetch-google-trends.mjs",
+    "fetch:google-news": "node scripts/fetch-google-news.mjs",
     "normalize:data": "node scripts/normalize-data.mjs",
     "build:summary": "node scripts/build-summary.mjs",
-    "pipeline": "npm run fetch:gsc && npm run fetch:ga4-site-search && npm run fetch:reddit && npm run fetch:hasdata-trends && npm run fetch:trendhunter && npm run fetch:google-news-trends && npm run normalize:data && npm run build:summary"
+    "pipeline": "npm run fetch:gsc && npm run fetch:ga4-site-search && npm run fetch:reddit && npm run fetch:google-trends && npm run fetch:google-news && npm run normalize:data && npm run build:summary"
   },
   "dependencies": {
     "clsx": "^2.1.1",
