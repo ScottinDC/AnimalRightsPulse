@@ -31,16 +31,22 @@ async function fetchGoogleTrends() {
     return safeReadJson(path.join(DATA_DIR, "google-trends.json"));
   }
 
-  const items = await runApifyActor(
-    "apify~google-trends-scraper",
-    {
-      searchTerms: DEFAULT_KEYWORDS,
-      geo: "US",
-      timeframe: "today 1-m",
-      maxItems: DEFAULT_KEYWORDS.length
-    },
-    process.env.APIFY_TOKEN
-  );
+  let items;
+  try {
+    items = await runApifyActor(
+      "apify~google-trends-scraper",
+      {
+        searchTerms: DEFAULT_KEYWORDS,
+        geo: "US",
+        timeframe: "today 1-m",
+        maxItems: DEFAULT_KEYWORDS.length
+      },
+      process.env.APIFY_TOKEN
+    );
+  } catch (error) {
+    console.warn(`Falling back to mock Google Trends data: ${error.message}`);
+    return safeReadJson(path.join(DATA_DIR, "google-trends.json"));
+  }
 
   const keywords = items.map((item) => {
     const keyword = item.searchTerm ?? item.keyword ?? item.term ?? "unknown";

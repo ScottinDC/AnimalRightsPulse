@@ -14,15 +14,21 @@ async function fetchReddit() {
     return safeReadJson(path.join(DATA_DIR, "reddit.json"));
   }
 
-  const items = await runApifyActor(
-    "spry_wholemeal~reddit-scraper",
-    {
-      subredditUrls: ["https://www.reddit.com/r/AnimalRights/"],
-      sort: "new",
-      maxItems: 50
-    },
-    process.env.APIFY_TOKEN
-  );
+  let items;
+  try {
+    items = await runApifyActor(
+      "spry_wholemeal~reddit-scraper",
+      {
+        subredditUrls: ["https://www.reddit.com/r/AnimalRights/"],
+        sort: "new",
+        maxItems: 50
+      },
+      process.env.APIFY_TOKEN
+    );
+  } catch (error) {
+    console.warn(`Falling back to mock Reddit data: ${error.message}`);
+    return safeReadJson(path.join(DATA_DIR, "reddit.json"));
+  }
 
   const posts = items.map((post, index) => {
     const createdRaw = post.createdAt ?? post.created_utc ?? post.timestamp ?? Date.now();

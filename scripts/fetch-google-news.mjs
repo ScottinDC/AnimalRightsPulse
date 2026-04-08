@@ -28,15 +28,21 @@ async function fetchGoogleNews() {
     return safeReadJson(path.join(DATA_DIR, "google-news.json"));
   }
 
-  const items = await runApifyActor(
-    "lhotanova~google-news-scraper",
-    {
-      queries: KEYWORDS,
-      language: "en-US",
-      maxItems: 100
-    },
-    process.env.APIFY_TOKEN
-  );
+  let items;
+  try {
+    items = await runApifyActor(
+      "lhotanova~google-news-scraper",
+      {
+        queries: KEYWORDS,
+        language: "en-US",
+        maxItems: 100
+      },
+      process.env.APIFY_TOKEN
+    );
+  } catch (error) {
+    console.warn(`Falling back to mock Google News data: ${error.message}`);
+    return safeReadJson(path.join(DATA_DIR, "google-news.json"));
+  }
 
   const keywords = [...bucketByKeyword(items).entries()].map(([keyword, rows]) => {
     const sorted = rows
