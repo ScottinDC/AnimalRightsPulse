@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-07T00:00:00.000Z",
+  "generatedAt": "2026-04-10T23:52:55.411Z",
   "site": "site-a",
   "window": {
     "currentStart": "2026-03-31",
@@ -7,96 +7,6 @@
     "previousStart": "2026-03-24",
     "previousEnd": "2026-03-30"
   },
-  "queries": [
-    {
-      "term": "animal cruelty laws",
-      "normalizedTerm": "animal cruelty laws",
-      "site": "site-a",
-      "page": "/animal-cruelty-laws",
-      "currentClicks": 172,
-      "previousClicks": 105,
-      "currentImpressions": 2900,
-      "previousImpressions": 1800,
-      "currentCtr": 0.059,
-      "previousCtr": 0.058,
-      "currentPosition": 6.2,
-      "previousPosition": 8.4,
-      "clickGrowthPct": 63.8,
-      "impressionGrowthPct": 61.1,
-      "ctrGrowthPct": 1.7,
-      "positionGainPct": 26.2,
-      "trendScore": 38.5,
-      "trendLabel": "rising"
-    },
-    {
-      "term": "fur ban states",
-      "normalizedTerm": "fur ban states",
-      "site": "site-a",
-      "page": "/fur-ban-states",
-      "currentClicks": 141,
-      "previousClicks": 64,
-      "currentImpressions": 2044,
-      "previousImpressions": 1150,
-      "currentCtr": 0.069,
-      "previousCtr": 0.056,
-      "currentPosition": 5.9,
-      "previousPosition": 9.5,
-      "clickGrowthPct": 120.3,
-      "impressionGrowthPct": 77.7,
-      "ctrGrowthPct": 23.2,
-      "positionGainPct": 37.9,
-      "trendScore": 53.4,
-      "trendLabel": "breakout"
-    },
-    {
-      "term": "foie gras ban",
-      "normalizedTerm": "foie gras ban",
-      "site": "site-a",
-      "page": "/foie-gras-ban-explainer",
-      "currentClicks": 92,
-      "previousClicks": 41,
-      "currentImpressions": 1320,
-      "previousImpressions": 910,
-      "currentCtr": 0.07,
-      "previousCtr": 0.045,
-      "currentPosition": 7.4,
-      "previousPosition": 10.1,
-      "clickGrowthPct": 124.4,
-      "impressionGrowthPct": 45.1,
-      "ctrGrowthPct": 55.6,
-      "positionGainPct": 26.7,
-      "trendScore": 56.9,
-      "trendLabel": "new"
-    }
-  ],
-  "pages": [
-    {
-      "page": "/animal-cruelty-laws",
-      "site": "site-a",
-      "currentClicks": 172,
-      "previousClicks": 105,
-      "currentImpressions": 2900,
-      "previousImpressions": 1800,
-      "clickGrowthPct": 63.8,
-      "impressionGrowthPct": 61.1,
-      "associatedTerms": [
-        "animal cruelty laws"
-      ],
-      "opportunity": "Expand supporting coverage"
-    },
-    {
-      "page": "/fur-ban-states",
-      "site": "site-a",
-      "currentClicks": 141,
-      "previousClicks": 64,
-      "currentImpressions": 2044,
-      "previousImpressions": 1150,
-      "clickGrowthPct": 120.3,
-      "impressionGrowthPct": 77.7,
-      "associatedTerms": [
-        "fur ban states"
-      ],
-      "opportunity": "Expand supporting coverage"
-    }
-  ]
+  "queries": [],
+  "pages": []
 }

@@ -1,58 +1,6 @@
 {
-  "generatedAt": "2026-04-10T21:30:47.633Z",
+  "generatedAt": "2026-04-10T23:52:57.085Z",
   "signals": [
-    {
-      "id": "gsc:site-b:slaughterhouse conditions",
-      "term": "slaughterhouse conditions",
-      "normalizedTerm": "slaughterhouse conditions",
-      "source": "gsc",
-      "site": "site-b",
-      "sourceLabel": "GSC SITE-B",
-      "trendScore": 55.016,
-      "trendLabel": "rising",
-      "crossSourceCount": 2,
-      "timeWindow": "current:2026-03-31:2026-04-06|previous:2026-03-24:2026-03-30",
-      "metrics": {
-        "clicks": 126.9,
-        "impressions": 128.6,
-        "ctr": 15.6,
-        "position": 38.6,
-        "novelty": 0,
-        "sourceCount": 2
-      },
-      "flags": [
-        "breakout",
-        "page-linked"
-      ],
-      "context": "/slaughterhouse-conditions-report",
-      "url": "/slaughterhouse-conditions-report"
-    },
-    {
-      "id": "gsc:site-b:wildlife trafficking law",
-      "term": "wildlife trafficking law",
-      "normalizedTerm": "wildlife trafficking law",
-      "source": "gsc",
-      "site": "site-b",
-      "sourceLabel": "GSC SITE-B",
-      "trendScore": 53,
-      "trendLabel": "new",
-      "crossSourceCount": 1,
-      "timeWindow": "current:2026-03-31:2026-04-06|previous:2026-03-24:2026-03-30",
-      "metrics": {
-        "clicks": 100,
-        "impressions": 100,
-        "ctr": 100,
-        "position": 0,
-        "novelty": 1,
-        "sourceCount": 1
-      },
-      "flags": [
-        "new",
-        "page-linked"
-      ],
-      "context": "/wildlife-trafficking-law",
-      "url": "/wildlife-trafficking-law"
-    },
     {
       "id": "ga4:site-b:factory farming protest",
       "term": "factory farming protest",
@@ -75,58 +23,6 @@
         "internal-demand"
       ],
       "context": "Internal site search"
-    },
-    {
-      "id": "gsc:site-a:fur ban states",
-      "term": "fur ban states",
-      "normalizedTerm": "fur ban states",
-      "source": "gsc",
-      "site": "site-a",
-      "sourceLabel": "GSC SITE-A",
-      "trendScore": 41.364000000000004,
-      "trendLabel": "rising",
-      "crossSourceCount": 1,
-      "timeWindow": "current:2026-03-31:2026-04-06|previous:2026-03-24:2026-03-30",
-      "metrics": {
-        "clicks": 120.3,
-        "impressions": 77.7,
-        "ctr": 23.2,
-        "position": 37.9,
-        "novelty": 0,
-        "sourceCount": 1
-      },
-      "flags": [
-        "breakout",
-        "page-linked"
-      ],
-      "context": "/fur-ban-states",
-      "url": "/fur-ban-states"
-    },
-    {
-      "id": "gsc:site-a:foie gras ban",
-      "term": "foie gras ban",
-      "normalizedTerm": "foie gras ban",
-      "source": "gsc",
-      "site": "site-a",
-      "sourceLabel": "GSC SITE-A",
-      "trendScore": 38.071999999999996,
-      "trendLabel": "rising",
-      "crossSourceCount": 1,
-      "timeWindow": "current:2026-03-31:2026-04-06|previous:2026-03-24:2026-03-30",
-      "metrics": {
-        "clicks": 124.4,
-        "impressions": 45.1,
-        "ctr": 55.6,
-        "position": 26.7,
-        "novelty": 0,
-        "sourceCount": 1
-      },
-      "flags": [
-        "new",
-        "page-linked"
-      ],
-      "context": "/foie-gras-ban-explainer",
-      "url": "/foie-gras-ban-explainer"
     },
     {
       "id": "ga4:site-a:state fur bans",
@@ -175,32 +71,6 @@
       "context": "Internal site search"
     },
     {
-      "id": "gsc:site-a:animal cruelty laws",
-      "term": "animal cruelty laws",
-      "normalizedTerm": "animal cruelty laws",
-      "source": "gsc",
-      "site": "site-a",
-      "sourceLabel": "GSC SITE-A",
-      "trendScore": 26.913999999999998,
-      "trendLabel": "rising",
-      "crossSourceCount": 1,
-      "timeWindow": "current:2026-03-31:2026-04-06|previous:2026-03-24:2026-03-30",
-      "metrics": {
-        "clicks": 63.8,
-        "impressions": 61.1,
-        "ctr": 1.7,
-        "position": 26.2,
-        "novelty": 0,
-        "sourceCount": 1
-      },
-      "flags": [
-        "rising",
-        "page-linked"
-      ],
-      "context": "/animal-cruelty-laws",
-      "url": "/animal-cruelty-laws"
-    },
-    {
       "id": "google-trends:global:puppy mills",
       "term": "puppy mills",
       "normalizedTerm": "puppy mills",
@@ -220,27 +90,6 @@
         "breakout"
       ],
       "context": "US"
-    },
-    {
-      "id": "reddit:global:slaughterhouse conditions",
-      "term": "slaughterhouse conditions",
-      "normalizedTerm": "slaughterhouse conditions",
-      "source": "reddit",
-      "site": "global",
-      "sourceLabel": "Reddit",
-      "trendScore": 20.962,
-      "trendLabel": "rising",
-      "crossSourceCount": 2,
-      "timeWindow": "reddit:24h",
-      "metrics": {
-        "redditVelocity": 54.2,
-        "sourceCount": 2,
-        "novelty": 1
-      },
-      "flags": [
-        "community-topic"
-      ],
-      "context": "3 repeated title matches"
     },
     {
       "id": "google-news:global:animal testing",
@@ -308,30 +157,25 @@
       "context": "US"
     },
     {
-      "id": "gsc:site-b:factory farming facts",
-      "term": "factory farming facts",
-      "normalizedTerm": "factory farming facts",
-      "source": "gsc",
-      "site": "site-b",
-      "sourceLabel": "GSC SITE-B",
-      "trendScore": 17.560000000000002,
+      "id": "reddit:global:slaughterhouse conditions",
+      "term": "slaughterhouse conditions",
+      "normalizedTerm": "slaughterhouse conditions",
+      "source": "reddit",
+      "site": "global",
+      "sourceLabel": "Reddit",
+      "trendScore": 16.962,
       "trendLabel": "steady",
       "crossSourceCount": 1,
-      "timeWindow": "current:2026-03-31:2026-04-06|previous:2026-03-24:2026-03-30",
+      "timeWindow": "reddit:24h",
       "metrics": {
-        "clicks": 42.1,
-        "impressions": 23,
-        "ctr": 15.7,
-        "position": 23.8,
-        "novelty": 0,
-        "sourceCount": 1
+        "redditVelocity": 54.2,
+        "sourceCount": 1,
+        "novelty": 1
       },
       "flags": [
-        "rising",
-        "page-linked"
+        "community-topic"
       ],
-      "context": "/factory-farming-facts",
-      "url": "/factory-farming-facts"
+      "context": "3 repeated title matches"
     },
     {
       "id": "google-news:global:fur ban",
