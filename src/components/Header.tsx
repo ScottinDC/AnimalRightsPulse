@@ -18,7 +18,7 @@ export function Header({ leopardImg }: HeaderProps) {
             height: "100%",
             objectFit: "cover",
             objectPosition: "center 30%",
-            opacity: 0.75,
+            opacity: 0.55,
             maskImage: "linear-gradient(to left, black 50%, transparent 100%)",
             WebkitMaskImage: "linear-gradient(to left, black 50%, transparent 100%)",
             pointerEvents: "none",
