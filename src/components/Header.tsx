@@ -29,9 +29,13 @@ export function Header({ leopardImg }: HeaderProps) {
         />
       )}
       {/* Logos — full height, far right, above leopard */}
-      <div style={{ position: "absolute", top: 0, right: 0, bottom: 0, zIndex: 10, display: "flex", flexDirection: "column", backgroundColor: "white", padding: "12px 24px", gap: 8 }}>
-        <img src={cheLogoSrc} alt="CHE" style={{ flex: 1, width: "auto", maxWidth: 140, objectFit: "contain", objectPosition: "center" }} />
-        <img src={awaLogoSrc} alt="AWA" style={{ flex: 1, width: "auto", maxWidth: 140, objectFit: "contain", objectPosition: "center" }} />
+      <div style={{ position: "absolute", top: 0, right: 0, bottom: 0, zIndex: 10, display: "flex", flexDirection: "column", backgroundColor: "white", padding: "16px 24px", gap: 12, minWidth: 160 }}>
+        <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <img src={cheLogoSrc} alt="CHE" style={{ maxHeight: "100%", maxWidth: 140, objectFit: "contain" }} />
+        </div>
+        <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <img src={awaLogoSrc} alt="AWA" style={{ maxHeight: "100%", maxWidth: 140, objectFit: "contain" }} />
+        </div>
       </div>
       <div className="max-w-3xl">
         <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#99ADC6]">Animal Rights Signal Monitor</p>
