@@ -1,16 +1,29 @@
-const NAV_ITEMS = [
-  ["overview", "Overview"],
-  ["gsc", "Search Demand"],
-  ["ga4", "Internal Search"],
-  ["reddit", "Reddit"],
-  ["google-trends", "Google Trends"],
-  ["google-news", "Google News"],
-  ["story-ideas", "Action Queue"]
-];
+interface HeaderProps {
+  leopardImg?: string;
+}
 
-export function Header() {
+export function Header({ leopardImg }: HeaderProps) {
   return (
-    <header id="top" className="border-b border-[#99ADC6]/45 bg-white px-6 py-6 sm:px-8">
+    <header id="top" className="relative overflow-hidden border-b border-[#99ADC6]/45 bg-white px-6 py-6 sm:px-8">
+      {leopardImg && (
+        <img
+          src={leopardImg}
+          alt=""
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            objectPosition: "center 30%",
+            opacity: 0.1,
+            maskImage: "linear-gradient(to left, black 0%, transparent 60%)",
+            WebkitMaskImage: "linear-gradient(to left, black 0%, transparent 60%)",
+            pointerEvents: "none",
+          }}
+        />
+      )}
       <div className="flex flex-col gap-4">
         <div className="max-w-3xl">
           <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#99ADC6]">Animal Rights Signal Monitor</p>

@@ -66,27 +66,7 @@ export function Dashboard() {
 
   return (
     <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8">
-      <Header />
-
-      {/* Leopard image — bottom of header into top of Overview */}
-      <div style={{ position: "relative", height: 220, marginTop: -60, marginBottom: -60, zIndex: 2, pointerEvents: "none", overflow: "hidden" }}>
-        <img
-          src={leopardImg}
-          alt=""
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            objectPosition: "center 30%",
-            opacity: 0.18,
-            maskImage: "linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%)",
-            WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%)",
-          }}
-        />
-      </div>
+      <Header leopardImg={leopardImg} />
 
       <SectionShell
         id="overview"
