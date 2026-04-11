@@ -12,7 +12,7 @@
       "id": "cross-source",
       "title": "Cross-Source Confirmed",
       "metric": "0",
-      "change": "Signals seen in three or more source families",
+      "change": "Signals seen in three or more sources",
       "narrative": "These are the safest candidates for immediate editorial action."
     },
     {

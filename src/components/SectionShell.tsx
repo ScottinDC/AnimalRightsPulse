@@ -21,8 +21,10 @@ export function SectionShell({ id, eyebrow, title, subtitle, actions, children }
       </div>
       {children}
       <div className="mt-6 flex justify-end">
-        <a href="#top" className="border border-[#99ADC6]/35 bg-[#F4F9FC] px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#4A678F] transition hover:bg-white">
-          Back to Top
+        <a href="#top" aria-label="Back to top" className="flex h-8 w-8 items-center justify-center border border-[#99ADC6]/45 bg-[#F4F9FC] text-[#4A678F] transition hover:bg-white hover:border-[#4A678F]/40">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M18 15l-6-6-6 6" />
+          </svg>
         </a>
       </div>
     </section>

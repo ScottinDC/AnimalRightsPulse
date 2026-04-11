@@ -5,13 +5,22 @@ import { SourceBadge } from "./SourceBadge";
 interface TrendTableProps {
   title: string;
   rows: NormalizedSignalRow[];
+  hideSource?: boolean;
 }
 
-export function TrendTable({ title, rows }: TrendTableProps) {
+export function TrendTable({ title, rows, hideSource = false }: TrendTableProps) {
+  const barColor = (score: number) => {
+    if (score >= 70) return "#CB693A";
+    if (score >= 40) return "#d4845c";
+    return "#dda07e";
+  };
+
   const toneForValue = (value: number) => {
-    if (value > 0) return "border-[#99ADC6] text-[#4A678F] bg-[#F4F9FC]";
-    if (value < 0) return "border-[#CB693A]/20 text-[#CB693A] bg-[#CB693A]/10";
-    return "text-[#4A678F] bg-white";
+    if (value >= 100) return "border-[#4a8f6f]/40 text-[#2d6b50] bg-[#d0ede0]";
+    if (value >= 50)  return "border-[#6aab87]/40 text-[#3a7d5e] bg-[#ddf2e8]";
+    if (value > 0)    return "border-[#8fc4a8]/40 text-[#4a8f6f] bg-[#eaf7f0]";
+    if (value < 0)    return "border-[#CB693A]/20 text-[#CB693A] bg-[#CB693A]/10";
+    return "text-[#4A678F] bg-white border-[#99ADC6]/30";
   };
 
   const toneForLabel = (label: string) => {
@@ -30,8 +39,8 @@ export function TrendTable({ title, rows }: TrendTableProps) {
           <thead className="bg-white text-[#4A678F]/80">
             <tr>
               <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em]">Signal</th>
-              <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em]">Source</th>
-              <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em]">Score</th>
+              {!hideSource && <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em]">Source</th>}
+              <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em] min-w-[180px]">Score</th>
               <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em]">Trend</th>
               <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em]">Momentum</th>
               <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em]">Flags</th>
@@ -47,19 +56,29 @@ export function TrendTable({ title, rows }: TrendTableProps) {
                 row.metrics.googleNewsVelocity ??
                 0;
 
+              const barPct = Math.min(Math.max(row.trendScore, 2), 100);
+              const color = barColor(row.trendScore);
+
               return (
                 <tr key={row.id} className="align-top">
                   <td className="px-5 py-4">
                     <div className="font-semibold text-[#4A678F]">{row.term}</div>
                     <div className="mt-1 text-[11px] uppercase tracking-[0.08em] text-[#99ADC6]">{row.context ?? row.timeWindow}</div>
                   </td>
+                  {!hideSource && (
+                    <td className="px-5 py-4">
+                      <SourceBadge source={row.source} label={row.sourceLabel} />
+                    </td>
+                  )}
                   <td className="px-5 py-4">
-                    <SourceBadge source={row.source} label={row.sourceLabel} />
-                  </td>
-                  <td className="px-5 py-4">
-                    <span className={`inline-flex border px-3 py-1 text-xs font-semibold uppercase tracking-[0.05em] ${toneForValue(row.trendScore)}`}>
-                      {formatTrendScore(row.trendScore)}
-                    </span>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <div style={{ position: "relative", width: 120, height: 22, backgroundColor: "#F4F9FC", border: "1px solid rgba(153,173,198,0.3)", flexShrink: 0, overflow: "hidden" }}>
+                        <div style={{ position: "absolute", left: 0, top: 0, height: "100%", width: `${barPct}%`, backgroundColor: color }} />
+                      </div>
+                      <span style={{ fontSize: 11, fontWeight: 600, color: "#4A678F", whiteSpace: "nowrap" }}>
+                        {formatTrendScore(row.trendScore)}
+                      </span>
+                    </div>
                   </td>
                   <td className="px-5 py-4">
                     <span className={`inline-flex border px-3 py-1 text-xs font-semibold uppercase tracking-[0.05em] ${toneForLabel(row.trendLabel)}`}>

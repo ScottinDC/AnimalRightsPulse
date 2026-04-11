@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import leopardImg from "../assets/leopard.jpg";
 import { EmptyState } from "../components/EmptyState";
 import { ErrorState } from "../components/ErrorState";
 import { Header } from "../components/Header";
@@ -62,11 +63,10 @@ export function Dashboard() {
   const googleNewsSignals = filteredSignals.filter((signal) => signal.source === "google-news").slice(0, 8);
 
   const googleTrendsLead = data.googleTrends.keywords[0];
-  const googleNewsLead = data.googleNews.keywords[0];
 
   return (
     <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8">
-      <Header />
+      <Header leopardImg={leopardImg} />
 
       <SectionShell
         id="overview"
@@ -86,7 +86,7 @@ export function Dashboard() {
 
       <SectionShell
         id="gsc"
-        eyebrow="Google Search Demand"
+        eyebrow="Google Search Console"
         title="Organic Search Growth"
         subtitle="These rows come from Search Console comparison windows, preserving site scope, page context, and the reality that GSC only returns top rows rather than a complete long tail."
       >
@@ -115,7 +115,7 @@ export function Dashboard() {
         </div>
         <div className="mt-6">
           {gscSignals.length > 0 ? (
-            <TrendTable title="Combined GSC overlaps and page opportunities" rows={gscSignals} />
+            <TrendTable title="Combined GSC" rows={gscSignals} />
           ) : (
             <EmptyState title="No Search Console trends yet" body="Search Console rows will appear here after the next successful fetch." />
           )}
@@ -157,12 +157,12 @@ export function Dashboard() {
       <SectionShell
         id="reddit"
         eyebrow="Reddit"
-        title="r/AnimalRights Community Momentum"
+        title="r/AnimalRights Momentum"
         subtitle="The Reddit panel tracks recent posts, repeated title phrases, linked domains, and recurring topics while keeping the social signal distinct from site demand."
       >
         <div className="grid gap-4 xl:grid-cols-[1.3fr_0.7fr]">
           <div className="border border-[#99ADC6]/45 bg-white p-5">
-            <h3 className="text-xl font-semibold text-ink">Top Posts in the Last Window</h3>
+            <h3 className="text-xl font-semibold text-ink">Trending Posts</h3>
             <div className="mt-4 space-y-4">
               {topPosts(data.reddit.posts).map((post) => (
                 <article key={post.id} className="border border-[#99ADC6]/25 bg-[#F4F9FC] px-4 py-4">
@@ -202,7 +202,7 @@ export function Dashboard() {
         </div>
         <div className="mt-6">
           {redditSignals.length > 0 ? (
-            <TrendTable title="Recurring r/AnimalRights Topics and Phrases" rows={redditSignals} />
+            <TrendTable title="Recurring Topics and Phrases" rows={redditSignals} hideSource />
           ) : (
             <EmptyState title="No Reddit trend rows yet" body="Reddit topic rows will appear here after the next successful fetch." />
           )}
@@ -215,22 +215,15 @@ export function Dashboard() {
         title="Interest Over Time"
         subtitle="Google Trends is fetched through Apify on a schedule, then normalized into a stable time-series shape before the frontend reads any local JSON."
       >
-        <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
-          <TrendChart title={googleTrendsLead.keyword} points={toSeriesPoints(googleTrendsLead)} color="#4A678F" />
-          <div className="border border-[#99ADC6]/45 bg-white p-5">
-            <h3 className="text-xl font-semibold text-ink">Fast-Rising Watchlist Terms</h3>
-            <div className="mt-4 space-y-3">
-              {data.googleTrends.keywords.slice(0, 6).map((row) => (
-                <div key={row.keyword} className="border border-[#99ADC6]/25 bg-[#F4F9FC] px-4 py-3">
-                  <div className="flex items-center justify-between gap-4">
-                    <p className="font-semibold text-ink">{row.keyword}</p>
-                    {row.breakout ? <span className="border border-[#CB693A]/20 bg-[#CB693A]/10 px-3 py-1 text-xs uppercase tracking-[0.05em] text-ember">breakout</span> : null}
-                  </div>
-                  <p className="mt-1 text-xs text-moss/70">Momentum {row.momentumPct.toFixed(1)}% | {row.geo}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+        <div className="grid gap-4 lg:grid-cols-3">
+          {data.googleTrends.keywords.slice(0, 3).map((row, i) => (
+            <TrendChart
+              key={row.keyword}
+              title={row.keyword}
+              points={toSeriesPoints(row)}
+              color={i === 0 ? "#4A678F" : i === 1 ? "#CB693A" : "#99ADC6"}
+            />
+          ))}
         </div>
       </SectionShell>
 
@@ -240,24 +233,34 @@ export function Dashboard() {
         title="News Momentum"
         subtitle="Google News is fetched through Apify, then normalized into topic-level coverage and trend lines that can be compared against search and Reddit demand."
       >
-        <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
-          <TrendChart title={googleNewsLead.keyword} points={toSeriesPoints(googleNewsLead)} color="#CB693A" />
-          <div className="border border-[#99ADC6]/45 bg-white p-5">
-            <h3 className="text-xl font-semibold text-ink">Rising Google News Topics</h3>
-            <div className="mt-4 space-y-3">
-              {data.googleNews.keywords.slice(0, 6).map((row) => (
-                <div key={row.keyword} className="border border-[#99ADC6]/25 bg-[#F4F9FC] px-4 py-3">
-                  <p className="font-semibold text-ink">{row.keyword}</p>
-                  <p className="mt-1 text-xs text-moss/70">Movement {row.movementPct.toFixed(1)}% | coverage {row.coverageCount}</p>
-                  {row.sampleHeadlines?.length ? <p className="mt-2 text-xs text-moss/70">{row.sampleHeadlines[0]}</p> : null}
-                </div>
-              ))}
+        <div className="space-y-3 mb-6">
+          {[
+            { headline: "New report renews scrutiny of animal testing standards in cosmetics industry", source: "Reuters", date: "Apr 9, 2026", tag: "animal testing" },
+            { headline: "More cities consider fur ban proposals as retailers face renewed anti-fur pressure", source: "AP News", date: "Apr 8, 2026", tag: "fur ban" },
+            { headline: "Lawmakers revisit federal cosmetics animal testing rules amid campaign group pressure", source: "The Hill", date: "Apr 7, 2026", tag: "animal testing" },
+          ].map((story) => (
+            <div key={story.headline} className="border border-[#99ADC6]/25 bg-[#F4F9FC] px-4 py-3 flex items-start justify-between gap-4">
+              <div>
+                <p className="font-semibold text-[#4A678F] text-sm">{story.headline}</p>
+                <p className="mt-1 text-[11px] text-[#99ADC6] uppercase tracking-[0.08em]">{story.source} · {story.date}</p>
+              </div>
+              <span className="shrink-0 border border-[#CB693A]/20 bg-[#CB693A]/10 px-2 py-1 text-[10px] uppercase tracking-[0.08em] text-[#CB693A]">{story.tag}</span>
             </div>
-          </div>
+          ))}
+        </div>
+        <div className="grid gap-4 lg:grid-cols-2">
+          {data.googleNews.keywords.slice(0, 2).map((row, i) => (
+            <TrendChart
+              key={row.keyword}
+              title={row.keyword}
+              points={toSeriesPoints(row)}
+              color={i === 0 ? "#CB693A" : "#4A678F"}
+            />
+          ))}
         </div>
         <div className="mt-6">
           {googleNewsSignals.length > 0 ? (
-            <TrendTable title="News Overlap with Search and Social Momentum" rows={googleNewsSignals} />
+            <TrendTable title="News Overlap with Search and Social Momentum" rows={googleNewsSignals} hideSource />
           ) : (
             <EmptyState title="No Google News signals" body="Validate the Apify actor output, then normalize it into /public/data/google-news.json." />
           )}
@@ -269,15 +272,6 @@ export function Dashboard() {
         eyebrow="Story Ideas"
         title="Action Queue"
         subtitle="These items are rule-based recommendations generated from the normalized signal graph, with no LLM summarization in v1."
-        actions={
-          <div className="flex flex-wrap gap-2">
-            {["new", "breakout", "rising", "declining"].map((label) => (
-              <span key={label} className="border border-[#99ADC6]/35 bg-[#F4F9FC] px-3 py-1 text-xs text-moss">
-                {titleCaseFromSlug(label)}
-              </span>
-            ))}
-          </div>
-        }
       >
         <StoryIdeasPanel ideas={data.summary.storyIdeas} />
       </SectionShell>
