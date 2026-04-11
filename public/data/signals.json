@@ -2,6 +2,29 @@
   "generatedAt": "2026-04-11T17:59:51.510Z",
   "signals": [
     {
+      "id": "gsc:site-a:factory farming protest",
+      "term": "factory farming protest",
+      "normalizedTerm": "factory farming protest",
+      "source": "gsc",
+      "site": "site-a",
+      "sourceLabel": "GSC CHE",
+      "trendScore": 36.4,
+      "trendLabel": "breakout",
+      "crossSourceCount": 2,
+      "timeWindow": "current:2026-04-04:2026-04-10|previous:2026-03-28:2026-04-03",
+      "metrics": {
+        "clicks": 64.3,
+        "impressions": 29.9,
+        "sourceCount": 2,
+        "novelty": 1
+      },
+      "flags": [
+        "breakout",
+        "click-growth"
+      ],
+      "context": "Organic search"
+    },
+    {
       "id": "ga4:site-b:factory farming protest",
       "term": "factory farming protest",
       "normalizedTerm": "factory farming protest",
