@@ -97,9 +97,7 @@ export function Dashboard() {
             height: "100%",
             objectFit: "cover",
             objectPosition: "center 30%",
-            opacity: 0.18,
-            maskImage: "linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%)",
-            WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%)",
+            opacity: 1,
           }}
         />
       </div>
