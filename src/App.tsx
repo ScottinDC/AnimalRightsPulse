@@ -8,7 +8,7 @@ function App() {
         style={{
           position: "fixed",
           inset: 0,
-          backgroundImage: 'url("/background.jpg")',
+          backgroundImage: `url("${import.meta.env.BASE_URL}background.jpg")`,
           backgroundRepeat: "repeat",
           backgroundSize: "480px auto",
           opacity: 0.2,
