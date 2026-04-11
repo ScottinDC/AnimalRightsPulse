@@ -16,9 +16,11 @@ export function TrendTable({ title, rows, hideSource = false }: TrendTableProps)
   };
 
   const toneForValue = (value: number) => {
-    if (value > 0) return "border-[#99ADC6] text-[#4A678F] bg-[#F4F9FC]";
-    if (value < 0) return "border-[#CB693A]/20 text-[#CB693A] bg-[#CB693A]/10";
-    return "text-[#4A678F] bg-white";
+    if (value >= 100) return "border-[#4a8f6f]/40 text-[#2d6b50] bg-[#d0ede0]";
+    if (value >= 50)  return "border-[#6aab87]/40 text-[#3a7d5e] bg-[#ddf2e8]";
+    if (value > 0)    return "border-[#8fc4a8]/40 text-[#4a8f6f] bg-[#eaf7f0]";
+    if (value < 0)    return "border-[#CB693A]/20 text-[#CB693A] bg-[#CB693A]/10";
+    return "text-[#4A678F] bg-white border-[#99ADC6]/30";
   };
 
   const toneForLabel = (label: string) => {
