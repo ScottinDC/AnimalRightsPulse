@@ -12,9 +12,9 @@ export function TrendTable({ title, rows }: TrendTableProps) {
 
   const barColor = (score: number) => {
     const pct = score / maxScore;
-    if (pct >= 0.7) return "#4A678F";
-    if (pct >= 0.4) return "#6883A0";
-    return "#99ADC6";
+    if (pct >= 0.7) return "#CB693A";
+    if (pct >= 0.4) return "#d4845c";
+    return "#dda07e";
   };
 
   const toneForValue = (value: number) => {
