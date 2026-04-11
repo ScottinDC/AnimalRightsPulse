@@ -162,7 +162,7 @@ export function Dashboard() {
       >
         <div className="grid gap-4 xl:grid-cols-[1.3fr_0.7fr]">
           <div className="border border-[#99ADC6]/45 bg-white p-5">
-            <h3 className="text-xl font-semibold text-ink">Top Posts in the Last Window</h3>
+            <h3 className="text-xl font-semibold text-ink">Trending Posts</h3>
             <div className="mt-4 space-y-4">
               {topPosts(data.reddit.posts).map((post) => (
                 <article key={post.id} className="border border-[#99ADC6]/25 bg-[#F4F9FC] px-4 py-4">
