@@ -68,15 +68,18 @@ export function TrendTable({ title, rows }: TrendTableProps) {
                   <td className="px-5 py-4">
                     <SourceBadge source={row.source} label={row.sourceLabel} />
                   </td>
-                  <td className="px-5 py-4 min-w-[180px]">
+                  <td className="px-5 py-4">
                     <div className="flex items-center gap-2">
-                      <div className="relative flex-1 h-[22px] bg-[#F4F9FC] overflow-hidden" style={{ border: "1px solid rgba(153,173,198,0.3)" }}>
+                      <div
+                        className="relative bg-[#F4F9FC] overflow-hidden"
+                        style={{ width: 120, height: 22, border: "1px solid rgba(153,173,198,0.3)", flexShrink: 0 }}
+                      >
                         <div
                           className="absolute left-0 top-0 h-full"
                           style={{ width: `${barPct}%`, backgroundColor: color }}
                         />
                       </div>
-                      <span className="w-9 shrink-0 text-right text-[11px] font-semibold text-[#4A678F]">
+                      <span className="text-[11px] font-semibold text-[#4A678F]">
                         {formatTrendScore(row.trendScore)}
                       </span>
                     </div>
