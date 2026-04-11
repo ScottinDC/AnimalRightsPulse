@@ -20,10 +20,10 @@ interface TrendChartProps {
   color?: string;
 }
 
-export function TrendChart({ title, points, color = "#234338" }: TrendChartProps) {
+export function TrendChart({ title, points, color = "#4A678F" }: TrendChartProps) {
   return (
-    <div className="rounded-[1.5rem] border border-[#99ADC6]/45 bg-white p-5">
-      <h3 className="font-display text-xl text-[#4A678F]">{title}</h3>
+    <div className="border border-[#99ADC6]/45 bg-white p-5">
+      <h3 className="text-lg font-semibold text-[#4A678F]">{title}</h3>
       <div className="mt-4 h-72">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={points}>
@@ -32,7 +32,7 @@ export function TrendChart({ title, points, color = "#234338" }: TrendChartProps
             <YAxis axisLine={false} tickLine={false} tick={{ fill: "#99ADC6", fontSize: 11 }} />
             <Tooltip
               contentStyle={{
-                borderRadius: "14px",
+                borderRadius: "0px",
                 border: "1px solid rgba(153,173,198,0.55)",
                 boxShadow: "0 10px 30px rgba(74,103,143,0.08)"
               }}

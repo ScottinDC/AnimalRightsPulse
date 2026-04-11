@@ -9,8 +9,8 @@ interface TrendTableProps {
 
 export function TrendTable({ title, rows }: TrendTableProps) {
   const toneForValue = (value: number) => {
-    if (value > 0) return "text-[#4A678F] bg-[#F4F9FC]";
-    if (value < 0) return "text-[#CB693A] bg-[#CB693A]/10";
+    if (value > 0) return "border-[#99ADC6] text-[#4A678F] bg-[#F4F9FC]";
+    if (value < 0) return "border-[#CB693A]/20 text-[#CB693A] bg-[#CB693A]/10";
     return "text-[#4A678F] bg-white";
   };
 
@@ -21,9 +21,9 @@ export function TrendTable({ title, rows }: TrendTableProps) {
   };
 
   return (
-    <div className="overflow-hidden rounded-[1.5rem] border border-[#99ADC6]/45 bg-white">
+    <div className="overflow-hidden border border-[#99ADC6]/45 bg-white">
       <div className="border-b border-[#99ADC6]/45 bg-[#F4F9FC] px-5 py-4">
-        <h3 className="font-display text-xl text-[#4A678F]">{title}</h3>
+        <h3 className="text-lg font-semibold text-[#4A678F]">{title}</h3>
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full text-left text-sm">
@@ -57,24 +57,24 @@ export function TrendTable({ title, rows }: TrendTableProps) {
                     <SourceBadge source={row.source} label={row.sourceLabel} />
                   </td>
                   <td className="px-5 py-4">
-                    <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${toneForValue(row.trendScore)}`}>
+                    <span className={`inline-flex border px-3 py-1 text-xs font-semibold uppercase tracking-[0.05em] ${toneForValue(row.trendScore)}`}>
                       {formatTrendScore(row.trendScore)}
                     </span>
                   </td>
                   <td className="px-5 py-4">
-                    <span className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold capitalize ${toneForLabel(row.trendLabel)}`}>
+                    <span className={`inline-flex border px-3 py-1 text-xs font-semibold uppercase tracking-[0.05em] ${toneForLabel(row.trendLabel)}`}>
                       {row.trendLabel}
                     </span>
                   </td>
                   <td className="px-5 py-4">
-                    <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${toneForValue(momentum)}`}>
+                    <span className={`inline-flex border px-3 py-1 text-xs font-semibold uppercase tracking-[0.05em] ${toneForValue(momentum)}`}>
                       {formatPercentDelta(momentum)}
                     </span>
                   </td>
                   <td className="px-5 py-4">
                     <div className="flex flex-wrap gap-2">
                       {row.flags.map((flag) => (
-                        <span key={flag} className="rounded-full bg-[#F4F9FC] px-3 py-1 text-[11px] uppercase tracking-[0.08em] text-[#4A678F]/75">
+                        <span key={flag} className="border border-[#99ADC6]/35 bg-[#F4F9FC] px-3 py-1 text-[11px] uppercase tracking-[0.08em] text-[#4A678F]/75">
                           {flag}
                         </span>
                       ))}

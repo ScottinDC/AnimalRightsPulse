@@ -14,10 +14,10 @@ export function SummaryCards({ cards }: SummaryCardsProps) {
   return (
     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
       {cards.map((card) => (
-        <article key={card.id} className="rounded-[1.5rem] border border-[#99ADC6]/45 bg-white px-5 py-5 shadow-card">
+        <article key={card.id} className="border border-[#99ADC6]/45 bg-white px-5 py-5">
           <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#99ADC6]">{card.title}</p>
-          <p className="mt-3 font-display text-[2rem] leading-tight text-[#4A678F]">{card.metric}</p>
-          <div className={`mt-3 inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${toneForChange(card.change)}`}>
+          <p className="mt-3 text-[1.85rem] font-semibold leading-tight text-[#4A678F]">{card.metric}</p>
+          <div className={`mt-3 inline-flex border px-3 py-1 text-xs font-semibold uppercase tracking-[0.06em] ${toneForChange(card.change)}`}>
             {card.change}
           </div>
           <p className="mt-4 text-sm leading-6 text-[#4A678F]/78">{card.narrative}</p>

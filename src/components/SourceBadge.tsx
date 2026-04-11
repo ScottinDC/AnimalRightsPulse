@@ -15,7 +15,7 @@ interface SourceBadgeProps {
 
 export function SourceBadge({ source, label }: SourceBadgeProps) {
   return (
-    <span className={`inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] ${SOURCE_STYLES[source]}`}>
+    <span className={`inline-flex items-center border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] ${SOURCE_STYLES[source]}`}>
       {label ?? source}
     </span>
   );

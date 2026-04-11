@@ -46,14 +46,14 @@ function toSeriesPoints(row: GoogleTrendsRow | GoogleNewsTrendRow) {
 }
 
 function siteLabel(site: SiteScope): string {
-  if (site === "site-a") return "Site A";
-  if (site === "site-b") return "Site B";
+  if (site === "site-a") return "CHE";
+  if (site === "site-b") return "AWA";
   return "Global";
 }
 
 function ga4SiteLabel(site: SiteScope): string {
-  if (site === "site-a") return "Site Search CHE";
-  if (site === "site-b") return "Site Search AWA";
+  if (site === "site-a") return "CHE Site Search";
+  if (site === "site-b") return "AWA Site Search";
   return "Global";
 }
 
@@ -93,7 +93,7 @@ export function Dashboard() {
   const googleNewsLead = data.googleNews.keywords[0];
 
   return (
-    <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
+    <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8">
       <Header />
       <FilterBar filters={filters} onChange={setFilters} />
 
@@ -121,20 +121,20 @@ export function Dashboard() {
       >
         <div className="grid gap-4 lg:grid-cols-2">
           {[data.gscSiteA, data.gscSiteB].map((file) => (
-            <article key={file.site} className="rounded-[1.75rem] border border-moss/10 bg-sand/40 p-5">
+            <article key={file.site} className="border border-[#99ADC6]/45 bg-white p-5">
               <div className="flex items-center justify-between gap-4">
-                <h3 className="font-display text-2xl text-ink">{siteLabel(file.site)}</h3>
-                <span className="rounded-full bg-white px-3 py-1 text-xs text-moss">{file.window.currentStart} to {file.window.currentEnd}</span>
+                <h3 className="text-xl font-semibold text-ink">{siteLabel(file.site)}</h3>
+                <span className="border border-[#99ADC6]/35 bg-[#F4F9FC] px-3 py-1 text-xs text-moss">{file.window.currentStart} to {file.window.currentEnd}</span>
               </div>
               <div className="mt-4 space-y-3">
                 {file.queries.slice(0, 5).map((query) => (
-                  <div key={`${file.site}-${query.term}`} className="rounded-2xl bg-white px-4 py-3">
+                  <div key={`${file.site}-${query.term}`} className="border border-[#99ADC6]/25 bg-[#F4F9FC] px-4 py-3">
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <p className="font-semibold text-ink">{query.term}</p>
                         <p className="mt-1 text-xs text-moss/70">{query.page ?? "Top matching page not assigned"}</p>
                       </div>
-                      <span className="rounded-full bg-leaf/10 px-3 py-1 text-xs text-leaf">{query.trendLabel}</span>
+                      <span className="border border-[#99ADC6]/35 bg-white px-3 py-1 text-xs uppercase tracking-[0.05em] text-[#4A678F]">{query.trendLabel}</span>
                     </div>
                   </div>
                 ))}
@@ -159,11 +159,11 @@ export function Dashboard() {
       >
         <div className="grid gap-4 lg:grid-cols-2">
           {[data.ga4SiteA, data.ga4SiteB].map((file) => (
-            <article key={file.site} className="rounded-[1.75rem] border border-moss/10 bg-white p-5">
-              <h3 className="font-display text-2xl text-ink">{ga4SiteLabel(file.site)}</h3>
+            <article key={file.site} className="border border-[#99ADC6]/45 bg-white p-5">
+              <h3 className="text-xl font-semibold text-ink">{ga4SiteLabel(file.site)}</h3>
               <div className="mt-4 space-y-3">
                 {file.searches.slice(0, 5).map((row) => (
-                  <div key={`${file.site}-${row.term}`} className="rounded-2xl bg-sand px-4 py-3">
+                  <div key={`${file.site}-${row.term}`} className="border border-[#99ADC6]/25 bg-[#F4F9FC] px-4 py-3">
                     <p className="font-semibold text-ink">{row.term}</p>
                     <p className="mt-1 text-xs text-moss/70">
                       Search growth {row.searchGrowthPct.toFixed(1)}% | repeat demand {row.repeatDemandPct.toFixed(1)}%
@@ -186,15 +186,15 @@ export function Dashboard() {
       <SectionShell
         id="reddit"
         eyebrow="Reddit"
-        title="Community Momentum on r/AnimalRights"
+        title="r/AnimalRights Community Momentum"
         subtitle="The Reddit panel tracks recent posts, repeated title phrases, linked domains, and recurring topics while keeping the social signal distinct from site demand."
       >
         <div className="grid gap-4 xl:grid-cols-[1.3fr_0.7fr]">
-          <div className="rounded-[1.75rem] border border-moss/10 bg-white p-5">
-            <h3 className="font-display text-2xl text-ink">Top posts in the last window</h3>
+          <div className="border border-[#99ADC6]/45 bg-white p-5">
+            <h3 className="text-xl font-semibold text-ink">Top Posts in the Last Window</h3>
             <div className="mt-4 space-y-4">
               {topPosts(data.reddit.posts).map((post) => (
-                <article key={post.id} className="rounded-2xl bg-sand px-4 py-4">
+                <article key={post.id} className="border border-[#99ADC6]/25 bg-[#F4F9FC] px-4 py-4">
                   <a href={post.url || `https://reddit.com${post.permalink}`} target="_blank" rel="noreferrer" className="font-semibold text-ink">
                     {post.title}
                   </a>
@@ -206,18 +206,18 @@ export function Dashboard() {
             </div>
           </div>
           <div className="space-y-4">
-            <div className="rounded-[1.75rem] border border-moss/10 bg-white p-5">
-              <h3 className="font-display text-xl text-ink">Repeated phrases</h3>
+            <div className="border border-[#99ADC6]/45 bg-white p-5">
+              <h3 className="text-lg font-semibold text-ink">Repeated Phrases</h3>
               <div className="mt-4 flex flex-wrap gap-2">
                 {data.reddit.repeatedPhrases.slice(0, 10).map((phrase) => (
-                  <span key={phrase.phrase} className="rounded-full bg-ember/10 px-3 py-2 text-xs text-ember">
+                  <span key={phrase.phrase} className="border border-[#CB693A]/20 bg-[#CB693A]/10 px-3 py-2 text-xs uppercase tracking-[0.05em] text-ember">
                     {phrase.phrase} ({phrase.count})
                   </span>
                 ))}
               </div>
             </div>
-            <div className="rounded-[1.75rem] border border-moss/10 bg-white p-5">
-              <h3 className="font-display text-xl text-ink">Top linked domains</h3>
+            <div className="border border-[#99ADC6]/45 bg-white p-5">
+              <h3 className="text-lg font-semibold text-ink">Top Linked Domains</h3>
               <div className="mt-4 space-y-2">
                 {data.reddit.linkedDomains.slice(0, 5).map((domain) => (
                   <div key={domain.domain} className="flex items-center justify-between text-sm text-moss">
@@ -231,7 +231,7 @@ export function Dashboard() {
         </div>
         <div className="mt-6">
           {redditSignals.length > 0 ? (
-            <TrendTable title="Recurring Reddit Topics and Phrases" rows={redditSignals} />
+            <TrendTable title="Recurring r/AnimalRights Topics and Phrases" rows={redditSignals} />
           ) : (
             <EmptyState title="No Reddit topic rows" body="The mock dataset will populate this until the Apify Reddit actor is configured." />
           )}
@@ -245,15 +245,15 @@ export function Dashboard() {
         subtitle="Google Trends is fetched through Apify on a schedule, then normalized into a stable time-series shape before the frontend reads any local JSON."
       >
         <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
-          <TrendChart title={googleTrendsLead.keyword} points={toSeriesPoints(googleTrendsLead)} color="#234338" />
-          <div className="rounded-[1.75rem] border border-moss/10 bg-white p-5">
-            <h3 className="font-display text-2xl text-ink">Fast-rising watchlist terms</h3>
+          <TrendChart title={googleTrendsLead.keyword} points={toSeriesPoints(googleTrendsLead)} color="#4A678F" />
+          <div className="border border-[#99ADC6]/45 bg-white p-5">
+            <h3 className="text-xl font-semibold text-ink">Fast-Rising Watchlist Terms</h3>
             <div className="mt-4 space-y-3">
               {data.googleTrends.keywords.slice(0, 6).map((row) => (
-                <div key={row.keyword} className="rounded-2xl bg-sand px-4 py-3">
+                <div key={row.keyword} className="border border-[#99ADC6]/25 bg-[#F4F9FC] px-4 py-3">
                   <div className="flex items-center justify-between gap-4">
                     <p className="font-semibold text-ink">{row.keyword}</p>
-                    {row.breakout ? <span className="rounded-full bg-ember/15 px-3 py-1 text-xs text-ember">breakout</span> : null}
+                    {row.breakout ? <span className="border border-[#CB693A]/20 bg-[#CB693A]/10 px-3 py-1 text-xs uppercase tracking-[0.05em] text-ember">breakout</span> : null}
                   </div>
                   <p className="mt-1 text-xs text-moss/70">Momentum {row.momentumPct.toFixed(1)}% | {row.geo}</p>
                 </div>
@@ -270,12 +270,12 @@ export function Dashboard() {
         subtitle="Google News is fetched through Apify, then normalized into topic-level coverage and trend lines that can be compared against search and Reddit demand."
       >
         <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
-          <TrendChart title={googleNewsLead.keyword} points={toSeriesPoints(googleNewsLead)} color="#c45d37" />
-          <div className="rounded-[1.75rem] border border-moss/10 bg-white p-5">
-            <h3 className="font-display text-2xl text-ink">Rising news topics</h3>
+          <TrendChart title={googleNewsLead.keyword} points={toSeriesPoints(googleNewsLead)} color="#CB693A" />
+          <div className="border border-[#99ADC6]/45 bg-white p-5">
+            <h3 className="text-xl font-semibold text-ink">Rising Google News Topics</h3>
             <div className="mt-4 space-y-3">
               {data.googleNews.keywords.slice(0, 6).map((row) => (
-                <div key={row.keyword} className="rounded-2xl bg-sand px-4 py-3">
+                <div key={row.keyword} className="border border-[#99ADC6]/25 bg-[#F4F9FC] px-4 py-3">
                   <p className="font-semibold text-ink">{row.keyword}</p>
                   <p className="mt-1 text-xs text-moss/70">Movement {row.movementPct.toFixed(1)}% | coverage {row.coverageCount}</p>
                   {row.sampleHeadlines?.length ? <p className="mt-2 text-xs text-moss/70">{row.sampleHeadlines[0]}</p> : null}
@@ -301,7 +301,7 @@ export function Dashboard() {
         actions={
           <div className="flex flex-wrap gap-2">
             {["new", "breakout", "rising", "declining"].map((label) => (
-              <span key={label} className="rounded-full bg-sand px-3 py-1 text-xs text-moss">
+              <span key={label} className="border border-[#99ADC6]/35 bg-[#F4F9FC] px-3 py-1 text-xs text-moss">
                 {titleCaseFromSlug(label)}
               </span>
             ))}
@@ -311,7 +311,7 @@ export function Dashboard() {
         <StoryIdeasPanel ideas={data.summary.storyIdeas} />
       </SectionShell>
 
-      <footer className="rounded-[2rem] border border-moss/10 bg-white/75 p-5 text-sm text-moss/80">
+      <footer className="border border-[#99ADC6]/45 bg-white px-6 py-5 text-sm text-moss/80">
         <p className="font-semibold text-ink">Source coverage</p>
         <div className="mt-3 flex flex-wrap gap-2">
           {(["gsc", "ga4", "reddit", "google-trends", "google-news"] as SourceType[]).map((source) => (

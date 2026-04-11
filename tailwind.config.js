@@ -15,7 +15,7 @@ export default {
         card: "0 18px 40px rgba(74, 103, 143, 0.08)"
       },
       fontFamily: {
-        display: ["Georgia", "Cambria", "\"Times New Roman\"", "serif"],
+        display: ["\"Avenir Next\"", "Segoe UI", "sans-serif"],
         body: ["\"Avenir Next\"", "Segoe UI", "sans-serif"]
       }
     }

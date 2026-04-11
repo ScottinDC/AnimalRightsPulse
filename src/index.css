@@ -4,9 +4,7 @@
 
 :root {
   color: #4A678F;
-  background:
-    radial-gradient(circle at top left, rgba(153, 173, 198, 0.22), transparent 28%),
-    linear-gradient(180deg, #ffffff 0%, #f4f9fc 100%);
+  background: #f4f9fc;
 }
 
 html {
@@ -17,6 +15,8 @@ body {
   margin: 0;
   min-width: 320px;
   font-family: "Avenir Next", "Segoe UI", sans-serif;
+  background: #f4f9fc;
+  color: #4A678F;
 }
 
 #root {
