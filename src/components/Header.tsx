@@ -10,7 +10,7 @@ const NAV_ITEMS = [
 
 export function Header() {
   return (
-    <header className="border-b border-[#99ADC6]/45 bg-white px-6 py-6 sm:px-8">
+    <header id="top" className="border-b border-[#99ADC6]/45 bg-white px-6 py-6 sm:px-8">
       <div className="flex flex-col gap-4">
         <div className="max-w-3xl">
           <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#99ADC6]">Animal Rights Signal Monitor</p>

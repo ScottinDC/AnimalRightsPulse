@@ -1,42 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { EmptyState } from "../components/EmptyState";
 import { ErrorState } from "../components/ErrorState";
-import { FilterBar, type Filters } from "../components/FilterBar";
 import { Header } from "../components/Header";
 import { SectionShell } from "../components/SectionShell";
-import { SourceBadge } from "../components/SourceBadge";
 import { StoryIdeasPanel } from "../components/StoryIdeasPanel";
 import { SummaryCards } from "../components/SummaryCards";
 import { TrendChart } from "../components/TrendChart";
 import { TrendTable } from "../components/TrendTable";
 import { loadDashboardData } from "../lib/data";
 import { formatNumber, titleCaseFromSlug } from "../lib/format";
-import type {
-  DashboardData,
-  GoogleNewsTrendRow,
-  GoogleTrendsRow,
-  NormalizedSignalRow,
-  RedditPostRow,
-  SiteScope,
-  SourceType
-} from "../lib/types";
-
-const DEFAULT_FILTERS: Filters = {
-  source: "all",
-  site: "all",
-  trendLabel: "all",
-  dateWindow: "all"
-};
-
-function filterSignals(rows: NormalizedSignalRow[], filters: Filters): NormalizedSignalRow[] {
-  return rows.filter((row) => {
-    if (filters.source !== "all" && row.source !== filters.source) return false;
-    if (filters.site !== "all" && row.site !== filters.site) return false;
-    if (filters.trendLabel !== "all" && row.trendLabel !== filters.trendLabel) return false;
-    if (filters.dateWindow !== "all" && !row.timeWindow.includes(filters.dateWindow)) return false;
-    return true;
-  });
-}
+import type { DashboardData, GoogleNewsTrendRow, GoogleTrendsRow, RedditPostRow, SiteScope } from "../lib/types";
 
 function toSeriesPoints(row: GoogleTrendsRow | GoogleNewsTrendRow) {
   return row.series.map((point) => ({
@@ -63,7 +36,6 @@ function topPosts(posts: RedditPostRow[]) {
 
 export function Dashboard() {
   const [data, setData] = useState<DashboardData | null>(null);
-  const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -74,8 +46,8 @@ export function Dashboard() {
 
   const filteredSignals = useMemo(() => {
     if (!data) return [];
-    return filterSignals(data.signals.signals, filters);
-  }, [data, filters]);
+    return data.signals.signals;
+  }, [data]);
 
   const topSignals = useMemo(() => filteredSignals.slice(0, 15), [filteredSignals]);
 
@@ -95,7 +67,6 @@ export function Dashboard() {
   return (
     <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8">
       <Header />
-      <FilterBar filters={filters} onChange={setFilters} />
 
       <SectionShell
         id="overview"
@@ -108,7 +79,7 @@ export function Dashboard() {
           {topSignals.length > 0 ? (
             <TrendTable title="Top 15 Rising Signals" rows={topSignals} />
           ) : (
-            <EmptyState title="No signals match these filters" body="Try widening the source, site, or trend filters." />
+            <EmptyState title="No normalized signals yet" body="Signals will appear here after the next successful pipeline run." />
           )}
         </div>
       </SectionShell>
@@ -146,7 +117,7 @@ export function Dashboard() {
           {gscSignals.length > 0 ? (
             <TrendTable title="Combined GSC overlaps and page opportunities" rows={gscSignals} />
           ) : (
-            <EmptyState title="No GSC rows available" body="Run the Search Console fetch script or keep using the mock files for layout work." />
+            <EmptyState title="No Search Console trends yet" body="Search Console rows will appear here after the next successful fetch." />
           )}
         </div>
       </SectionShell>
@@ -178,7 +149,7 @@ export function Dashboard() {
           {ga4Signals.length > 0 ? (
             <TrendTable title="Internal Overlaps" rows={ga4Signals} />
           ) : (
-            <EmptyState title="No GA4 internal search rows" body="Wire GA4 site-search instrumentation first, then re-run the pipeline." />
+            <EmptyState title="No internal site-search trends yet" body="GA4 site-search rows will appear here after the next successful fetch." />
           )}
         </div>
       </SectionShell>
@@ -233,7 +204,7 @@ export function Dashboard() {
           {redditSignals.length > 0 ? (
             <TrendTable title="Recurring r/AnimalRights Topics and Phrases" rows={redditSignals} />
           ) : (
-            <EmptyState title="No Reddit topic rows" body="The mock dataset will populate this until the Apify Reddit actor is configured." />
+            <EmptyState title="No Reddit trend rows yet" body="Reddit topic rows will appear here after the next successful fetch." />
           )}
         </div>
       </SectionShell>
@@ -310,18 +281,6 @@ export function Dashboard() {
       >
         <StoryIdeasPanel ideas={data.summary.storyIdeas} />
       </SectionShell>
-
-      <footer className="border border-[#99ADC6]/45 bg-white px-6 py-5 text-sm text-moss/80">
-        <p className="font-semibold text-ink">Source coverage</p>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {(["gsc", "ga4", "reddit", "google-trends", "google-news"] as SourceType[]).map((source) => (
-            <SourceBadge key={source} source={source} />
-          ))}
-        </div>
-        <p className="mt-4 leading-6">
-          The dashboard is deterministic by design: it renders from committed JSON files and remains useful even before credentials are configured.
-        </p>
-      </footer>
     </div>
   );
 }

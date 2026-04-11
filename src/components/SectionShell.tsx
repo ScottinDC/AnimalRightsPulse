@@ -20,6 +20,11 @@ export function SectionShell({ id, eyebrow, title, subtitle, actions, children }
         {actions}
       </div>
       {children}
+      <div className="mt-6 flex justify-end">
+        <a href="#top" className="border border-[#99ADC6]/35 bg-[#F4F9FC] px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#4A678F] transition hover:bg-white">
+          Back to Top
+        </a>
+      </div>
     </section>
   );
 }
