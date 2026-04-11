@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import leopardImg from "../assets/leopard.jpg";
 import { EmptyState } from "../components/EmptyState";
 import { ErrorState } from "../components/ErrorState";
 import { Header } from "../components/Header";
@@ -82,6 +83,21 @@ export function Dashboard() {
           )}
         </div>
       </SectionShell>
+
+      {/* Leopard transition image spanning bottom of Overview into top of GSC */}
+      <div className="relative -my-4 h-48 overflow-hidden pointer-events-none select-none">
+        <img
+          src={leopardImg}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+          style={{
+            opacity: 0.09,
+            maskImage: "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.6) 30%, rgba(0,0,0,0.6) 70%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.6) 30%, rgba(0,0,0,0.6) 70%, transparent 100%)",
+          }}
+        />
+      </div>
 
       <SectionShell
         id="gsc"
