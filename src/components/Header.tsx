@@ -12,8 +12,9 @@ export function Header({ leopardImg }: HeaderProps) {
           aria-hidden="true"
           style={{
             position: "absolute",
-            inset: 0,
-            width: "100%",
+            top: 0,
+            right: 0,
+            width: "45%",
             height: "100%",
             objectFit: "cover",
             objectPosition: "center 30%",
