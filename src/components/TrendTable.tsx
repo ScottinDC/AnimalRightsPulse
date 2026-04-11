@@ -9,12 +9,9 @@ interface TrendTableProps {
 }
 
 export function TrendTable({ title, rows, hideSource = false }: TrendTableProps) {
-  const maxScore = Math.max(...rows.map((r) => r.trendScore), 1);
-
   const barColor = (score: number) => {
-    const pct = score / maxScore;
-    if (pct >= 0.7) return "#CB693A";
-    if (pct >= 0.4) return "#d4845c";
+    if (score >= 70) return "#CB693A";
+    if (score >= 40) return "#d4845c";
     return "#dda07e";
   };
 
@@ -57,7 +54,7 @@ export function TrendTable({ title, rows, hideSource = false }: TrendTableProps)
                 row.metrics.googleNewsVelocity ??
                 0;
 
-              const barPct = Math.max((row.trendScore / maxScore) * 100, 2);
+              const barPct = Math.min(Math.max(row.trendScore, 2), 100);
               const color = barColor(row.trendScore);
 
               return (

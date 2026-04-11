@@ -25,6 +25,96 @@
       "context": "Organic search"
     },
     {
+      "id": "gsc:site-a:state fur bans",
+      "term": "state fur bans",
+      "normalizedTerm": "state fur bans",
+      "source": "gsc",
+      "site": "site-a",
+      "sourceLabel": "GSC CHE",
+      "trendScore": 28,
+      "trendLabel": "rising",
+      "crossSourceCount": 2,
+      "timeWindow": "current:2026-04-04:2026-04-10|previous:2026-03-28:2026-04-03",
+      "metrics": {
+        "clicks": 31.1,
+        "impressions": 25.8,
+        "sourceCount": 2,
+        "novelty": 0
+      },
+      "flags": [
+        "rising",
+        "click-growth"
+      ],
+      "context": "Organic search"
+    },
+    {
+      "id": "gsc:site-a:animal testing cosmetics ban",
+      "term": "animal testing cosmetics ban",
+      "normalizedTerm": "animal testing cosmetics ban",
+      "source": "gsc",
+      "site": "site-a",
+      "sourceLabel": "GSC CHE",
+      "trendScore": 24,
+      "trendLabel": "rising",
+      "crossSourceCount": 1,
+      "timeWindow": "current:2026-04-04:2026-04-10|previous:2026-03-28:2026-04-03",
+      "metrics": {
+        "clicks": 28.6,
+        "impressions": 14.3,
+        "sourceCount": 1,
+        "novelty": 1
+      },
+      "flags": [
+        "rising",
+        "click-growth"
+      ],
+      "context": "Organic search"
+    },
+    {
+      "id": "gsc:site-a:vegan diet health benefits",
+      "term": "vegan diet health benefits",
+      "normalizedTerm": "vegan diet health benefits",
+      "source": "gsc",
+      "site": "site-a",
+      "sourceLabel": "GSC CHE",
+      "trendScore": 18,
+      "trendLabel": "steady",
+      "crossSourceCount": 1,
+      "timeWindow": "current:2026-04-04:2026-04-10|previous:2026-03-28:2026-04-03",
+      "metrics": {
+        "clicks": 21.6,
+        "impressions": 9.3,
+        "sourceCount": 1,
+        "novelty": 0
+      },
+      "flags": [
+        "steady"
+      ],
+      "context": "Organic search"
+    },
+    {
+      "id": "gsc:site-a:puppy mill laws by state",
+      "term": "puppy mill laws by state",
+      "normalizedTerm": "puppy mill laws by state",
+      "source": "gsc",
+      "site": "site-a",
+      "sourceLabel": "GSC CHE",
+      "trendScore": 15,
+      "trendLabel": "steady",
+      "crossSourceCount": 1,
+      "timeWindow": "current:2026-04-04:2026-04-10|previous:2026-03-28:2026-04-03",
+      "metrics": {
+        "clicks": 23.1,
+        "impressions": 9.9,
+        "sourceCount": 1,
+        "novelty": 0
+      },
+      "flags": [
+        "steady"
+      ],
+      "context": "Organic search"
+    },
+    {
       "id": "ga4:site-b:factory farming protest",
       "term": "factory farming protest",
       "normalizedTerm": "factory farming protest",
