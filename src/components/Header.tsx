@@ -14,7 +14,7 @@ export function Header({ leopardImg }: HeaderProps) {
             position: "absolute",
             top: 0,
             right: 0,
-            width: "45%",
+            width: "52%",
             height: "100%",
             objectFit: "cover",
             objectPosition: "center 30%",
