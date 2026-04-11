@@ -17,14 +17,10 @@ body {
   font-family: "Avenir Next", "Segoe UI", sans-serif;
   background-color: #f4f9fc;
   color: #4A678F;
-}
-
-#root {
-  min-height: 100vh;
   position: relative;
 }
 
-#root::before {
+body::before {
   content: "";
   position: fixed;
   inset: 0;
@@ -33,12 +29,11 @@ body {
   background-size: 480px auto;
   opacity: 0.25;
   pointer-events: none;
-  z-index: 0;
+  z-index: -1;
 }
 
-#root > * {
-  position: relative;
-  z-index: 1;
+#root {
+  min-height: 100vh;
 }
 
 ::selection {

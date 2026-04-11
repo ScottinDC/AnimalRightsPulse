@@ -75,10 +75,10 @@ export function TrendTable({ title, rows }: TrendTableProps) {
                           className="absolute left-0 top-0 h-full"
                           style={{ width: `${barPct}%`, backgroundColor: color }}
                         />
-                        <span className="absolute inset-0 flex items-center px-2 text-[11px] font-semibold text-white">
-                          {formatTrendScore(row.trendScore)}
-                        </span>
                       </div>
+                      <span className="w-9 shrink-0 text-right text-[11px] font-semibold text-[#4A678F]">
+                        {formatTrendScore(row.trendScore)}
+                      </span>
                     </div>
                   </td>
                   <td className="px-5 py-4">
