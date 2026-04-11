@@ -12,14 +12,29 @@ import {
   safeWriteJson
 } from "./lib.mjs";
 
-function mockWindow() {
+function formatDate(date) {
+  return date.toISOString().slice(0, 10);
+}
+
+function buildRollingWindow() {
+  const today = new Date();
+  const endCurrent = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() - 1));
+  const startCurrent = new Date(endCurrent);
+  startCurrent.setUTCDate(endCurrent.getUTCDate() - 6);
+
+  const endPrevious = new Date(startCurrent);
+  endPrevious.setUTCDate(startCurrent.getUTCDate() - 1);
+  const startPrevious = new Date(endPrevious);
+  startPrevious.setUTCDate(endPrevious.getUTCDate() - 6);
+
   return {
-    currentStart: "2026-03-31",
-    currentEnd: "2026-04-06",
-    previousStart: "2026-03-24",
-    previousEnd: "2026-03-30"
+    currentStart: formatDate(startCurrent),
+    currentEnd: formatDate(endCurrent),
+    previousStart: formatDate(startPrevious),
+    previousEnd: formatDate(endPrevious)
   };
 }
+
 
 function buildQueryRow(site, row, previous) {
   const metrics = {
@@ -127,7 +142,7 @@ async function fetchPropertyData(site, propertyUrl) {
   }
 
   const { access_token: accessToken } = await tokenResponse.json();
-  const window = mockWindow();
+  const window = buildRollingWindow();
 
   async function runQuery(dimensions) {
     const endpoint = `https://searchconsole.googleapis.com/webmasters/v3/sites/${encodeURIComponent(propertyUrl)}/searchAnalytics/query`;

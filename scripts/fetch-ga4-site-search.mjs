@@ -8,7 +8,7 @@ import {
   safeWriteJson
 } from "./lib.mjs";
 
-function buildMockWindow() {
+function buildRollingWindow() {
   return {
     currentStart: "2026-03-31",
     currentEnd: "2026-04-06",
@@ -26,7 +26,7 @@ async function fetchGa4SiteSearch(site, propertyId) {
     return loadMock(site);
   }
 
-  const window = buildMockWindow();
+  const window = buildRollingWindow();
   const serviceAccount = {
     client_email: process.env.GA4_CLIENT_EMAIL,
     private_key: process.env.GA4_PRIVATE_KEY.replace(/\\n/g, "\n")
