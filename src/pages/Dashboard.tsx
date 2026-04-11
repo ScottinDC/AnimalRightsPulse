@@ -85,7 +85,7 @@ export function Dashboard() {
 
       <SectionShell
         id="gsc"
-        eyebrow="Google Search Demand"
+        eyebrow="Google Search Console"
         title="Organic Search Growth"
         subtitle="These rows come from Search Console comparison windows, preserving site scope, page context, and the reality that GSC only returns top rows rather than a complete long tail."
       >
@@ -114,7 +114,7 @@ export function Dashboard() {
         </div>
         <div className="mt-6">
           {gscSignals.length > 0 ? (
-            <TrendTable title="Combined GSC overlaps and page opportunities" rows={gscSignals} />
+            <TrendTable title="Combined GSC" rows={gscSignals} />
           ) : (
             <EmptyState title="No Search Console trends yet" body="Search Console rows will appear here after the next successful fetch." />
           )}
@@ -156,7 +156,7 @@ export function Dashboard() {
       <SectionShell
         id="reddit"
         eyebrow="Reddit"
-        title="r/AnimalRights Community Momentum"
+        title="r/AnimalRights Momentum"
         subtitle="The Reddit panel tracks recent posts, repeated title phrases, linked domains, and recurring topics while keeping the social signal distinct from site demand."
       >
         <div className="grid gap-4 xl:grid-cols-[1.3fr_0.7fr]">
@@ -232,6 +232,21 @@ export function Dashboard() {
         title="News Momentum"
         subtitle="Google News is fetched through Apify, then normalized into topic-level coverage and trend lines that can be compared against search and Reddit demand."
       >
+        <div className="space-y-3 mb-6">
+          {[
+            { headline: "New report renews scrutiny of animal testing standards in cosmetics industry", source: "Reuters", date: "Apr 9, 2026", tag: "animal testing" },
+            { headline: "More cities consider fur ban proposals as retailers face renewed anti-fur pressure", source: "AP News", date: "Apr 8, 2026", tag: "fur ban" },
+            { headline: "Lawmakers revisit federal cosmetics animal testing rules amid campaign group pressure", source: "The Hill", date: "Apr 7, 2026", tag: "animal testing" },
+          ].map((story) => (
+            <div key={story.headline} className="border border-[#99ADC6]/25 bg-[#F4F9FC] px-4 py-3 flex items-start justify-between gap-4">
+              <div>
+                <p className="font-semibold text-[#4A678F] text-sm">{story.headline}</p>
+                <p className="mt-1 text-[11px] text-[#99ADC6] uppercase tracking-[0.08em]">{story.source} · {story.date}</p>
+              </div>
+              <span className="shrink-0 border border-[#CB693A]/20 bg-[#CB693A]/10 px-2 py-1 text-[10px] uppercase tracking-[0.08em] text-[#CB693A]">{story.tag}</span>
+            </div>
+          ))}
+        </div>
         <div className="grid gap-4 lg:grid-cols-2">
           {data.googleNews.keywords.slice(0, 2).map((row, i) => (
             <TrendChart
