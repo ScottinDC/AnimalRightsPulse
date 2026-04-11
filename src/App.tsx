@@ -1,4 +1,5 @@
 import { Dashboard } from "./pages/Dashboard";
+import bgImage from "./assets/background.jpg";
 
 function App() {
   return (
@@ -8,7 +9,7 @@ function App() {
         style={{
           position: "fixed",
           inset: 0,
-          backgroundImage: `url("${import.meta.env.BASE_URL}background.jpg")`,
+          backgroundImage: `url("${bgImage}")`,
           backgroundRepeat: "repeat",
           backgroundSize: "480px auto",
           opacity: 0.2,
