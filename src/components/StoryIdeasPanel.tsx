@@ -18,12 +18,8 @@ export function StoryIdeasPanel({ ideas }: StoryIdeasPanelProps) {
             <h3 className="font-semibold text-[#4A678F]">{idea.headline}</h3>
             <p className="mt-1 text-xs leading-5 text-[#4A678F]/70">{idea.rationale}</p>
           </div>
-          <div className="shrink-0 flex flex-col gap-1 items-end">
-            <div className="flex gap-1">
-              {[...new Set(idea.sources)].map((source) => (
-                <SourceBadge key={`${idea.id}-${source}`} source={source} />
-              ))}
-            </div>
+          <div className="shrink-0 flex flex-col items-end gap-2">
+            <SourceBadge source={[...new Set(idea.sources)][0]} />
             <div className="flex flex-wrap gap-1 justify-end">
               {idea.relatedTerms.map((term) => (
                 <span key={term} className="border border-[#99ADC6]/35 bg-[#F4F9FC] px-2 py-0.5 text-[10px] text-[#4A678F]">

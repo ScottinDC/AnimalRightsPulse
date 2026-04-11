@@ -271,15 +271,6 @@ export function Dashboard() {
         eyebrow="Story Ideas"
         title="Action Queue"
         subtitle="These items are rule-based recommendations generated from the normalized signal graph, with no LLM summarization in v1."
-        actions={
-          <div className="flex flex-wrap gap-2">
-            {["new", "breakout", "rising", "declining"].map((label) => (
-              <span key={label} className="border border-[#99ADC6]/35 bg-[#F4F9FC] px-3 py-1 text-xs text-moss">
-                {titleCaseFromSlug(label)}
-              </span>
-            ))}
-          </div>
-        }
       >
         <StoryIdeasPanel ideas={data.summary.storyIdeas} />
       </SectionShell>
