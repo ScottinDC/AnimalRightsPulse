@@ -62,7 +62,6 @@ export function Dashboard() {
   const googleNewsSignals = filteredSignals.filter((signal) => signal.source === "google-news").slice(0, 8);
 
   const googleTrendsLead = data.googleTrends.keywords[0];
-  const googleNewsLead = data.googleNews.keywords[0];
 
   return (
     <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8">
@@ -233,24 +232,19 @@ export function Dashboard() {
         title="News Momentum"
         subtitle="Google News is fetched through Apify, then normalized into topic-level coverage and trend lines that can be compared against search and Reddit demand."
       >
-        <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
-          <TrendChart title={googleNewsLead.keyword} points={toSeriesPoints(googleNewsLead)} color="#CB693A" />
-          <div className="border border-[#99ADC6]/45 bg-white p-5">
-            <h3 className="text-xl font-semibold text-ink">Rising Google News Topics</h3>
-            <div className="mt-4 space-y-3">
-              {data.googleNews.keywords.slice(0, 6).map((row) => (
-                <div key={row.keyword} className="border border-[#99ADC6]/25 bg-[#F4F9FC] px-4 py-3">
-                  <p className="font-semibold text-ink">{row.keyword}</p>
-                  <p className="mt-1 text-xs text-moss/70">Movement {row.movementPct.toFixed(1)}% | coverage {row.coverageCount}</p>
-                  {row.sampleHeadlines?.length ? <p className="mt-2 text-xs text-moss/70">{row.sampleHeadlines[0]}</p> : null}
-                </div>
-              ))}
-            </div>
-          </div>
+        <div className="grid gap-4 lg:grid-cols-2">
+          {data.googleNews.keywords.slice(0, 2).map((row, i) => (
+            <TrendChart
+              key={row.keyword}
+              title={row.keyword}
+              points={toSeriesPoints(row)}
+              color={i === 0 ? "#CB693A" : "#4A678F"}
+            />
+          ))}
         </div>
         <div className="mt-6">
           {googleNewsSignals.length > 0 ? (
-            <TrendTable title="News Overlap with Search and Social Momentum" rows={googleNewsSignals} />
+            <TrendTable title="News Overlap with Search and Social Momentum" rows={googleNewsSignals} hideSource />
           ) : (
             <EmptyState title="No Google News signals" body="Validate the Apify actor output, then normalize it into /public/data/google-news.json." />
           )}
