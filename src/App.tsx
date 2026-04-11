@@ -12,7 +12,7 @@ function App() {
           backgroundImage: `url("${bgImage}")`,
           backgroundRepeat: "repeat",
           backgroundSize: "480px auto",
-          opacity: 0.35,
+          opacity: 0.12,
           zIndex: 0,
           pointerEvents: "none",
         }}
