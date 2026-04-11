@@ -215,22 +215,15 @@ export function Dashboard() {
         title="Interest Over Time"
         subtitle="Google Trends is fetched through Apify on a schedule, then normalized into a stable time-series shape before the frontend reads any local JSON."
       >
-        <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
-          <TrendChart title={googleTrendsLead.keyword} points={toSeriesPoints(googleTrendsLead)} color="#4A678F" />
-          <div className="border border-[#99ADC6]/45 bg-white p-5">
-            <h3 className="text-xl font-semibold text-ink">Fast-Rising Watchlist Terms</h3>
-            <div className="mt-4 space-y-3">
-              {data.googleTrends.keywords.slice(0, 6).map((row) => (
-                <div key={row.keyword} className="border border-[#99ADC6]/25 bg-[#F4F9FC] px-4 py-3">
-                  <div className="flex items-center justify-between gap-4">
-                    <p className="font-semibold text-ink">{row.keyword}</p>
-                    {row.breakout ? <span className="border border-[#CB693A]/20 bg-[#CB693A]/10 px-3 py-1 text-xs uppercase tracking-[0.05em] text-ember">breakout</span> : null}
-                  </div>
-                  <p className="mt-1 text-xs text-moss/70">Momentum {row.momentumPct.toFixed(1)}% | {row.geo}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+        <div className="grid gap-4 lg:grid-cols-3">
+          {data.googleTrends.keywords.slice(0, 3).map((row, i) => (
+            <TrendChart
+              key={row.keyword}
+              title={row.keyword}
+              points={toSeriesPoints(row)}
+              color={i === 0 ? "#4A678F" : i === 1 ? "#CB693A" : "#99ADC6"}
+            />
+          ))}
         </div>
       </SectionShell>
 

@@ -40,7 +40,7 @@ export function TrendTable({ title, rows, hideSource = false }: TrendTableProps)
           <thead className="bg-white text-[#4A678F]/80">
             <tr>
               <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em]">Signal</th>
-              <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em]">Source</th>
+              {!hideSource && <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em]">Source</th>}
               <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em] min-w-[180px]">Score</th>
               <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em]">Trend</th>
               <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em]">Momentum</th>
@@ -66,9 +66,11 @@ export function TrendTable({ title, rows, hideSource = false }: TrendTableProps)
                     <div className="font-semibold text-[#4A678F]">{row.term}</div>
                     <div className="mt-1 text-[11px] uppercase tracking-[0.08em] text-[#99ADC6]">{row.context ?? row.timeWindow}</div>
                   </td>
-                  <td className="px-5 py-4">
-                    {!hideSource && <SourceBadge source={row.source} label={row.sourceLabel} />}
-                  </td>
+                  {!hideSource && (
+                    <td className="px-5 py-4">
+                      <SourceBadge source={row.source} label={row.sourceLabel} />
+                    </td>
+                  )}
                   <td className="px-5 py-4">
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                       <div style={{ position: "relative", width: 120, height: 22, backgroundColor: "#F4F9FC", border: "1px solid rgba(153,173,198,0.3)", flexShrink: 0, overflow: "hidden" }}>
