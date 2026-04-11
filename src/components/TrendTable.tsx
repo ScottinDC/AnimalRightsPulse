@@ -8,24 +8,36 @@ interface TrendTableProps {
 }
 
 export function TrendTable({ title, rows }: TrendTableProps) {
+  const toneForValue = (value: number) => {
+    if (value > 0) return "text-[#4A678F] bg-[#F4F9FC]";
+    if (value < 0) return "text-[#CB693A] bg-[#CB693A]/10";
+    return "text-[#4A678F] bg-white";
+  };
+
+  const toneForLabel = (label: string) => {
+    if (label === "breakout" || label === "new" || label === "rising") return "text-[#4A678F] bg-[#F4F9FC] border-[#99ADC6]";
+    if (label === "declining") return "text-[#CB693A] bg-[#CB693A]/10 border-[#CB693A]/20";
+    return "text-[#4A678F] bg-white border-[#99ADC6]/60";
+  };
+
   return (
-    <div className="overflow-hidden rounded-[1.75rem] border border-moss/10">
-      <div className="border-b border-moss/10 bg-sand/70 px-5 py-4">
-        <h3 className="font-display text-xl text-ink">{title}</h3>
+    <div className="overflow-hidden rounded-[1.5rem] border border-[#99ADC6]/45 bg-white">
+      <div className="border-b border-[#99ADC6]/45 bg-[#F4F9FC] px-5 py-4">
+        <h3 className="font-display text-xl text-[#4A678F]">{title}</h3>
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full text-left text-sm">
-          <thead className="bg-white/70 text-moss">
+          <thead className="bg-white text-[#4A678F]/80">
             <tr>
-              <th className="px-5 py-3 font-medium">Signal</th>
-              <th className="px-5 py-3 font-medium">Source</th>
-              <th className="px-5 py-3 font-medium">Score</th>
-              <th className="px-5 py-3 font-medium">Trend</th>
-              <th className="px-5 py-3 font-medium">Momentum</th>
-              <th className="px-5 py-3 font-medium">Flags</th>
+              <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em]">Signal</th>
+              <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em]">Source</th>
+              <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em]">Score</th>
+              <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em]">Trend</th>
+              <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em]">Momentum</th>
+              <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em]">Flags</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-moss/10 bg-white">
+          <tbody className="divide-y divide-[#99ADC6]/25 bg-white">
             {rows.map((row) => {
               const momentum =
                 row.metrics.impressions ??
@@ -36,21 +48,33 @@ export function TrendTable({ title, rows }: TrendTableProps) {
                 0;
 
               return (
-                <tr key={row.id}>
+                <tr key={row.id} className="align-top">
                   <td className="px-5 py-4">
-                    <div className="font-semibold text-ink">{row.term}</div>
-                    <div className="mt-1 text-xs text-moss/70">{row.context ?? row.timeWindow}</div>
+                    <div className="font-semibold text-[#4A678F]">{row.term}</div>
+                    <div className="mt-1 text-[11px] uppercase tracking-[0.08em] text-[#99ADC6]">{row.context ?? row.timeWindow}</div>
                   </td>
                   <td className="px-5 py-4">
                     <SourceBadge source={row.source} label={row.sourceLabel} />
                   </td>
-                  <td className="px-5 py-4 font-semibold text-ink">{formatTrendScore(row.trendScore)}</td>
-                  <td className="px-5 py-4 capitalize text-moss">{row.trendLabel}</td>
-                  <td className="px-5 py-4 text-moss">{formatPercentDelta(momentum)}</td>
+                  <td className="px-5 py-4">
+                    <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${toneForValue(row.trendScore)}`}>
+                      {formatTrendScore(row.trendScore)}
+                    </span>
+                  </td>
+                  <td className="px-5 py-4">
+                    <span className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold capitalize ${toneForLabel(row.trendLabel)}`}>
+                      {row.trendLabel}
+                    </span>
+                  </td>
+                  <td className="px-5 py-4">
+                    <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${toneForValue(momentum)}`}>
+                      {formatPercentDelta(momentum)}
+                    </span>
+                  </td>
                   <td className="px-5 py-4">
                     <div className="flex flex-wrap gap-2">
                       {row.flags.map((flag) => (
-                        <span key={flag} className="rounded-full bg-moss/8 px-3 py-1 text-xs text-moss">
+                        <span key={flag} className="rounded-full bg-[#F4F9FC] px-3 py-1 text-[11px] uppercase tracking-[0.08em] text-[#4A678F]/75">
                           {flag}
                         </span>
                       ))}

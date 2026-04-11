@@ -24,12 +24,12 @@ function Select<T extends string>({
   onChange: (value: T) => void;
 }) {
   return (
-    <label className="flex flex-col gap-2 text-sm text-moss">
-      <span className="font-medium">{label}</span>
+    <label className="flex flex-col gap-2 text-sm text-[#4A678F]">
+      <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#99ADC6]">{label}</span>
       <select
         value={value}
         onChange={(event) => onChange(event.target.value as T)}
-        className="rounded-2xl border border-moss/15 bg-white px-4 py-3 text-ink outline-none ring-0"
+        className="rounded-xl border border-[#99ADC6]/45 bg-white px-4 py-3 text-sm text-[#4A678F] outline-none ring-0 transition focus:border-[#4A678F]"
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>
@@ -43,7 +43,7 @@ function Select<T extends string>({
 
 export function FilterBar({ filters, onChange }: FilterBarProps) {
   return (
-    <div className="grid gap-4 rounded-[2rem] border border-moss/10 bg-white/85 p-5 shadow-card sm:grid-cols-2 xl:grid-cols-4">
+    <div className="grid gap-4 rounded-[1.5rem] border border-[#99ADC6]/45 bg-white p-5 shadow-card sm:grid-cols-2 xl:grid-cols-4">
       <Select
         label="Source"
         value={filters.source}

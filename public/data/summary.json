@@ -1,30 +1,30 @@
 {
-  "generatedAt": "2026-04-11T17:38:30.666Z",
+  "generatedAt": "2026-04-11T17:59:51.509Z",
   "summaryCards": [
     {
       "id": "top-signal",
-      "title": "Top signal",
+      "title": "Top Signal",
       "metric": "factory farming protest",
-      "change": "rising at 48.0",
+      "change": "Rising at 48.0",
       "narrative": "The highest scoring signal blends momentum, novelty, and cross-source confirmation."
     },
     {
       "id": "cross-source",
-      "title": "Cross-source confirmed",
+      "title": "Cross-Source Confirmed",
       "metric": "0",
       "change": "Signals seen in three or more source families",
       "narrative": "These are the safest candidates for immediate editorial action."
     },
     {
       "id": "internal-search",
-      "title": "Internal demand gaps",
+      "title": "Internal Demand Gaps",
       "metric": "4",
       "change": "GA4 terms with rising on-site demand",
       "narrative": "These terms often point to navigation gaps or missing explainers."
     },
     {
       "id": "watch-list",
-      "title": "Watch list",
+      "title": "Watch List",
       "metric": "0",
       "change": "New or breakout topics",
       "narrative": "These deserve a faster newsroom review loop than steady demand terms."

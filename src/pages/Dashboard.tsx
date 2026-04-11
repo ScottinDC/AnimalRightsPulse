@@ -51,6 +51,12 @@ function siteLabel(site: SiteScope): string {
   return "Global";
 }
 
+function ga4SiteLabel(site: SiteScope): string {
+  if (site === "site-a") return "Site Search CHE";
+  if (site === "site-b") return "Site Search AWA";
+  return "Global";
+}
+
 function topPosts(posts: RedditPostRow[]) {
   return [...posts].sort((a, b) => b.velocityScore - a.velocityScore).slice(0, 5);
 }
@@ -94,13 +100,13 @@ export function Dashboard() {
       <SectionShell
         id="overview"
         eyebrow="Overview"
-        title="Top rising signals"
+        title="Rising Signals"
         subtitle="Rule-based scoring merges committed source files into a single editorial view without any live browser-side API calls."
       >
         <SummaryCards cards={data.summary.summaryCards} />
         <div className="mt-6">
           {topSignals.length > 0 ? (
-            <TrendTable title="Top 15 rising signals across all sources" rows={topSignals} />
+            <TrendTable title="Top 15 Rising Signals" rows={topSignals} />
           ) : (
             <EmptyState title="No signals match these filters" body="Try widening the source, site, or trend filters." />
           )}
@@ -110,7 +116,7 @@ export function Dashboard() {
       <SectionShell
         id="gsc"
         eyebrow="Google Search Demand"
-        title="Organic search demand before people land on your sites"
+        title="Organic Search Growth"
         subtitle="These rows come from Search Console comparison windows, preserving site scope, page context, and the reality that GSC only returns top rows rather than a complete long tail."
       >
         <div className="grid gap-4 lg:grid-cols-2">
@@ -148,13 +154,13 @@ export function Dashboard() {
       <SectionShell
         id="ga4"
         eyebrow="Internal Site Search"
-        title="Questions audiences type into each site’s own search box"
+        title="Internal Site Queries"
         subtitle="GA4 internal search signals are modeled separately from external search demand so editorial gaps and information architecture issues stay visible."
       >
         <div className="grid gap-4 lg:grid-cols-2">
           {[data.ga4SiteA, data.ga4SiteB].map((file) => (
             <article key={file.site} className="rounded-[1.75rem] border border-moss/10 bg-white p-5">
-              <h3 className="font-display text-2xl text-ink">{siteLabel(file.site)}</h3>
+              <h3 className="font-display text-2xl text-ink">{ga4SiteLabel(file.site)}</h3>
               <div className="mt-4 space-y-3">
                 {file.searches.slice(0, 5).map((row) => (
                   <div key={`${file.site}-${row.term}`} className="rounded-2xl bg-sand px-4 py-3">
@@ -170,7 +176,7 @@ export function Dashboard() {
         </div>
         <div className="mt-6">
           {ga4Signals.length > 0 ? (
-            <TrendTable title="Combined internal-search overlaps" rows={ga4Signals} />
+            <TrendTable title="Internal Overlaps" rows={ga4Signals} />
           ) : (
             <EmptyState title="No GA4 internal search rows" body="Wire GA4 site-search instrumentation first, then re-run the pipeline." />
           )}
@@ -180,7 +186,7 @@ export function Dashboard() {
       <SectionShell
         id="reddit"
         eyebrow="Reddit"
-        title="Editorial and community momentum from r/AnimalRights"
+        title="Community Momentum on r/AnimalRights"
         subtitle="The Reddit panel tracks recent posts, repeated title phrases, linked domains, and recurring topics while keeping the social signal distinct from site demand."
       >
         <div className="grid gap-4 xl:grid-cols-[1.3fr_0.7fr]">
@@ -225,7 +231,7 @@ export function Dashboard() {
         </div>
         <div className="mt-6">
           {redditSignals.length > 0 ? (
-            <TrendTable title="Recurring Reddit topics and phrases" rows={redditSignals} />
+            <TrendTable title="Recurring Reddit Topics and Phrases" rows={redditSignals} />
           ) : (
             <EmptyState title="No Reddit topic rows" body="The mock dataset will populate this until the Apify Reddit actor is configured." />
           )}
@@ -235,7 +241,7 @@ export function Dashboard() {
       <SectionShell
         id="google-trends"
         eyebrow="Google Trends"
-        title="Interest-over-time for a seeded animal-rights watchlist"
+        title="Interest Over Time"
         subtitle="Google Trends is fetched through Apify on a schedule, then normalized into a stable time-series shape before the frontend reads any local JSON."
       >
         <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
@@ -260,7 +266,7 @@ export function Dashboard() {
       <SectionShell
         id="google-news"
         eyebrow="Google News"
-        title="News momentum and mainstream breakout monitoring"
+        title="News Momentum"
         subtitle="Google News is fetched through Apify, then normalized into topic-level coverage and trend lines that can be compared against search and Reddit demand."
       >
         <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
@@ -280,7 +286,7 @@ export function Dashboard() {
         </div>
         <div className="mt-6">
           {googleNewsSignals.length > 0 ? (
-            <TrendTable title="News overlap with search and social momentum" rows={googleNewsSignals} />
+            <TrendTable title="News Overlap with Search and Social Momentum" rows={googleNewsSignals} />
           ) : (
             <EmptyState title="No Google News signals" body="Validate the Apify actor output, then normalize it into /public/data/google-news.json." />
           )}
@@ -290,7 +296,7 @@ export function Dashboard() {
       <SectionShell
         id="story-ideas"
         eyebrow="Story Ideas"
-        title="Action queue for the editorial team"
+        title="Action Queue"
         subtitle="These items are rule-based recommendations generated from the normalized signal graph, with no LLM summarization in v1."
         actions={
           <div className="flex flex-wrap gap-2">

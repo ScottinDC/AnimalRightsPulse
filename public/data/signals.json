@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-11T17:38:30.502Z",
+  "generatedAt": "2026-04-11T17:59:51.510Z",
   "signals": [
     {
       "id": "ga4:site-b:factory farming protest",
@@ -7,7 +7,7 @@
       "normalizedTerm": "factory farming protest",
       "source": "ga4",
       "site": "site-b",
-      "sourceLabel": "GA4 SITE-B",
+      "sourceLabel": "GA4 AWA",
       "trendScore": 48,
       "trendLabel": "rising",
       "crossSourceCount": 1,
@@ -30,7 +30,7 @@
       "normalizedTerm": "state fur bans",
       "source": "ga4",
       "site": "site-a",
-      "sourceLabel": "GA4 SITE-A",
+      "sourceLabel": "GA4 CHE",
       "trendScore": 31.151999999999997,
       "trendLabel": "rising",
       "crossSourceCount": 1,
@@ -53,7 +53,7 @@
       "normalizedTerm": "animal testing cosmetics",
       "source": "ga4",
       "site": "site-a",
-      "sourceLabel": "GA4 SITE-A",
+      "sourceLabel": "GA4 CHE",
       "trendScore": 30.336,
       "trendLabel": "rising",
       "crossSourceCount": 1,
@@ -118,7 +118,7 @@
       "normalizedTerm": "puppy mills map",
       "source": "ga4",
       "site": "site-b",
-      "sourceLabel": "GA4 SITE-B",
+      "sourceLabel": "GA4 AWA",
       "trendScore": 19.356,
       "trendLabel": "steady",
       "crossSourceCount": 1,

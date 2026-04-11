@@ -4,15 +4,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        ink: "#10221c",
-        moss: "#234338",
-        leaf: "#4f7a55",
-        sand: "#f4efdf",
-        ember: "#c45d37",
-        sky: "#b5d9df"
+        ink: "#4A678F",
+        moss: "#99ADC6",
+        leaf: "#99ADC6",
+        sand: "#FFFFFF",
+        ember: "#CB693A",
+        sky: "#F4F9FC"
       },
       boxShadow: {
-        card: "0 18px 40px rgba(16, 34, 28, 0.08)"
+        card: "0 18px 40px rgba(74, 103, 143, 0.08)"
       },
       fontFamily: {
         display: ["Georgia", "Cambria", "\"Times New Roman\"", "serif"],

@@ -11,28 +11,28 @@ async function main() {
   const cards = [
     {
       id: "top-signal",
-      title: "Top signal",
+      title: "Top Signal",
       metric: topSignals[0]?.term ?? "No data",
-      change: `${topSignals[0]?.trendLabel ?? "steady"} at ${topSignals[0]?.trendScore?.toFixed?.(1) ?? "0.0"}`,
+      change: `${topSignals[0] ? `${topSignals[0].trendLabel.charAt(0).toUpperCase()}${topSignals[0].trendLabel.slice(1)}` : "Steady"} at ${topSignals[0]?.trendScore?.toFixed?.(1) ?? "0.0"}`,
       narrative: "The highest scoring signal blends momentum, novelty, and cross-source confirmation."
     },
     {
       id: "cross-source",
-      title: "Cross-source confirmed",
+      title: "Cross-Source Confirmed",
       metric: String(topSignals.filter((signal) => signal.crossSourceCount >= 3).length),
       change: "Signals seen in three or more source families",
       narrative: "These are the safest candidates for immediate editorial action."
     },
     {
       id: "internal-search",
-      title: "Internal demand gaps",
+      title: "Internal Demand Gaps",
       metric: String(topSignals.filter((signal) => signal.source === "ga4").length),
       change: "GA4 terms with rising on-site demand",
       narrative: "These terms often point to navigation gaps or missing explainers."
     },
     {
       id: "watch-list",
-      title: "Watch list",
+      title: "Watch List",
       metric: String(topSignals.filter((signal) => signal.trendLabel === "new" || signal.trendLabel === "breakout").length),
       change: "New or breakout topics",
       narrative: "These deserve a faster newsroom review loop than steady demand terms."

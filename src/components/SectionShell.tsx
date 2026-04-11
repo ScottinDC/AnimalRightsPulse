@@ -10,12 +10,12 @@ interface SectionShellProps extends PropsWithChildren {
 
 export function SectionShell({ id, eyebrow, title, subtitle, actions, children }: SectionShellProps) {
   return (
-    <section id={id} className="scroll-mt-24 rounded-[2rem] border border-moss/10 bg-white/80 p-6 shadow-card backdrop-blur sm:p-8">
-      <div className="mb-6 flex flex-col gap-4 border-b border-moss/10 pb-5 lg:flex-row lg:items-end lg:justify-between">
+    <section id={id} className="scroll-mt-24 rounded-[1.75rem] border border-[#99ADC6]/45 bg-white p-6 shadow-card sm:p-7">
+      <div className="mb-6 flex flex-col gap-4 border-b border-[#99ADC6]/45 pb-5 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-leaf">{eyebrow}</p>
-          <h2 className="mt-2 font-display text-3xl text-ink">{title}</h2>
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-moss/80">{subtitle}</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#99ADC6]">{eyebrow}</p>
+          <h2 className="mt-2 font-display text-[2rem] leading-tight text-[#4A678F]">{title}</h2>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-[#4A678F]/78">{subtitle}</p>
         </div>
         {actions}
       </div>

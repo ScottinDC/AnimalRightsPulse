@@ -75,7 +75,7 @@ async function main() {
         normalizedTerm: row.normalizedTerm,
         source: "ga4",
         site: file.site,
-        sourceLabel: `GA4 ${file.site.toUpperCase()}`,
+        sourceLabel: file.site === "site-a" ? "GA4 CHE" : "GA4 AWA",
         trendScore: row.trendScore,
         trendLabel: row.trendLabel,
         crossSourceCount: 1,
