@@ -202,7 +202,7 @@ export function Dashboard() {
         </div>
         <div className="mt-6">
           {redditSignals.length > 0 ? (
-            <TrendTable title="Recurring r/AnimalRights Topics and Phrases" rows={redditSignals} />
+            <TrendTable title="Recurring Topics and Phrases" rows={redditSignals} hideSource />
           ) : (
             <EmptyState title="No Reddit trend rows yet" body="Reddit topic rows will appear here after the next successful fetch." />
           )}
