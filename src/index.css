@@ -15,12 +15,30 @@ body {
   margin: 0;
   min-width: 320px;
   font-family: "Avenir Next", "Segoe UI", sans-serif;
-  background: #f4f9fc;
+  background-color: #f4f9fc;
   color: #4A678F;
 }
 
 #root {
   min-height: 100vh;
+  position: relative;
+}
+
+#root::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("/background.jpg");
+  background-repeat: repeat;
+  background-size: 480px auto;
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 0;
+}
+
+#root > * {
+  position: relative;
+  z-index: 1;
 }
 
 ::selection {
