@@ -20,17 +20,6 @@ export function Header() {
             community, and news signals.
           </p>
         </div>
-        <nav className="flex flex-wrap gap-2 border-t border-[#99ADC6]/45 pt-4">
-          {NAV_ITEMS.map(([id, label]) => (
-            <a
-              key={id}
-              href={`#${id}`}
-              className="border border-[#99ADC6]/45 bg-[#F4F9FC] px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-[#4A678F] transition hover:bg-white"
-            >
-              {label}
-            </a>
-          ))}
-        </nav>
       </div>
     </header>
   );
