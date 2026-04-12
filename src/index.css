@@ -17,25 +17,18 @@ body {
   min-width: 320px;
   font-family: "Avenir Next", "Segoe UI", sans-serif;
   background: #ffffff;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.86)),
+    var(--app-background-image);
+  background-repeat: repeat, repeat;
+  background-position: 0 0, -42px top;
+  background-size: auto, 500px auto;
+  background-attachment: fixed, fixed;
   color: #4A678F;
-}
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.14;
-  background-image: var(--app-background-image, url("../background.jpg"));
-  background-repeat: repeat;
-  background-position: -42px top;
-  background-size: 500px auto;
 }
 
 #root {
   position: relative;
-  z-index: 1;
   min-height: 100vh;
 }
 
