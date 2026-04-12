@@ -17,13 +17,6 @@ body {
   min-width: 320px;
   font-family: "Avenir Next", "Segoe UI", sans-serif;
   background: #ffffff;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.86)),
-    var(--app-background-image);
-  background-repeat: repeat, repeat;
-  background-position: 0 0, -42px top;
-  background-size: auto, 500px auto;
-  background-attachment: fixed, fixed;
   color: #4A678F;
 }
 
