@@ -1,4 +1,6 @@
 export function Header() {
+  const base = import.meta.env.BASE_URL;
+
   return (
     <header id="top" className="border-b border-[#99ADC6]/45 bg-white px-5 py-5 sm:px-7">
       <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
@@ -13,17 +15,17 @@ export function Header() {
 
         <div className="relative -mr-5 -my-5 m-0 h-40 w-full max-w-[390px] self-stretch overflow-hidden p-0 sm:-mr-7 sm:h-44 sm:max-w-[420px]">
           <img
-            src="/leopard.jpg"
+            src={`${base}leopard.jpg`}
             alt="Leopard portrait"
             className="absolute inset-0 m-0 block h-full w-full scale-[1.2] p-0 object-cover object-right opacity-50"
           />
           <div className="absolute inset-y-0 left-0 w-[58%] bg-gradient-to-r from-white via-white/82 to-transparent" />
           <div className="absolute right-0 top-0 z-10 flex h-full w-20 flex-col items-stretch sm:w-[88px]">
             <div className="flex h-1/2 items-center justify-center bg-white p-2">
-              <img src="/che-logo.png" alt="CHE logo" className="h-full w-full object-contain" />
+              <img src={`${base}che-logo.png`} alt="CHE logo" className="h-full w-full object-contain" />
             </div>
             <div className="flex h-1/2 items-center justify-center bg-white p-2">
-              <img src="/awa-logo.png" alt="AWA logo" className="h-full w-full object-contain" />
+              <img src={`${base}awa-logo.png`} alt="AWA logo" className="h-full w-full object-contain" />
             </div>
           </div>
         </div>
