@@ -18,7 +18,7 @@ export function Header() {
             src={`${base}leopard.jpg`}
             alt="Leopard portrait"
             className="absolute inset-0 m-0 block h-full w-full scale-[1.6] p-0 object-cover opacity-50"
-            style={{ objectPosition: "right 58%" }}
+            style={{ objectPosition: "right 52%" }}
           />
           <div className="absolute inset-y-0 left-0 w-[58%] bg-gradient-to-r from-white via-white/82 to-transparent" />
           <div className="absolute right-0 top-0 z-10 flex h-full w-20 flex-col items-stretch sm:w-[88px]">
