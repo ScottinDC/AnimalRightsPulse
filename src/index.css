@@ -26,8 +26,8 @@ body::before {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.1;
-  background-image: var(--app-background-image);
+  opacity: 0.14;
+  background-image: var(--app-background-image, url("../background.jpg"));
   background-repeat: repeat;
   background-position: -42px top;
   background-size: 500px auto;
