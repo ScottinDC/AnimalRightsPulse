@@ -135,9 +135,10 @@ export function Dashboard() {
 
       <SectionShell
         id="overview"
-        eyebrow="Overview"
-        title=""
+        title="Overview"
         subtitle="Rule-based scoring merges committed source files into a single editorial view without any live browser-side API calls."
+        headerDivider={false}
+        topDivider={false}
         actions={
           <label className="flex items-center gap-3 self-start lg:self-end">
             <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#99ADC6]">Time Period</span>

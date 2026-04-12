@@ -2,7 +2,7 @@ export function Header() {
   const base = import.meta.env.BASE_URL;
 
   return (
-    <header id="top" className="border-b border-[#99ADC6]/45 bg-white px-5 py-5 sm:px-7">
+    <header id="top" className="bg-white px-5 py-5 sm:px-7">
       <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-3xl">
           <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#99ADC6]">Animal Rights Signal</p>
