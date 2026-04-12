@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "generatedAt": "2026-04-12T01:54:22.795Z",
+=======
+  "generatedAt": "2026-04-12T03:09:40.850Z",
+>>>>>>> bcc18a0 (Polish dashboard interactions and deploy assets)
   "signals": [
     {
       "id": "ga4:site-b:factory farming protest",
@@ -99,7 +103,7 @@
       "site": "global",
       "sourceLabel": "Google News",
       "trendScore": 20.1,
-      "trendLabel": "rising",
+      "trendLabel": "breakout",
       "crossSourceCount": 1,
       "timeWindow": "google-news:recent",
       "metrics": {
@@ -120,7 +124,7 @@
       "site": "site-b",
       "sourceLabel": "GA4 AWA",
       "trendScore": 19.356,
-      "trendLabel": "steady",
+      "trendLabel": "rising",
       "crossSourceCount": 1,
       "timeWindow": "current:2026-03-31:2026-04-06|previous:2026-03-24:2026-03-30",
       "metrics": {
@@ -143,7 +147,7 @@
       "site": "global",
       "sourceLabel": "Google Trends",
       "trendScore": 19,
-      "trendLabel": "steady",
+      "trendLabel": "rising",
       "crossSourceCount": 1,
       "timeWindow": "today 1-m",
       "metrics": {

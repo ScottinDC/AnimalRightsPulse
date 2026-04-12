@@ -1,0 +1,74 @@
+{
+  "generatedAt": "2026-04-11T00:00:00.000Z",
+  "keywords": [
+    {
+      "keyword": "animal testing",
+      "normalizedTerm": "animal testing",
+      "engagement": 1820,
+      "growthPct": 86.4,
+      "trendScore": 27.4,
+      "trendLabel": "breakout"
+    },
+    {
+      "keyword": "fur ban",
+      "normalizedTerm": "fur ban",
+      "engagement": 1440,
+      "growthPct": 64.2,
+      "trendScore": 21.8,
+      "trendLabel": "rising"
+    },
+    {
+      "keyword": "wildlife trafficking",
+      "normalizedTerm": "wildlife trafficking",
+      "engagement": 1275,
+      "growthPct": 58.6,
+      "trendScore": 19.4,
+      "trendLabel": "rising"
+    },
+    {
+      "keyword": "puppy mills",
+      "normalizedTerm": "puppy mills",
+      "engagement": 1185,
+      "growthPct": 41.7,
+      "trendScore": 16.6,
+      "trendLabel": "steady"
+    },
+    {
+      "keyword": "marine mammal captivity",
+      "normalizedTerm": "marine mammal captivity",
+      "engagement": 990,
+      "growthPct": 38.9,
+      "trendScore": 15.2,
+      "trendLabel": "steady"
+    }
+  ],
+  "stories": [
+    {
+      "id": "fb-1",
+      "headline": "New coalition pushes cosmetics animal testing ban into state legislatures",
+      "url": "https://example.com/facebook-story-animal-testing",
+      "keyword": "animal testing",
+      "engagement": 1820,
+      "growthPct": 86.4,
+      "trendLabel": "breakout"
+    },
+    {
+      "id": "fb-2",
+      "headline": "Retail pressure campaign reignites momentum around fur ban coverage",
+      "url": "https://example.com/facebook-story-fur-ban",
+      "keyword": "fur ban",
+      "engagement": 1440,
+      "growthPct": 64.2,
+      "trendLabel": "rising"
+    },
+    {
+      "id": "fb-3",
+      "headline": "Advocates share new puppy mills map and regional enforcement breakdown",
+      "url": "https://example.com/facebook-story-puppy-mills",
+      "keyword": "puppy mills",
+      "engagement": 1185,
+      "growthPct": 41.7,
+      "trendLabel": "steady"
+    }
+  ]
+}

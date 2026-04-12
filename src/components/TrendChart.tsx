@@ -23,7 +23,7 @@ interface TrendChartProps {
 export function TrendChart({ title, points, color = "#4A678F" }: TrendChartProps) {
   return (
     <div className="border border-[#99ADC6]/45 bg-white p-5">
-      <h3 className="text-lg font-semibold text-[#4A678F]">{title}</h3>
+      <h3 className="text-lg font-semibold text-[#000000]">{title}</h3>
       <div className="mt-4 h-72">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={points}>

@@ -3,6 +3,7 @@ export type SourceType =
   | "gsc"
   | "ga4"
   | "reddit"
+  | "facebook"
   | "google-trends"
   | "google-news";
 export type TrendLabel = "new" | "breakout" | "rising" | "steady" | "declining";
@@ -22,6 +23,7 @@ export interface DeltaMetrics {
   searches?: number;
   repeatRate?: number;
   redditVelocity?: number;
+  facebookVelocity?: number;
   googleTrendsVelocity?: number;
   googleNewsVelocity?: number;
   sourceCount?: number;
@@ -120,6 +122,32 @@ export interface GoogleNewsTrendRow {
   movementPct: number;
   coverageCount: number;
   sampleHeadlines?: string[];
+  sampleStories?: Array<{ headline: string; url: string }>;
+}
+
+export interface FacebookKeywordRow {
+  keyword: string;
+  normalizedTerm: string;
+  engagement: number;
+  growthPct: number;
+  trendScore: number;
+  trendLabel: TrendLabel;
+}
+
+export interface FacebookStoryRow {
+  id: string;
+  headline: string;
+  url: string;
+  keyword: string;
+  engagement: number;
+  growthPct: number;
+  trendLabel: TrendLabel;
+}
+
+export interface FacebookInsightsDataFile {
+  generatedAt: string;
+  keywords: FacebookKeywordRow[];
+  stories: FacebookStoryRow[];
 }
 
 export interface NormalizedSignalRow {
@@ -211,6 +239,7 @@ export interface DashboardData {
   ga4SiteB: Ga4DataFile;
   ga4Combined: Ga4DataFile;
   reddit: RedditDataFile;
+  facebookInsights: FacebookInsightsDataFile;
   googleTrends: GoogleTrendsDataFile;
   googleNews: GoogleNewsDataFile;
   signals: SignalsDataFile;

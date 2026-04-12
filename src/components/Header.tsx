@@ -1,36 +1,32 @@
-const NAV_ITEMS = [
-  ["overview", "Overview"],
-  ["gsc", "Search Demand"],
-  ["ga4", "Internal Search"],
-  ["reddit", "Reddit"],
-  ["google-trends", "Google Trends"],
-  ["google-news", "Google News"],
-  ["story-ideas", "Action Queue"]
-];
-
 export function Header() {
   return (
-    <header id="top" className="border-b border-[#99ADC6]/45 bg-white px-6 py-6 sm:px-8">
-      <div className="flex flex-col gap-4">
+    <header id="top" className="border-b border-[#99ADC6]/45 bg-white px-5 py-5 sm:px-7">
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-3xl">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#99ADC6]">Animal Rights Signal Monitor</p>
-          <h1 className="mt-2 text-[2rem] font-semibold leading-tight text-[#4A678F] sm:text-[2.15rem]">Trends and Insights Dashboard</h1>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#99ADC6]">Animal Rights Signal</p>
+          <h1 className="mt-2 text-[2rem] font-semibold leading-tight text-[#000000] sm:text-[2.15rem]">Trends and Insights Dashboard</h1>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-[#4A678F]/76">
             Static reporting for organic search growth, internal site queries, and emerging animal-rights topics across search,
             community, and news signals.
           </p>
         </div>
-        <nav className="flex flex-wrap gap-2 border-t border-[#99ADC6]/45 pt-4">
-          {NAV_ITEMS.map(([id, label]) => (
-            <a
-              key={id}
-              href={`#${id}`}
-              className="border border-[#99ADC6]/45 bg-[#F4F9FC] px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-[#4A678F] transition hover:bg-white"
-            >
-              {label}
-            </a>
-          ))}
-        </nav>
+
+        <div className="relative -mr-5 -my-5 m-0 h-40 w-full max-w-[390px] self-stretch overflow-hidden p-0 sm:-mr-7 sm:h-44 sm:max-w-[420px]">
+          <img
+            src="/leopard.jpg"
+            alt="Leopard portrait"
+            className="absolute inset-0 m-0 block h-full w-full p-0 object-cover object-right opacity-50"
+          />
+          <div className="absolute inset-y-0 left-0 w-[58%] bg-gradient-to-r from-white via-white/82 to-transparent" />
+          <div className="absolute right-0 top-0 z-10 flex h-full w-[30%] flex-col items-stretch">
+            <div className="flex h-1/2 items-center justify-center bg-white">
+              <img src="/che-logo.png" alt="CHE logo" className="h-full w-full object-contain" />
+            </div>
+            <div className="flex h-1/2 items-center justify-center bg-white">
+              <img src="/awa-logo.png" alt="AWA logo" className="h-full w-full object-contain" />
+            </div>
+          </div>
+        </div>
       </div>
     </header>
   );

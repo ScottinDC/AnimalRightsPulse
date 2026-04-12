@@ -34,6 +34,17 @@ export function scoreTrend(metrics: DeltaMetrics): number {
 }
 
 export function classifyTrend(score: number, metrics: DeltaMetrics): TrendLabel {
+  const strongestMomentum = Math.max(
+    metrics.clicks ?? 0,
+    metrics.impressions ?? 0,
+    metrics.searches ?? 0,
+    metrics.repeatRate ?? 0,
+    metrics.redditVelocity ?? 0,
+    metrics.facebookVelocity ?? 0,
+    metrics.googleTrendsVelocity ?? 0,
+    metrics.googleNewsVelocity ?? 0
+  );
+
   if ((metrics.clicks ?? 0) < -25 || (metrics.searches ?? 0) < -25 || score < -15) {
     return "declining";
   }
@@ -42,6 +53,12 @@ export function classifyTrend(score: number, metrics: DeltaMetrics): TrendLabel 
   }
   if ((metrics.sourceCount ?? 1) >= 3 && score > 55) {
     return "breakout";
+  }
+  if (strongestMomentum >= 120 && ((metrics.sourceCount ?? 1) >= 2 || (metrics.novelty ?? 0) > 0)) {
+    return "breakout";
+  }
+  if (strongestMomentum >= 80 && score > 8) {
+    return "rising";
   }
   if (score > 20) {
     return "rising";

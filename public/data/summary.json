@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "generatedAt": "2026-04-12T01:54:22.957Z",
+=======
+  "generatedAt": "2026-04-12T03:09:51.771Z",
+>>>>>>> bcc18a0 (Polish dashboard interactions and deploy assets)
   "summaryCards": [
     {
       "id": "top-signal",
@@ -25,7 +29,7 @@
     {
       "id": "watch-list",
       "title": "Watch List",
-      "metric": "0",
+      "metric": "1",
       "change": "New or breakout topics",
       "narrative": "These deserve a faster newsroom review loop than steady demand terms."
     }

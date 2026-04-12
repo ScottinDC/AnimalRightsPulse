@@ -32,6 +32,12 @@
         "New report renews scrutiny of animal testing standards",
         "Lawmakers revisit cosmetics animal testing rules",
         "Campaign groups push for broader testing bans"
+      ],
+      "sampleStories": [
+        {
+          "headline": "New report renews scrutiny of animal testing standards",
+          "url": "https://example.com/google-news-animal-testing"
+        }
       ]
     },
     {
@@ -65,6 +71,12 @@
         "More cities consider fur ban proposals",
         "Retailers respond to renewed anti-fur pressure",
         "State lawmakers debate fur sales restrictions"
+      ],
+      "sampleStories": [
+        {
+          "headline": "More cities consider fur ban proposals",
+          "url": "https://example.com/google-news-fur-ban"
+        }
       ]
     }
   ],

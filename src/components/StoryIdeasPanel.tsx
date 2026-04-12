@@ -7,7 +7,7 @@ interface StoryIdeasPanelProps {
 
 export function StoryIdeasPanel({ ideas }: StoryIdeasPanelProps) {
   return (
-    <div className="grid gap-4 lg:grid-cols-2">
+    <div className="flex flex-col gap-4">
       {ideas.map((idea) => (
         <article key={idea.id} className="border border-[#99ADC6]/45 bg-white p-5">
           <div className="flex items-start justify-between gap-4">
@@ -19,7 +19,7 @@ export function StoryIdeasPanel({ ideas }: StoryIdeasPanelProps) {
           </div>
           <p className="mt-4 text-sm leading-6 text-[#4A678F]/80">{idea.rationale}</p>
           <div className="mt-4 flex flex-wrap gap-2">
-            {idea.sources.map((source) => (
+            {[...new Set(idea.sources)].map((source) => (
               <SourceBadge key={`${idea.id}-${source}`} source={source} />
             ))}
           </div>
