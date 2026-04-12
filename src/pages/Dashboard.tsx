@@ -464,7 +464,7 @@ export function Dashboard() {
         <StoryIdeasPanel ideas={data.summary.storyIdeas} />
       </SectionShell>
 
-      <div className="px-1 text-left text-xs text-[#4A678F]/72">© 2026</div>
+      <div className="px-1 text-left text-xs text-[#4A678F]/72">© 2026 Center for a Humane Economy | Animal Wellness Action</div>
     </div>
   );
 }

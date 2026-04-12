@@ -64,11 +64,11 @@ export function TrendTable({ title, rows, scoreMode = "chip", showSource = true 
   const scoreBarStyle = () => "#CB693A";
 
   return (
-    <div className="overflow-hidden border border-[#99ADC6]/45 bg-white">
+    <div className="overflow-visible border border-[#99ADC6]/45 bg-white">
       <div className="border-b border-[#99ADC6]/45 bg-[#F4F9FC] px-5 py-4">
         <h3 className="text-lg font-semibold text-[#4A678F]">{title}</h3>
       </div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto overflow-y-visible">
         <table className="min-w-full text-left text-sm">
           <thead className="bg-white text-[#4A678F]/80">
             <tr>
