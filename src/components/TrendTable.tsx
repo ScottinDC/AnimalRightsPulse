@@ -17,6 +17,21 @@ export function TrendTable({ title, rows, scoreMode = "chip", showSource = true 
     highlights: "Short editorial cues pulled from the underlying signal flags."
   };
 
+  const HelpLabel = ({ label, helpText }: { label: string; helpText: string }) => (
+    <span className="group relative inline-flex items-center gap-2">
+      <span>{label}</span>
+      <span
+        aria-hidden="true"
+        className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-[#99ADC6]/45 text-[10px] font-semibold text-[#4A678F]"
+      >
+        ?
+      </span>
+      <span className="pointer-events-none absolute left-0 top-full z-20 mt-2 hidden w-64 border border-[#99ADC6]/45 bg-white px-3 py-2 text-[11px] normal-case tracking-normal text-[#4A678F] shadow-[0_10px_25px_rgba(74,103,143,0.12)] group-hover:block group-focus-within:block">
+        {helpText}
+      </span>
+    </span>
+  );
+
   const toneForValue = (value: number) => {
     if (value > 0) return "border-[#99ADC6] text-[#4A678F] bg-[#F4F9FC]";
     if (value < 0) return "border-[#CB693A]/20 text-[#CB693A] bg-[#CB693A]/10";
@@ -60,16 +75,16 @@ export function TrendTable({ title, rows, scoreMode = "chip", showSource = true 
               <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em]">Signal</th>
               {showSource ? <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em]">Source</th> : null}
               <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em]">
-                <span title={headerHelp.score} className="cursor-help">Score</span>
+                <HelpLabel label="Score" helpText={headerHelp.score} />
               </th>
               <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em]">
-                <span title={headerHelp.trend} className="cursor-help">Trend</span>
+                <HelpLabel label="Trend" helpText={headerHelp.trend} />
               </th>
               <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em]">
-                <span title={headerHelp.momentum} className="cursor-help">Momentum</span>
+                <HelpLabel label="Momentum" helpText={headerHelp.momentum} />
               </th>
               <th className="px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.14em]">
-                <span title={headerHelp.highlights} className="cursor-help">Highlights</span>
+                <HelpLabel label="Highlights" helpText={headerHelp.highlights} />
               </th>
             </tr>
           </thead>

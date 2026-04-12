@@ -15,14 +15,14 @@ export function Header() {
           <img
             src="/leopard.jpg"
             alt="Leopard portrait"
-            className="absolute inset-0 m-0 block h-full w-full p-0 object-cover object-right opacity-50"
+            className="absolute inset-0 m-0 block h-full w-full scale-[1.2] p-0 object-cover object-right opacity-50"
           />
           <div className="absolute inset-y-0 left-0 w-[58%] bg-gradient-to-r from-white via-white/82 to-transparent" />
-          <div className="absolute right-0 top-0 z-10 flex h-full w-[30%] flex-col items-stretch">
-            <div className="flex h-1/2 items-center justify-center bg-white">
+          <div className="absolute right-0 top-0 z-10 flex h-full aspect-[1/2] flex-col items-stretch">
+            <div className="flex h-1/2 items-center justify-center bg-white p-2">
               <img src="/che-logo.png" alt="CHE logo" className="h-full w-full object-contain" />
             </div>
-            <div className="flex h-1/2 items-center justify-center bg-white">
+            <div className="flex h-1/2 items-center justify-center bg-white p-2">
               <img src="/awa-logo.png" alt="AWA logo" className="h-full w-full object-contain" />
             </div>
           </div>
