@@ -1,6 +1,6 @@
-# Animal Rights Signal Monitor
+# Animal Rights Pulse
 
-Animal Rights Signal Monitor is a static single-page dashboard for tracking rising animal-rights signals across Google Search Console, GA4 internal site search, Reddit via Apify, Google Trends via Apify, and Google News via Apify.
+Animal Rights Pulse is a static single-page dashboard for tracking rising animal-rights signals across Google Search Console, GA4 internal site search, Reddit via Apify, Google Trends via Apify, and Google News via Apify.
 
 The frontend is a Vite + React + TypeScript app that reads only committed JSON files from [`/public/data`](/Users/scottstadum/Desktop/Projects/Apps/Animal%20Rights%20Pulse/public/data). External APIs are called only by server-side Node scripts in [`/scripts`](/Users/scottstadum/Desktop/Projects/Apps/Animal%20Rights%20Pulse/scripts), typically through GitHub Actions.
 

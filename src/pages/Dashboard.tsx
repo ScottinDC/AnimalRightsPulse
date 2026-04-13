@@ -3,7 +3,7 @@ import { EmptyState } from "../components/EmptyState";
 import { ErrorState } from "../components/ErrorState";
 import { Header } from "../components/Header";
 import { SectionShell } from "../components/SectionShell";
-import { StoryIdeasPanel } from "../components/StoryIdeasPanel";
+import { StoryIdeasPanel, StoryWorthEvaluator } from "../components/StoryIdeasPanel";
 import { SummaryCards } from "../components/SummaryCards";
 import { TrendChart } from "../components/TrendChart";
 import { TrendTable } from "../components/TrendTable";
@@ -128,6 +128,13 @@ export function Dashboard() {
 
   const googleTrendsLead = data.googleTrends.keywords[selectedTrendsKeyword] ?? data.googleTrends.keywords[0];
   const googleNewsLead = data.googleNews.keywords[selectedNewsKeyword] ?? data.googleNews.keywords[0];
+  const evaluatorData = {
+    gscFiles: [data.gscSiteA, data.gscSiteB, data.gscCombined],
+    ga4Files: [data.ga4SiteA, data.ga4SiteB, data.ga4Combined],
+    googleNews: data.googleNews,
+    facebookInsights: data.facebookInsights,
+    googleTrends: data.googleTrends
+  };
 
   return (
     <div className="mx-auto flex max-w-7xl flex-col gap-4 px-3 py-5 sm:px-5 lg:px-7">
@@ -155,6 +162,7 @@ export function Dashboard() {
           </label>
         }
       >
+        <StoryWorthEvaluator defaultValue="factory farming protest" evaluatorData={evaluatorData} />
         <SummaryCards cards={data.summary.summaryCards} />
         <div className="mt-6">
           {topSignals.length > 0 ? (

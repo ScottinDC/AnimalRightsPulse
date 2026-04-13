@@ -5,7 +5,7 @@ export function Header() {
     <header id="top" className="bg-white px-5 py-5 sm:px-7">
       <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-3xl">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#99ADC6]">Animal Rights Signal</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#99ADC6]">Animal Rights Pulse</p>
           <h1 className="mt-2 text-[2rem] font-semibold leading-tight text-[#000000] sm:text-[2.15rem]">Trends and Insights Dashboard</h1>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-[#4A678F]/76">
             Static reporting for organic search growth, internal site queries, and emerging animal-rights topics across search,
