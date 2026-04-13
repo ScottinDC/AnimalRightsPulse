@@ -46,9 +46,9 @@ export function StoryWorthEvaluator({ defaultValue, evaluatorData }: StoryWorthE
       {evaluation ? (
         <div className="mt-4 space-y-4">
           <div className="flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-[0.06em]">
-            <span className="border border-[#4A678F] bg-[#4A678F] px-3 py-2 text-white">7/10</span>
-            <span className="border border-[#99ADC6]/45 px-3 py-2 text-[#4A678F]">yes</span>
-            <span className="border border-[#99ADC6]/45 px-3 py-2 text-[#4A678F]">rising</span>
+            <span className="border border-[#4A678F] bg-[#4A678F] px-3 py-2 text-white">Score 7/10</span>
+            <span className="border border-[#99ADC6]/45 px-3 py-2 text-[#4A678F]">Worth posting: yes</span>
+            <span className="border border-[#99ADC6]/45 px-3 py-2 text-[#4A678F]">Status: Rising</span>
           </div>
 
           <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-5">
