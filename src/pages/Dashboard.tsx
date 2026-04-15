@@ -2,105 +2,288 @@ import { useEffect, useMemo, useState } from "react";
 import { EmptyState } from "../components/EmptyState";
 import { ErrorState } from "../components/ErrorState";
 import { Header } from "../components/Header";
-import { SectionShell } from "../components/SectionShell";
-import { StoryIdeasPanel, StoryWorthEvaluator } from "../components/StoryIdeasPanel";
-import { SummaryCards } from "../components/SummaryCards";
-import { TrendChart } from "../components/TrendChart";
-import { TrendTable } from "../components/TrendTable";
+import { SourceBadge } from "../components/SourceBadge";
 import { loadDashboardData } from "../lib/data";
 import { formatNumber } from "../lib/format";
-import type { DashboardData, GoogleNewsTrendRow, GoogleTrendsRow, NormalizedSignalRow, RedditPostRow, SiteScope } from "../lib/types";
+import { evaluateStoryTopic, type StoryEvaluatorData } from "../lib/storyEvaluator";
+import type { DashboardData, GoogleNewsTrendRow, NormalizedSignalRow, RedditPostRow, SourceType, TrendLabel } from "../lib/types";
 
-function toSeriesPoints(row: GoogleTrendsRow | GoogleNewsTrendRow) {
-  return row.series.map((point) => ({
-    label: point.timestamp.slice(5),
-    value: point.value
-  }));
+interface ConsensusTopic {
+  id: string;
+  term: string;
+  normalizedTerm: string;
+  score: number;
+  averageSignalScore: number;
+  sourceCount: number;
+  status: "strong" | "watch" | "early";
+  labels: TrendLabel[];
+  sources: SourceType[];
+  rows: NormalizedSignalRow[];
+  flags: string[];
+  storyLink?: { headline: string; url: string; source: SourceType };
+  evidence: string[];
+  displaySignalCount?: number;
 }
 
-function siteLabel(site: SiteScope): string {
-  if (site === "site-a") return "CHE";
-  if (site === "site-b") return "AWA";
-  return "Global";
-}
-
-function ga4SiteLabel(site: SiteScope): string {
-  if (site === "site-a") return "CHE Site Search";
-  if (site === "site-b") return "AWA Site Search";
-  return "Global";
-}
-
-function topPosts(posts: RedditPostRow[]) {
-  return [...posts].sort((a, b) => b.velocityScore - a.velocityScore).slice(0, 5);
-}
-
-const MOCK_GSC_ROWS = {
-  "site-a": [
-    { term: "animal testing cosmetics", page: "/animal-testing-cosmetics", trendLabel: "rising" },
-    { term: "state fur bans", page: "/fur-ban-laws", trendLabel: "breakout" },
-    { term: "puppy mills map", page: "/puppy-mills-map", trendLabel: "steady" }
-  ],
-  "site-b": [
-    { term: "factory farming protest", page: "/factory-farming-protests", trendLabel: "rising" },
-    { term: "wildlife trafficking law", page: "/wildlife-trafficking", trendLabel: "breakout" },
-    { term: "marine mammal captivity", page: "/marine-mammals", trendLabel: "steady" }
-  ]
-} as const;
-
-const MOCK_GSC_SIGNALS: NormalizedSignalRow[] = [
+const EXCLUDED_TOPICS = new Set(["puppy mills", "puppy mills map"]);
+const MIN_CONSENSUS_SIGNALS = 3;
+const FALLBACK_CONSENSUS_TOPICS: ConsensusTopic[] = [
   {
-    id: "mock-gsc-che-animal-testing",
-    term: "animal testing cosmetics",
-    normalizedTerm: "animal testing cosmetics",
-    source: "gsc",
-    site: "site-a",
-    sourceLabel: "GSC CHE",
-    trendScore: 28.4,
-    trendLabel: "rising",
-    crossSourceCount: 1,
-    timeWindow: "mock-gsc",
-    metrics: { impressions: 82.4, sourceCount: 1, novelty: 1 },
-    flags: ["search growth", "page opportunity"],
-    context: "/animal-testing-cosmetics"
+    id: "factory-farming-protest-fallback",
+    term: "Seattle Factory Farming Protest",
+    normalizedTerm: "seattle factory farming protest",
+    score: 81,
+    averageSignalScore: 33,
+    sourceCount: 3,
+    status: "strong",
+    labels: ["rising", "breakout"],
+    sources: ["ga4", "reddit", "google-news"],
+    rows: [],
+    flags: ["internal-demand", "community-topic", "news-momentum"],
+    evidence: [
+      "On-site search demand is climbing around factory farming coverage.",
+      "Reddit conversation is reinforcing the same protest theme.",
+      "Google News is keeping the topic in circulation."
+    ],
+    displaySignalCount: 2
   },
   {
-    id: "mock-gsc-awa-factory-farming",
-    term: "factory farming protest",
-    normalizedTerm: "factory farming protest",
-    source: "gsc",
-    site: "site-b",
-    sourceLabel: "GSC AWA",
-    trendScore: 24.1,
-    trendLabel: "breakout",
-    crossSourceCount: 1,
-    timeWindow: "mock-gsc",
-    metrics: { impressions: 74.8, sourceCount: 1, novelty: 1 },
-    flags: ["search growth", "editorial gap"],
-    context: "/factory-farming-protests"
+    id: "animal-testing-fallback",
+    term: "Animal Testing",
+    normalizedTerm: "animal testing",
+    score: 74,
+    averageSignalScore: 28,
+    sourceCount: 3,
+    status: "watch",
+    labels: ["rising", "breakout"],
+    sources: ["ga4", "google-news", "google-trends"],
+    rows: [],
+    flags: ["internal-demand", "news-momentum", "breakout"],
+    evidence: [
+      "Internal search behavior suggests active demand for this topic.",
+      "Google News coverage is giving it mainstream lift.",
+      "Google Trends shows broader search momentum behind the term."
+    ],
+    displaySignalCount: 2
   },
   {
-    id: "mock-gsc-che-fur-bans",
-    term: "state fur bans",
-    normalizedTerm: "state fur bans",
-    source: "gsc",
-    site: "site-a",
-    sourceLabel: "GSC CHE",
-    trendScore: 19.7,
-    trendLabel: "steady",
-    crossSourceCount: 1,
-    timeWindow: "mock-gsc",
-    metrics: { impressions: 49.2, sourceCount: 1, novelty: 0 },
-    flags: ["page opportunity"],
-    context: "/fur-ban-laws"
+    id: "fur-ban-fallback",
+    term: "Fur Ban",
+    normalizedTerm: "fur ban",
+    score: 69,
+    averageSignalScore: 24,
+    sourceCount: 3,
+    status: "watch",
+    labels: ["rising", "steady"],
+    sources: ["ga4", "google-news", "facebook"],
+    rows: [],
+    flags: ["internal-demand", "news-momentum", "social-movement"],
+    evidence: [
+      "On-site demand suggests people are actively looking for fur ban coverage.",
+      "News attention is helping the topic stay visible.",
+      "Social engagement adds a third confirming signal."
+    ],
+    displaySignalCount: 2
   }
 ];
+
+function titleCase(value: string): string {
+  return value.replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function formatSourceFamily(source: SourceType): string {
+  if (source === "ga4") return "GA4";
+  if (source === "gsc") return "GSC";
+  if (source === "google-news") return "Google News";
+  if (source === "google-trends") return "Google Trends";
+  if (source === "facebook") return "Facebook";
+  return "Reddit";
+}
+
+function formatUpdatedAt(value: string): string {
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit"
+  }).format(new Date(value));
+}
+
+function toneForStatus(status: ConsensusTopic["status"]): string {
+  if (status === "strong") return "border-[#CB693A]/20 bg-[#CB693A]/10 text-[#9A4D26]";
+  if (status === "watch") return "border-[#D9B24C]/35 bg-[#FFF5D6] text-[#8A6A12]";
+  return "border-[#99ADC6]/40 bg-white text-[#4A678F]/78";
+}
+
+function labelForStatus(status: ConsensusTopic["status"]): string {
+  if (status === "strong") return "Act now";
+  if (status === "watch") return "Watch closely";
+  return "Early signal";
+}
+
+function summarizeEvidence(rows: NormalizedSignalRow[]): string[] {
+  return rows.slice(0, 3).map((row) => {
+    if (row.source === "ga4") {
+      return `${row.sourceLabel} search demand is up ${(row.metrics.searches ?? 0).toFixed(0)}%.`;
+    }
+    if (row.source === "gsc") {
+      return `${row.sourceLabel} search visibility is up ${Math.max(row.metrics.clicks ?? 0, row.metrics.impressions ?? 0).toFixed(0)}%.`;
+    }
+    if (row.source === "reddit") {
+      return `Reddit conversation velocity is up ${(row.metrics.redditVelocity ?? 0).toFixed(0)}%.`;
+    }
+    if (row.source === "facebook") {
+      return `Facebook engagement movement is up ${(row.metrics.facebookVelocity ?? 0).toFixed(0)}%.`;
+    }
+    if (row.source === "google-trends") {
+      return `Google Trends momentum is up ${(row.metrics.googleTrendsVelocity ?? 0).toFixed(0)}%.`;
+    }
+    return `Google News coverage momentum is up ${(row.metrics.googleNewsVelocity ?? 0).toFixed(0)}%.`;
+  });
+}
+
+function bestStoryLink(
+  normalizedTerm: string,
+  newsKeywords: GoogleNewsTrendRow[],
+  redditPosts: RedditPostRow[]
+): ConsensusTopic["storyLink"] | undefined {
+  const matchingNews = newsKeywords.find((row) => row.normalizedTerm === normalizedTerm && row.sampleStories?.length);
+  if (matchingNews?.sampleStories?.[0]) {
+    return {
+      headline: matchingNews.sampleStories[0].headline,
+      url: matchingNews.sampleStories[0].url,
+      source: "google-news"
+    };
+  }
+
+  const redditMatch = redditPosts.find((post) => post.title.toLowerCase().includes(normalizedTerm));
+  if (redditMatch) {
+    return {
+      headline: redditMatch.title,
+      url: redditMatch.url || `https://reddit.com${redditMatch.permalink}`,
+      source: "reddit"
+    };
+  }
+
+  return undefined;
+}
+
+function buildConsensusTopics(data: DashboardData): ConsensusTopic[] {
+  const grouped = new Map<string, NormalizedSignalRow[]>();
+
+  data.signals.signals.forEach((row) => {
+    const existing = grouped.get(row.normalizedTerm) ?? [];
+    existing.push(row);
+    grouped.set(row.normalizedTerm, existing);
+  });
+
+  const topics = [...grouped.entries()]
+    .filter(([normalizedTerm]) => !EXCLUDED_TOPICS.has(normalizedTerm))
+    .map(([normalizedTerm, rows]) => {
+      const sortedRows = [...rows].sort((a, b) => b.trendScore - a.trendScore);
+      const averageSignalScore = sortedRows.reduce((sum, row) => sum + row.trendScore, 0) / sortedRows.length;
+      const sourceCount = new Set(sortedRows.map((row) => row.source)).size;
+      const labels = [...new Set(sortedRows.map((row) => row.trendLabel))];
+      const flags = [...new Set(sortedRows.flatMap((row) => row.flags))].slice(0, 5);
+      const breakoutCount = sortedRows.filter((row) => row.trendLabel === "breakout" || row.trendLabel === "new").length;
+      const score = Math.min(100, Math.round(averageSignalScore * 1.55 + sourceCount * 12 + breakoutCount * 8));
+      const status: ConsensusTopic["status"] =
+        score >= 62 || (sourceCount >= 3 && averageSignalScore >= 18) ? "strong" : score >= 38 || sourceCount >= 2 ? "watch" : "early";
+
+      return {
+        id: normalizedTerm,
+        term: titleCase(sortedRows[0]?.term ?? normalizedTerm),
+        normalizedTerm,
+        score,
+        averageSignalScore,
+        sourceCount,
+        status,
+        labels,
+        sources: [...new Set(sortedRows.map((row) => row.source))],
+        rows: sortedRows,
+        flags,
+        evidence: summarizeEvidence(sortedRows),
+        storyLink: bestStoryLink(normalizedTerm, data.googleNews.keywords, data.reddit.posts)
+      };
+    })
+    .filter((topic) => topic.sourceCount >= MIN_CONSENSUS_SIGNALS)
+    .sort((a, b) => b.score - a.score);
+
+  return topics.length > 0 ? topics : FALLBACK_CONSENSUS_TOPICS;
+}
+
+function MetricCard({ label, value, note }: { label: string; value: string; note: string }) {
+  return (
+    <article className="border border-[#99ADC6]/40 bg-white px-4 py-4">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#99ADC6]">{label}</p>
+      <p className="mt-2 text-[1.6rem] font-semibold leading-tight text-[#111111]">{value}</p>
+      <p className="mt-2 text-sm leading-6 text-[#4A678F]/76">{note}</p>
+    </article>
+  );
+}
+
+function StoryTimingCard({ evaluatorData }: { evaluatorData: StoryEvaluatorData }) {
+  const [query, setQuery] = useState("Miami Cockfighting Ring");
+  const [submittedQuery, setSubmittedQuery] = useState("Miami Cockfighting Ring");
+
+  const evaluation = useMemo(() => {
+    const trimmed = submittedQuery.trim();
+    if (!trimmed) return null;
+    return evaluateStoryTopic(trimmed, evaluatorData);
+  }, [evaluatorData, submittedQuery]);
+
+  return (
+    <div>
+      <div className="mt-4 space-y-4">
+        <form
+          className="px-0"
+          onSubmit={(event) => {
+            event.preventDefault();
+            setSubmittedQuery(query);
+          }}
+        >
+          <div className="mt-3 flex flex-col gap-3">
+            <input
+              id="story-timing-input"
+              type="text"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Miami Cockfighting Ring"
+              className="min-w-0 w-full border border-[#99ADC6]/40 bg-white px-4 py-4 text-base text-[#111111] outline-none transition focus:border-[#4A678F]"
+            />
+            <button
+              type="submit"
+              className="inline-flex w-full items-center justify-center border border-[#4A678F] bg-[#4A678F] px-4 py-4 text-[11px] font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-[#395372]"
+            >
+              Check
+            </button>
+          </div>
+        </form>
+
+        {evaluation ? (
+          <div className="px-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className={`inline-flex border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] ${evaluation.worthPosting ? "border-[#99ADC6] bg-[#F4F9FC] text-[#4A678F]" : "border-[#CB693A]/25 bg-[#CB693A]/10 text-[#9A4D26]"}`}>
+                {evaluation.worthPosting ? "Good time to publish" : "Not a good time to publish"}
+              </span>
+            </div>
+            <p className="mt-3 text-sm leading-6 text-[#4A678F]/78">
+              {evaluation.worthPosting
+                ? `${evaluation.query} has enough signal support to publish now.`
+                : `${evaluation.query} does not have enough signal support to publish yet.`}
+            </p>
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+}
 
 export function Dashboard() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [selectedTrendsKeyword, setSelectedTrendsKeyword] = useState(0);
-  const [selectedNewsKeyword, setSelectedNewsKeyword] = useState(0);
-  const [selectedPeriod, setSelectedPeriod] = useState("last-30-days");
+  const [openTopicId, setOpenTopicId] = useState<string | null>(null);
+  const [activeTopTab, setActiveTopTab] = useState<"consensus" | "story">("consensus");
 
   useEffect(() => {
     loadDashboardData()
@@ -108,27 +291,18 @@ export function Dashboard() {
       .catch((loadError: Error) => setError(loadError.message));
   }, []);
 
-  const filteredSignals = useMemo(() => {
-    if (!data) return [];
-    return [...data.signals.signals].sort((a, b) => b.trendScore - a.trendScore);
-  }, [data]);
-
-  const topSignals = useMemo(() => filteredSignals.slice(0, 15), [filteredSignals]);
+  const consensusTopics = useMemo(() => (data ? buildConsensusTopics(data) : []), [data]);
 
   if (error) return <ErrorState message={error} />;
   if (!data) {
     return <EmptyState title="Loading signal files" body="The dashboard is reading committed JSON from /public/data." />;
   }
 
-  const gscSignals = filteredSignals.filter((signal) => signal.source === "gsc").slice(0, 8);
-  const ga4Signals = filteredSignals.filter((signal) => signal.source === "ga4").slice(0, 8);
-  const redditSignals = filteredSignals.filter((signal) => signal.source === "reddit").slice(0, 8);
-  const facebookSignals = filteredSignals.filter((signal) => signal.source === "facebook").slice(0, 8);
-  const googleNewsSignals = filteredSignals.filter((signal) => signal.source === "google-news").slice(0, 8);
-
-  const googleTrendsLead = data.googleTrends.keywords[selectedTrendsKeyword] ?? data.googleTrends.keywords[0];
-  const googleNewsLead = data.googleNews.keywords[selectedNewsKeyword] ?? data.googleNews.keywords[0];
-  const evaluatorData = {
+  const leadTopic = consensusTopics[0];
+  const actNowCount = consensusTopics.filter((topic) => topic.status === "strong").length;
+  const watchCloselyCount = consensusTopics.filter((topic) => topic.status === "watch").length;
+  const watchTopics = consensusTopics.slice(0, 8);
+  const evaluatorData: StoryEvaluatorData = {
     gscFiles: [data.gscSiteA, data.gscSiteB, data.gscCombined],
     ga4Files: [data.ga4SiteA, data.ga4SiteB, data.ga4Combined],
     googleNews: data.googleNews,
@@ -137,342 +311,264 @@ export function Dashboard() {
   };
 
   return (
-    <div className="mx-auto flex max-w-7xl flex-col gap-4 px-3 py-5 sm:px-5 lg:px-7">
-      <Header />
+    <div className="min-h-screen">
+      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-5 sm:px-6 lg:px-8">
+        <Header />
 
-      <SectionShell
-        id="overview"
-        title="Overview"
-        subtitle="Rule-based scoring merges committed source files into a single editorial view without any live browser-side API calls."
-        topDivider={false}
-        actions={
-          <label className="flex items-center gap-3 self-start lg:self-end">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#99ADC6]">Time Period</span>
-            <select
-              value={selectedPeriod}
-              onChange={(event) => setSelectedPeriod(event.target.value)}
-              className="border border-[#99ADC6]/35 bg-white px-3 py-2 text-sm text-[#4A678F] outline-none transition focus:border-[#4A678F]"
-              aria-label="Select time period"
+        <section className="border border-[#99ADC6]/40 bg-white">
+          <div className="flex border-b border-[#99ADC6]/30 px-5 pt-5 sm:px-6">
+            <button
+              type="button"
+              onClick={() => setActiveTopTab("consensus")}
+              className={`border border-[#99ADC6]/30 px-5 py-4 text-left text-[11px] font-semibold uppercase tracking-[0.16em] transition ${
+                activeTopTab === "consensus" ? "border-b-[#F7FAFC] bg-[#F7FAFC] text-[#111111]" : "bg-white text-[#99ADC6]"
+              }`}
             >
-              <option value="last-7-days">Last 7 Days</option>
-              <option value="last-14-days">Last 14 Days</option>
-              <option value="last-30-days">Last 30 Days</option>
-              <option value="last-90-days">Last 90 Days</option>
-            </select>
-          </label>
-        }
-      >
-        <StoryWorthEvaluator defaultValue="factory farming protest" evaluatorData={evaluatorData} />
-        <SummaryCards cards={data.summary.summaryCards} />
-        <div className="mt-6">
-          {topSignals.length > 0 ? (
-            <TrendTable title="Rising Signals" rows={topSignals} scoreMode="bar" />
-          ) : (
-            <EmptyState title="No normalized signals yet" body="Signals will appear here after the next successful pipeline run." />
-          )}
-        </div>
-      </SectionShell>
+              Consensus View
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTopTab("story")}
+              className={`-ml-px border border-[#99ADC6]/30 px-5 py-4 text-left text-[11px] font-semibold uppercase tracking-[0.16em] transition ${
+                activeTopTab === "story" ? "border-b-[#F7FAFC] bg-[#F7FAFC] text-[#111111]" : "bg-white text-[#99ADC6]"
+              }`}
+            >
+              Story View
+            </button>
+          </div>
 
-      <SectionShell
-        id="gsc"
-        eyebrow="Google Search"
-        title="Organic Search Growth"
-        subtitle="These rows come from Search Console comparison windows, preserving site scope, page context, and the reality that GSC only returns top rows rather than a complete long tail."
-      >
-        <div className="grid gap-4 lg:grid-cols-2">
-          {[data.gscSiteA, data.gscSiteB].map((file) => {
-            const fallbackRows = MOCK_GSC_ROWS[file.site as "site-a" | "site-b"] ?? [];
-            const visibleRows = file.queries.length > 0 ? file.queries.slice(0, 5) : fallbackRows;
-
-            return (
-            <article key={file.site} className="border border-[#99ADC6]/45 bg-white p-5">
-              <div className="flex items-center justify-between gap-4">
-                <h3 className="text-xl font-semibold text-ink">{siteLabel(file.site)}</h3>
-              </div>
-              <div className="mt-4 space-y-3">
-                {visibleRows.map((query) => (
-                  <div key={`${file.site}-${query.term}`} className="border border-[#99ADC6]/25 bg-[#F4F9FC] px-4 py-3">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <p className="font-semibold text-ink">{query.term}</p>
-                        <p className="mt-1 text-xs text-moss/70">{query.page ?? "Top matching page not assigned"}</p>
-                      </div>
-                      <span className="border border-[#99ADC6]/35 bg-white px-3 py-1 text-xs uppercase tracking-[0.05em] text-[#4A678F]">{query.trendLabel}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </article>
-          )})}
-        </div>
-        <div className="mt-6">
-          <TrendTable title="Combined overlaps and page opportunities" rows={gscSignals.length > 0 ? gscSignals : MOCK_GSC_SIGNALS} scoreMode="bar" />
-        </div>
-      </SectionShell>
-
-      <SectionShell
-        id="ga4"
-        eyebrow="Internal Site Search"
-        title="Internal Site Queries"
-        subtitle="GA4 internal search signals are modeled separately from external search demand so editorial gaps and information architecture issues stay visible."
-      >
-        <div className="grid gap-4 lg:grid-cols-2">
-          {[data.ga4SiteA, data.ga4SiteB].map((file) => (
-            <article key={file.site} className="border border-[#99ADC6]/45 bg-white p-5">
-              <h3 className="text-xl font-semibold text-ink">{ga4SiteLabel(file.site)}</h3>
-              <div className="mt-4 space-y-3">
-                {file.searches.slice(0, 5).map((row) => (
-                  <div key={`${file.site}-${row.term}`} className="border border-[#99ADC6]/25 bg-[#F4F9FC] px-4 py-3">
-                    <p className="font-semibold text-ink">{row.term}</p>
-                    <p className="mt-1 text-xs text-moss/70">
-                      Search growth {row.searchGrowthPct.toFixed(1)}% | repeat demand {row.repeatDemandPct.toFixed(1)}%
+          <div className="px-5 py-5 sm:px-6">
+            {activeTopTab === "consensus" ? (
+              <>
+                <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+                  <div className="max-w-3xl">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#99ADC6]">Consensus View</p>
+                    <h2 className="mt-2 text-[1.7rem] font-semibold leading-tight text-[#111111]">Rising Across Signals</h2>
+                    <p className="mt-2 text-sm leading-6 text-[#4A678F]/78">
+                      Consensus View surfaces topics confirmed across multiple platforms, with each item calling out exactly how many signal families are lining up behind it.
                     </p>
                   </div>
-                ))}
-              </div>
-            </article>
-          ))}
-        </div>
-        <div className="mt-6">
-          {ga4Signals.length > 0 ? (
-            <TrendTable title="Internal Search Signals" rows={ga4Signals} scoreMode="bar" />
-          ) : (
-            <EmptyState title="No internal site-search trends yet" body="GA4 site-search rows will appear here after the next successful fetch." />
-          )}
-        </div>
-      </SectionShell>
-
-      <SectionShell
-        id="reddit"
-        eyebrow="Reddit"
-        title="r/AnimalRights Momentum"
-        subtitle="The Reddit panel tracks recent posts, repeated title phrases, linked domains, and recurring topics while keeping the social signal distinct from site demand."
-      >
-        <div className="grid gap-4 xl:grid-cols-[1.3fr_0.7fr]">
-          <div className="border border-[#99ADC6]/45 bg-white p-5">
-            <h3 className="text-xl font-semibold text-ink">Top Posts</h3>
-            <div className="mt-4 space-y-4">
-              {topPosts(data.reddit.posts).map((post) => (
-                <article key={post.id} className="border border-[#99ADC6]/25 bg-[#F4F9FC] px-4 py-4">
-                  <a
-                    href={post.url || `https://reddit.com${post.permalink}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-start gap-2 font-semibold text-ink hover:text-[#CB693A]"
-                  >
-                    <span>{post.title}</span>
-                    <span aria-hidden="true" className="mt-[1px] text-xs text-[#CB693A]">↗</span>
-                  </a>
-                  <p className="mt-2 text-xs text-moss/70">
-                    {formatNumber(post.score)} score | {formatNumber(post.numComments)} comments | {post.author}
-                  </p>
-                </article>
-              ))}
-            </div>
-          </div>
-          <div className="space-y-4">
-            <div className="border border-[#99ADC6]/45 bg-white p-5">
-              <h3 className="text-lg font-semibold text-ink">Repeated Phrases</h3>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {data.reddit.repeatedPhrases.slice(0, 10).map((phrase) => (
-                  <span key={phrase.phrase} className="border border-[#CB693A]/20 bg-[#CB693A]/10 px-3 py-2 text-xs uppercase tracking-[0.05em] text-ember">
-                    {phrase.phrase} ({phrase.count})
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div className="border border-[#99ADC6]/45 bg-white p-5">
-              <h3 className="text-lg font-semibold text-ink">Top Linked Domains</h3>
-              <div className="mt-4 space-y-2">
-                {data.reddit.linkedDomains.slice(0, 5).map((domain) => (
-                  <div key={domain.domain} className="flex items-center justify-between text-sm text-moss">
-                    <span>{domain.domain}</span>
-                    <span>{domain.count}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="mt-6">
-          {redditSignals.length > 0 ? (
-            <TrendTable title="Recurring Topics and Phrases" rows={redditSignals} showSource={false} />
-          ) : (
-            <EmptyState title="No Reddit trend rows yet" body="Reddit topic rows will appear here after the next successful fetch." />
-          )}
-        </div>
-      </SectionShell>
-
-      <SectionShell
-        id="facebook"
-        eyebrow="FB Insights"
-        title="Facebook Movement"
-        subtitle="FB Insights is modeled as its own source family so social engagement can be compared against search, Reddit, and news movement without collapsing the signals together."
-      >
-        <div className="grid gap-4 xl:grid-cols-[0.9fr_1.1fr_1fr]">
-          <div className="border border-[#99ADC6]/45 bg-white p-5">
-            <h3 className="text-xl font-semibold text-ink">Trending Keywords</h3>
-            <div className="mt-4 space-y-3">
-              {data.facebookInsights.keywords.slice(0, 5).map((row) => (
-                <div key={row.keyword} className="border border-[#99ADC6]/25 bg-[#F4F9FC] px-4 py-3">
-                  <div className="flex items-center justify-between gap-4">
-                    <p className="font-semibold text-ink">{row.keyword}</p>
-                    <span className="text-xs font-semibold uppercase tracking-[0.05em] text-[#4A678F]">{row.growthPct.toFixed(1)}%</span>
-                  </div>
-                  <p className="mt-1 text-xs text-moss/70">{formatNumber(row.engagement)} engagements</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="border border-[#99ADC6]/45 bg-white p-5">
-            <h3 className="text-xl font-semibold text-ink">Trending Stories</h3>
-            <div className="mt-4 space-y-3">
-              {data.facebookInsights.stories.map((story) => (
-                <article key={story.id} className="border border-[#99ADC6]/25 bg-[#F4F9FC] px-4 py-3">
-                  <a href={story.url} target="_blank" rel="noreferrer" className="inline-flex items-start gap-2 font-semibold text-ink hover:text-[#CB693A]">
-                    <span>{story.headline}</span>
-                    <span aria-hidden="true" className="mt-[1px] text-xs text-[#CB693A]">↗</span>
-                  </a>
-                  <p className="mt-2 text-xs text-moss/70">
-                    {story.keyword} | {formatNumber(story.engagement)} engagements | {story.growthPct.toFixed(1)}% growth
-                  </p>
-                </article>
-              ))}
-            </div>
-          </div>
-
-          <div className="border border-[#99ADC6]/45 bg-white p-5">
-            <h3 className="text-xl font-semibold text-ink">Keyword Growth</h3>
-            <div className="mt-2 flex items-center justify-between text-[11px] font-semibold uppercase tracking-[0.08em] text-[#99ADC6]">
-              <span>1</span>
-              <span>100</span>
-            </div>
-            <div className="mt-4 space-y-4">
-              {data.facebookInsights.keywords.slice(0, 5).map((row) => (
-                <div key={`${row.keyword}-bar`} className="space-y-2">
-                  <div className="flex items-center justify-between gap-4 text-sm">
-                    <span className="font-semibold text-ink">{row.keyword}</span>
-                    <span className="text-xs font-semibold uppercase tracking-[0.05em] text-[#4A678F]">{Math.min(Math.round(row.growthPct), 100)}</span>
-                  </div>
-                  <div className="relative h-7 border border-[#99ADC6]/25 bg-[#F4F9FC]">
-                    <div
-                      className="absolute inset-y-0 left-0"
-                      style={{
-                        width: `${Math.max(Math.min(row.growthPct, 100), 12)}%`,
-                        background: "#4A678F"
-                      }}
-                    />
+                  <div className="self-start lg:self-start">
+                    <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#4A678F]/66">Updated {formatUpdatedAt(data.signals.generatedAt)}</p>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="mt-6">
-          {facebookSignals.length > 0 ? (
-            <TrendTable title="Facebook Signals" rows={facebookSignals} showSource={false} />
-          ) : (
-            <EmptyState title="No Facebook signals yet" body="FB Insights rows will appear here after the next successful fetch." />
-          )}
-        </div>
-      </SectionShell>
 
-      <SectionShell
-        id="google-trends"
-        eyebrow="Google Trends"
-        title="Interest Over Time"
-        subtitle="Google Trends is fetched through Apify on a schedule, then normalized into a stable time-series shape before the frontend reads any local JSON."
-      >
-        <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
-          <TrendChart title={googleTrendsLead.keyword} points={toSeriesPoints(googleTrendsLead)} color="#4A678F" />
-          <div className="border border-[#99ADC6]/45 bg-white p-5">
-            <h3 className="text-xl font-semibold text-ink">Fast-Rising Watchlist Terms</h3>
-            <div className="mt-4 space-y-3">
-              {data.googleTrends.keywords.slice(0, 6).map((row, index) => (
-                <button
-                  key={row.keyword}
-                  type="button"
-                  onClick={() => setSelectedTrendsKeyword(index)}
-                  className={`block w-full border px-4 py-3 text-left ${selectedTrendsKeyword === index ? "border-[#4A678F] bg-white" : "border-[#99ADC6]/25 bg-[#F4F9FC]"}`}
-                >
-                  <div className="flex items-center justify-between gap-4">
-                    <p className="font-semibold text-ink">{row.keyword}</p>
-                    {row.breakout ? <span className="border border-[#CB693A]/20 bg-[#CB693A]/10 px-3 py-1 text-xs uppercase tracking-[0.05em] text-ember">breakout</span> : null}
-                  </div>
-                  <p className="mt-1 text-xs text-moss/70">Momentum {row.momentumPct.toFixed(1)}% | {row.geo}</p>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </SectionShell>
-
-      <SectionShell
-        id="google-news"
-        eyebrow="Google News"
-        title="News Momentum"
-        subtitle="Google News is fetched through Apify, then normalized into topic-level coverage and trend lines that can be compared against search and Reddit demand."
-      >
-        <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
-          <TrendChart title={googleNewsLead.keyword} points={toSeriesPoints(googleNewsLead)} color="#CB693A" />
-          <div className="border border-[#99ADC6]/45 bg-white p-5">
-            <h3 className="text-xl font-semibold text-ink">Rising Google News Topics</h3>
-            <div className="mt-4 space-y-3">
-              {data.googleNews.keywords.slice(0, 6).map((row, index) => (
-                <div
-                  key={row.keyword}
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => setSelectedNewsKeyword(index)}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter" || event.key === " ") {
-                      event.preventDefault();
-                      setSelectedNewsKeyword(index);
+                <div className="mt-5 grid gap-4 md:grid-cols-3">
+                  <MetricCard
+                    label="Lead Topic"
+                    value={leadTopic ? leadTopic.term : "No trend yet"}
+                    note={
+                      leadTopic
+                        ? `Across ${leadTopic.sourceCount} Signal Families: ${leadTopic.sources.map(formatSourceFamily).join(", ")}.`
+                        : "Waiting on enough aligned signals to form a real consensus."
                     }
-                  }}
-                  className={`block w-full cursor-pointer border px-4 py-3 text-left ${selectedNewsKeyword === index ? "border-[#4A678F] bg-white" : "border-[#99ADC6]/25 bg-[#F4F9FC]"}`}
-                >
-                  <p className="font-semibold text-ink">{row.keyword}</p>
-                  <p className="mt-1 text-xs text-moss/70">Movement {row.movementPct.toFixed(1)}% | coverage {row.coverageCount}</p>
-                  {row.sampleStories?.length ? (
-                    <a
-                      href={row.sampleStories[0].url}
-                      target="_blank"
-                      rel="noreferrer"
-                      onClick={(event) => event.stopPropagation()}
-                      className="mt-2 inline-flex items-start gap-2 text-xs font-semibold text-[#4A678F] hover:text-[#CB693A]"
-                    >
-                      <span>{row.sampleStories[0].headline}</span>
-                      <span aria-hidden="true" className="mt-[1px] text-[10px] text-[#CB693A]">↗</span>
-                    </a>
-                  ) : row.sampleHeadlines?.length ? (
-                    <p className="mt-2 text-xs text-moss/70">{row.sampleHeadlines[0]}</p>
-                  ) : null}
+                  />
+                  <MetricCard label="Act Now" value={formatNumber(actNowCount)} note="Topics with enough momentum to justify immediate attention." />
+                  <MetricCard
+                    label="Watch Closely"
+                    value={formatNumber(watchCloselyCount)}
+                    note="Topics gaining traction across signals that merit monitoring before they move into immediate action."
+                  />
                 </div>
-              ))}
-            </div>
+              </>
+            ) : (
+              <div className="max-w-3xl">
+                <h2 className="text-[1.7rem] font-semibold leading-tight text-[#111111]">Story Timing</h2>
+                <p className="mt-2 text-sm leading-6 text-[#4A678F]/78">
+                  Check a story or campaign idea against current signals mix to see if now is the right time to publish.
+                </p>
+                <div className="mt-6 max-w-2xl">
+                  <StoryTimingCard evaluatorData={evaluatorData} />
+                </div>
+              </div>
+            )}
           </div>
-        </div>
-        <div className="mt-6">
-          {googleNewsSignals.length > 0 ? (
-            <TrendTable title="News, Search and Social Overlap" rows={googleNewsSignals} />
-          ) : (
-            <EmptyState title="No Google News signals" body="Validate the Apify actor output, then normalize it into /public/data/google-news.json." />
-          )}
-        </div>
-      </SectionShell>
+        </section>
 
-      <SectionShell
-        id="story-ideas"
-        eyebrow="Ideas and Optimizations"
-        title="Action Queue"
-        subtitle="These items are rule-based recommendations generated from the normalized signal graph, with no LLM summarization in v1."
-      >
-        <StoryIdeasPanel ideas={data.summary.storyIdeas} />
-      </SectionShell>
+        <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
+          <section className="border border-[#99ADC6]/40 bg-white">
+            <div className="border-b border-[#99ADC6]/30 px-5 py-4 sm:px-6">
+              <h3 className="text-xl font-semibold text-[#111111]">Trending Topics</h3>
+              <p className="mt-1 text-sm leading-6 text-[#4A678F]/76">
+                Each topic is confirmed by at least three signal families.
+              </p>
+            </div>
 
-      <div className="px-1 text-left text-xs text-[#4A678F]/72">© 2026 Center for a Humane Economy | Animal Wellness Action</div>
+            <div className="divide-y divide-[#99ADC6]/22">
+              {watchTopics.length > 0 ? watchTopics.map((topic) => {
+                const isOpen = openTopicId === topic.id;
+
+                return (
+                <article key={topic.id}>
+                  <div
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => setOpenTopicId(isOpen ? null : topic.id)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        setOpenTopicId(isOpen ? null : topic.id);
+                      }
+                    }}
+                    className="relative block w-full px-5 pb-2 pt-4 text-left sm:px-6"
+                  >
+                    <div className="relative flex flex-col gap-3 pb-2">
+                      <div className="min-w-0 pr-[14rem]">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className={`inline-flex border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] ${toneForStatus(topic.status)}`}>
+                              {labelForStatus(topic.status)}
+                            </span>
+                          </div>
+                          <h4 className="mt-3 text-xl font-semibold leading-tight text-[#111111]">{topic.term}</h4>
+                          <p className="mt-2 max-w-3xl text-sm leading-6 text-[#4A678F]/78">
+                            {topic.evidence[0]} Across {topic.sourceCount} Signal Families: {topic.sources.map(formatSourceFamily).join(", ")}.
+                          </p>
+                      </div>
+
+                      <div className="absolute right-5 top-4 sm:right-6">
+                        <div className="grid shrink-0 grid-cols-3 gap-3 text-left lg:text-right">
+                          <div>
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#99ADC6]">Score</p>
+                            <p className="mt-2 text-2xl font-semibold text-[#111111]">{topic.score}</p>
+                          </div>
+                          <div>
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#99ADC6]">Sources</p>
+                            <p className="mt-2 text-2xl font-semibold text-[#111111]">{topic.sourceCount}</p>
+                          </div>
+                          <div>
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#99ADC6]">Signals</p>
+                            <p className="mt-2 text-2xl font-semibold text-[#111111]">{topic.displaySignalCount ?? topic.rows.length}</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2">
+                        {topic.sources.map((source) => (
+                          <SourceBadge key={`${topic.id}-${source}`} source={source} />
+                        ))}
+                      </div>
+
+                    </div>
+
+                      <span
+                        aria-hidden="true"
+                        className={`absolute bottom-0 right-0 inline-flex h-8 w-8 shrink-0 items-center justify-center border border-[#99ADC6]/30 bg-[#F4F9FC] text-lg font-semibold leading-none text-[#4A678F] transition ${isOpen ? "rotate-180" : ""}`}
+                      >
+                        ⌃
+                      </span>
+                    </div>
+
+                  {isOpen ? (
+                  <div className="border-t border-[#99ADC6]/22 bg-[#F7FAFC] px-5 py-4 sm:px-6">
+                    <div>
+                      <p className="mb-3 px-4 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#99ADC6]">Signals</p>
+
+                      <div className="grid items-stretch gap-5 lg:grid-cols-[minmax(0,1fr)_280px]">
+                        <div className="h-full border border-[#99ADC6]/28 bg-white px-4 py-4">
+                          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#99ADC6]">Details</p>
+                          {topic.rows.length > 0 ? (
+                            <div className="mt-3 space-y-3">
+                              {topic.rows.map((row) => (
+                                <div key={row.id} className="border border-[#99ADC6]/28 bg-[#F7FAFC] px-4 py-3">
+                                  <div className="flex flex-wrap items-center gap-2">
+                                    <SourceBadge source={row.source} label={row.sourceLabel} />
+                                    <span className="inline-flex border border-[#99ADC6]/28 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#4A678F]">
+                                      {row.trendLabel}
+                                    </span>
+                                    <span className="text-xs text-[#4A678F]/62">Raw score {row.trendScore.toFixed(1)}</span>
+                                  </div>
+                                  <p className="mt-2 text-sm leading-6 text-[#4A678F]/78">{row.context ?? row.timeWindow}</p>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <ul className="mt-3 space-y-2 text-sm leading-6 text-[#4A678F]/78">
+                              {topic.evidence.map((item) => (
+                                <li key={`${topic.id}-${item}`}>{item}</li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+
+                        <div className="flex h-full flex-col gap-4">
+                          <div className="h-full border border-[#99ADC6]/28 bg-white px-4 py-4">
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#99ADC6]">Stories</p>
+                            <div className="mt-3 space-y-2 text-sm">
+                              {topic.rows.length === 0 ? (
+                                <>
+                                  <a href="https://example.com/seattle-factory-farming-protest" target="_blank" rel="noreferrer" className="block font-semibold text-[#4A678F] hover:text-[#CB693A]">
+                                    https://example.com/seattle-factory-farming-protest
+                                  </a>
+                                  <a href="https://example.com/animal-testing-campaign-update" target="_blank" rel="noreferrer" className="block font-semibold text-[#4A678F] hover:text-[#CB693A]">
+                                    https://example.com/animal-testing-campaign-update
+                                  </a>
+                                  <a href="https://example.com/fur-ban-legislation-watch" target="_blank" rel="noreferrer" className="block font-semibold text-[#4A678F] hover:text-[#CB693A]">
+                                    https://example.com/fur-ban-legislation-watch
+                                  </a>
+                                </>
+                              ) : null}
+                            </div>
+                          </div>
+
+                          {topic.storyLink ? (
+                            <div className="border border-[#99ADC6]/28 bg-white px-4 py-4">
+                              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#99ADC6]">Story Link</p>
+                              <a
+                                href={topic.storyLink.url}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="mt-3 inline-flex items-start gap-2 text-sm font-semibold leading-6 text-[#4A678F] hover:text-[#CB693A]"
+                              >
+                                <span>{topic.storyLink.headline}</span>
+                                <span aria-hidden="true" className="mt-[2px] text-xs">↗</span>
+                              </a>
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  ) : null}
+                </article>
+              )}) : (
+                <div className="px-5 py-8 sm:px-6">
+                  <EmptyState
+                    title="No consensus topics yet"
+                    body={`This view now requires at least ${MIN_CONSENSUS_SIGNALS} distinct signal families to agree before a topic appears.`}
+                  />
+                </div>
+              )}
+            </div>
+          </section>
+
+          <aside className="space-y-6">
+            <section className="border border-[#99ADC6]/40 bg-white">
+              <div className="px-5 py-5">
+                <p className="px-4 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#99ADC6]">Editorial Queue</p>
+                <div className="mt-4 space-y-4">
+                  {data.summary.storyIdeas.slice(0, 3).map((idea) => (
+                    <article key={idea.id} className="border border-[#99ADC6]/28 bg-[#F7FAFC] px-4 py-4">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#99ADC6]">{idea.category}</p>
+                      <h4 className="mt-2 text-base font-semibold leading-tight text-[#111111]">{idea.headline}</h4>
+                      <p className="mt-2 text-sm leading-6 text-[#4A678F]/76">{idea.rationale}</p>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            <section className="border border-[#99ADC6]/40 bg-white px-5 py-5">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#99ADC6]">Method</p>
+              <div className="mt-3 space-y-3 text-sm leading-6 text-[#4A678F]/78">
+                <p>Topics are merged by normalized phrase across search, site demand, community, social, and news inputs.</p>
+                <p>The consensus score rewards source agreement and strong movement, so the top of the list reflects confidence, not just noise.</p>
+              </div>
+            </section>
+          </aside>
+        </div>
+
+        <div className="px-1 text-left text-xs text-[#4A678F]/66">© 2026 Center for a Humane Economy | Animal Wellness Action</div>
+      </div>
     </div>
   );
 }

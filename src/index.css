@@ -16,7 +16,11 @@ body {
   margin: 0;
   min-width: 320px;
   font-family: "Avenir Next", "Segoe UI", sans-serif;
-  background: #ffffff;
+  background-color: #f7fafc;
+  background-image:
+    linear-gradient(rgba(153, 173, 198, 0.0375) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(153, 173, 198, 0.0375) 1px, transparent 1px);
+  background-size: 28px 28px;
   color: #4A678F;
 }
 
