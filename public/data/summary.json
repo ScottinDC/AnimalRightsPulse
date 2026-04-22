@@ -51,34 +51,34 @@
     {
       "id": "monitor",
       "category": "Monitor",
-      "headline": "Track whether Wildlife Conservation graduates from social chatter to search demand",
+      "headline": "Track whether Species Recovery graduates from social chatter to search demand",
       "rationale": "Signals with strong Reddit, Google News, or Google Trends movement but lighter site demand may be early indicators rather than immediate assignments.",
       "relatedTerms": [
-        "Wildlife Conservation",
-        "Euthanasia Rescue Alerts",
-        "Cat Rescue & Foster"
+        "Species Recovery",
+        "animal testing",
+        "animal cruelty"
       ],
       "sources": [
         "reddit",
-        "reddit",
-        "reddit"
+        "google-news",
+        "google-trends"
       ],
       "priority": 2
     },
     {
       "id": "evergreen",
       "category": "Evergreen update",
-      "headline": "Refresh foundational coverage around Veterinary Rescue Needs ",
+      "headline": "Refresh foundational coverage around Habitat Protection Fights ",
       "rationale": "If a term rises in GSC and internal search at the same time, a clearer evergreen explainer or FAQ often pays off faster than net-new reporting.",
       "relatedTerms": [
-        "Veterinary Rescue Needs",
-        "Dog Rescue & Adoption",
-        "animal testing"
+        "Habitat Protection Fights",
+        "fur ban",
+        "factory farming"
       ],
       "sources": [
         "reddit",
-        "reddit",
-        "google-news"
+        "google-news",
+        "google-trends"
       ],
       "priority": 2
     },

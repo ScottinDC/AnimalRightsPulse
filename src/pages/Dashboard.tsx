@@ -144,6 +144,35 @@ function trimHeadline(value: string, maxLength = 88): string {
   return `${cleaned.slice(0, maxLength).trimEnd()}...`;
 }
 
+function cleanTrendHeadline(value: string): string {
+  return value
+    .replace(/\s*\([^)]*\)\s*$/g, "")
+    .replace(/[^\p{L}\p{N}\s,.'’:%/-]/gu, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function formatFreshnessWindow(hours: number): string {
+  if (hours <= 1) return "the last hour";
+  if (hours < 24) return `the last ${Math.round(hours)} hours`;
+  const days = Math.max(1, Math.round(hours / 24));
+  return `the last ${days} day${days === 1 ? "" : "s"}`;
+}
+
+function summarizeEmergingSignal(cluster: RedditTrendClusterRow): string {
+  const headline = trimHeadline(cleanTrendHeadline(cluster.urls?.[0]?.title ?? cluster.label), 96);
+  const momentumPhrase =
+    cluster.direction === "accelerating"
+      ? "is breaking out"
+      : cluster.direction === "rising"
+        ? "is gaining traction"
+        : cluster.direction === "cooling"
+          ? "is losing momentum"
+          : "is holding steady";
+
+  return `${headline} ${momentumPhrase}, with fresh engagement building over ${formatFreshnessWindow(cluster.freshnessHours)}.`;
+}
+
 function buildRedditFallbackTopics(data: DashboardData): ConsensusTopic[] {
   return (data.reddit.trendClusters ?? [])
     .filter((cluster) => !EXCLUDED_TOPICS.has(cluster.normalizedTerm))
@@ -423,16 +452,9 @@ export function Dashboard() {
 
                 {topRedditTrend ? (
                   <div className="mt-4 border border-[#99ADC6]/28 bg-[#F7FAFC] px-4 py-4 sm:px-5">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#99ADC6]">Reddit Signal</p>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#99ADC6]">Emerging Signal</p>
                     <p className="mt-2 text-sm leading-6 text-[#4A678F]/82">
-                      <span className="font-semibold text-[#111111]">
-                        {trimHeadline(topRedditTrend.urls?.[0]?.title ?? topRedditTrend.label)}
-                      </span>{" "}
-                      is{" "}
-                      <span className="font-semibold text-[#4A678F]">{formatTrendDirection(topRedditTrend.direction).toLowerCase()}</span>{" "}
-                      on Reddit under <span className="font-semibold text-[#4A678F]">{topRedditTrend.label}</span>, with{" "}
-                      {formatNumber(topRedditTrend.postCount)} posts, {formatNumber(topRedditTrend.totalComments)} comments, and the freshest match
-                      landing within {topRedditTrend.freshnessHours} hours.
+                      {summarizeEmergingSignal(topRedditTrend)}
                     </p>
                   </div>
                 ) : null}

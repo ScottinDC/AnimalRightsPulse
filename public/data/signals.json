@@ -94,18 +94,18 @@
       "context": "Internal site search"
     },
     {
-      "id": "reddit:global:wildlife conservation",
-      "term": "Wildlife Conservation",
-      "normalizedTerm": "wildlife conservation",
+      "id": "reddit:global:species recovery",
+      "term": "Species Recovery",
+      "normalizedTerm": "species recovery",
       "source": "reddit",
       "site": "global",
       "sourceLabel": "Reddit",
-      "trendScore": 22,
+      "trendScore": 21.164,
       "trendLabel": "rising",
       "crossSourceCount": 1,
       "timeWindow": "reddit:7d",
       "metrics": {
-        "redditVelocity": 100,
+        "redditVelocity": 92.4,
         "sourceCount": 1,
         "novelty": 1
       },
@@ -113,100 +113,8 @@
         "community-topic",
         "reddit-accelerating"
       ],
-      "context": "Rank #2, 6 URLs, 3206 score, 132 comments, fresh within 1h",
-      "url": "https://www.hcn.org/articles/interior-department-crafted-talking-points-for-public-lands-sell-off-agenda/"
-    },
-    {
-      "id": "reddit:global:euthanasia rescue alerts",
-      "term": "Euthanasia Rescue Alerts",
-      "normalizedTerm": "euthanasia rescue alerts",
-      "source": "reddit",
-      "site": "global",
-      "sourceLabel": "Reddit",
-      "trendScore": 22,
-      "trendLabel": "rising",
-      "crossSourceCount": 1,
-      "timeWindow": "reddit:7d",
-      "metrics": {
-        "redditVelocity": 100,
-        "sourceCount": 1,
-        "novelty": 1
-      },
-      "flags": [
-        "community-topic",
-        "reddit-accelerating"
-      ],
-      "context": "Rank #3, 7 URLs, 3353 score, 498 comments, fresh within 1h",
-      "url": "https://v.redd.it/iyr5qmjkvevg1"
-    },
-    {
-      "id": "reddit:global:cat rescue foster",
-      "term": "Cat Rescue & Foster",
-      "normalizedTerm": "cat rescue foster",
-      "source": "reddit",
-      "site": "global",
-      "sourceLabel": "Reddit",
-      "trendScore": 22,
-      "trendLabel": "rising",
-      "crossSourceCount": 1,
-      "timeWindow": "reddit:7d",
-      "metrics": {
-        "redditVelocity": 100,
-        "sourceCount": 1,
-        "novelty": 1
-      },
-      "flags": [
-        "community-topic",
-        "reddit-accelerating"
-      ],
-      "context": "Rank #4, 14 URLs, 6119 score, 741 comments, fresh within 1h",
-      "url": "https://www.reddit.com/gallery/1sma4q2"
-    },
-    {
-      "id": "reddit:global:veterinary rescue needs",
-      "term": "Veterinary Rescue Needs",
-      "normalizedTerm": "veterinary rescue needs",
-      "source": "reddit",
-      "site": "global",
-      "sourceLabel": "Reddit",
-      "trendScore": 22,
-      "trendLabel": "rising",
-      "crossSourceCount": 1,
-      "timeWindow": "reddit:7d",
-      "metrics": {
-        "redditVelocity": 100,
-        "sourceCount": 1,
-        "novelty": 1
-      },
-      "flags": [
-        "community-topic",
-        "reddit-accelerating"
-      ],
-      "context": "Rank #5, 11 URLs, 5519 score, 642 comments, fresh within 1h",
-      "url": "https://www.reddit.com/gallery/1so6br3"
-    },
-    {
-      "id": "reddit:global:dog rescue adoption",
-      "term": "Dog Rescue & Adoption",
-      "normalizedTerm": "dog rescue adoption",
-      "source": "reddit",
-      "site": "global",
-      "sourceLabel": "Reddit",
-      "trendScore": 22,
-      "trendLabel": "rising",
-      "crossSourceCount": 1,
-      "timeWindow": "reddit:7d",
-      "metrics": {
-        "redditVelocity": 100,
-        "sourceCount": 1,
-        "novelty": 1
-      },
-      "flags": [
-        "community-topic",
-        "reddit-accelerating"
-      ],
-      "context": "Rank #13, 10 URLs, 4682 score, 508 comments, fresh within 1h",
-      "url": "https://v.redd.it/foiebnzu2ovg1"
+      "context": "Rank #35, 2 URLs, 728 score, 68 comments, fresh within 8h",
+      "url": "https://www.bbc.com/future/article/20260416-the-humpback-super-groups-swarming-the-seas"
     },
     {
       "id": "google-news:global:animal testing",
@@ -270,6 +178,29 @@
         "breakout"
       ],
       "context": "US"
+    },
+    {
+      "id": "reddit:global:habitat protection fights",
+      "term": "Habitat Protection Fights",
+      "normalizedTerm": "habitat protection fights",
+      "source": "reddit",
+      "site": "global",
+      "sourceLabel": "Reddit",
+      "trendScore": 18.997,
+      "trendLabel": "steady",
+      "crossSourceCount": 1,
+      "timeWindow": "reddit:7d",
+      "metrics": {
+        "redditVelocity": 72.7,
+        "sourceCount": 1,
+        "novelty": 1
+      },
+      "flags": [
+        "community-topic",
+        "reddit-rising"
+      ],
+      "context": "Rank #26, 2 URLs, 783 score, 24 comments, fresh within 23h",
+      "url": "https://planet-wildlife.com/2026/04/20/rewilding-wolves/"
     },
     {
       "id": "google-news:global:fur ban",

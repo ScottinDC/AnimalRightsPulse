@@ -40,42 +40,93 @@ const CLUSTER_STOPWORDS = new Set([
 
 const THEMATIC_TREND_DEFINITIONS = [
   {
-    label: "Euthanasia Rescue Alerts",
-    keywords: ["euthanasia", "euth", "deadline", "deadlined", "last call", "rescue hold", "shelter", "hours left"],
+    label: "Public Lands Sell-Off",
+    keywords: ["public lands", "sell off", "sell-off", "strip mines", "oil fields", "data centers", "interior department"],
     priority: 5
   },
   {
-    label: "Veterinary Rescue Needs",
-    keywords: ["veterinary", "vet", "doctor", "vaccine", "infection", "injuries", "injury", "respiratory", "care"],
+    label: "Wildlife Die-Offs",
+    keywords: ["die off", "died", "river", "puddle", "heat", "valencia", "eels", "species loss"],
     priority: 4
   },
   {
-    label: "Cat Rescue & Foster",
-    keywords: ["kitten", "kittens", "cat", "cats", "rescuecats", "foster", "adoption", "stray"],
+    label: "Habitat Protection Fights",
+    keywords: ["habitat", "endangered", "conservation", "protected land", "acre", "development", "rewilding"],
     priority: 3
   },
   {
-    label: "Dog Rescue & Adoption",
-    keywords: ["dog", "dogs", "puppy", "puppies", "rescuedogs", "adoptable", "adoption"],
-    priority: 3
-  },
-  {
-    label: "Wildlife Conservation",
-    keywords: ["rewilding", "wolves", "wolf", "lynx", "whales", "whale", "hippos", "habitat", "conservation", "wildlife", "cull"],
+    label: "Species Recovery",
+    keywords: ["wolves", "wolf", "lynx", "gorilla", "whale", "whales", "hippos", "rewilding"],
     priority: 2
-  },
-  {
-    label: "Rescue Fundraising",
-    keywords: ["donation", "donations", "pledge", "funds", "support", "bills", "help needed", "hail mary"],
-    priority: 1
   }
 ];
+
+const BLOCKED_REDDIT_TERMS = [
+  "donation",
+  "donations",
+  "pledge",
+  "pledges",
+  "gofundme",
+  "adoption",
+  "adoptable",
+  "adopt",
+  "euthanasia",
+  "euth",
+  "rescuecats",
+  "rescuedogs",
+  "cat rescue",
+  "dog rescue",
+  "kitten",
+  "kittens",
+  "cat",
+  "cats",
+  "dog",
+  "dogs",
+  "puppy",
+  "puppies",
+  "foster",
+  "shelter",
+  "vet bill",
+  "veterinary",
+  "vet care"
+];
+
+const BLOCKED_REDDIT_DOMAINS = new Set([
+  "reddit.com",
+  "www.reddit.com",
+  "old.reddit.com",
+  "redd.it",
+  "v.redd.it",
+  "i.redd.it",
+  "preview.redd.it"
+]);
+
+const BLOCKED_REDDIT_EXTENSIONS = [".jpg", ".jpeg", ".png", ".gif", ".webp", ".mp4", ".mov", ".webm"];
 
 function linkedDomain(url) {
   try {
     return new URL(url).hostname.replace(/^www\./, "");
   } catch {
     return "reddit.com";
+  }
+}
+
+function isExternalArticleUrl(url) {
+  if (!url) return false;
+
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace(/^www\./, "");
+    const path = parsed.pathname.toLowerCase();
+
+    if (!["http:", "https:"].includes(parsed.protocol)) return false;
+    if (BLOCKED_REDDIT_DOMAINS.has(host)) return false;
+    if (path.includes("/gallery/")) return false;
+    if (BLOCKED_REDDIT_EXTENSIONS.some((extension) => path.endsWith(extension))) return false;
+
+    return true;
+  } catch {
+    return false;
   }
 }
 
@@ -186,9 +237,17 @@ function buildClusterFromPosts(label, posts) {
   const freshnessHours = Math.min(
     ...sortedPosts.map((post) => Math.max((Date.now() - Number(new Date(post.createdUtc))) / 3_600_000, 1))
   );
-  const freshnessScore = clamp(100 - freshnessHours * 4.5, 8, 100);
-  const rawMomentum = totalScore * 0.42 + totalComments * 0.34 + (100 - avgRank * 6) + freshnessScore * 0.4 + sortedPosts.length * 10;
-  const momentumScore = clamp(Number((rawMomentum / 4.2).toFixed(1)), 8, 100);
+  const freshnessScore = clamp(100 - freshnessHours * 3.5, 10, 100);
+  const scoreSignal = Math.log10(Math.max(totalScore, 1)) * 12;
+  const commentSignal = Math.log10(Math.max(totalComments, 1)) * 11;
+  const rankSignal = clamp(100 - avgRank * 2.4, 0, 100) * 0.32;
+  const recencySignal = freshnessScore * 0.36;
+  const concentrationSignal = sortedPosts.length * 4;
+  const momentumScore = clamp(
+    Number((scoreSignal + commentSignal + rankSignal + recencySignal + concentrationSignal).toFixed(1)),
+    8,
+    100
+  );
   const { direction, trendLabel } = classifyRedditDirection(momentumScore, freshnessScore, sortedPosts.length);
   const subreddits = new Set(sortedPosts.map((post) => post.subreddit ?? "AnimalRights"));
 
@@ -253,6 +312,32 @@ function buildThematicTrendClusters(posts) {
     .map(([label, themedPosts]) => buildClusterFromPosts(label, themedPosts))
     .filter(Boolean)
     .sort((a, b) => b.momentumScore - a.momentumScore);
+}
+
+function isBlockedRedditPost(post) {
+  const haystack = normalizeTerm(`${post.title} ${post.subreddit} ${post.url} ${post.permalink}`);
+  if (BLOCKED_REDDIT_TERMS.some((term) => haystack.includes(normalizeTerm(term)))) {
+    return true;
+  }
+
+  const domain = linkedDomain(post.url);
+  if (BLOCKED_REDDIT_DOMAINS.has(domain)) {
+    return true;
+  }
+
+  if (post.url.includes("/gallery/")) {
+    return true;
+  }
+
+  if (!isExternalArticleUrl(post.url)) {
+    return true;
+  }
+
+  return false;
+}
+
+function filterEligibleRedditPosts(posts) {
+  return posts.filter((post) => !isBlockedRedditPost(post));
 }
 
 function dedupePosts(posts) {
@@ -481,7 +566,7 @@ async function readAirtableRows() {
 
 async function fetchReddit() {
   if (process.env.AIRTABLE_TOKEN) {
-    const posts = await readAirtableRows();
+    const posts = filterEligibleRedditPosts(await readAirtableRows());
     const thematicClusters = buildThematicTrendClusters(posts);
     const trendClusters = thematicClusters.length > 0 ? thematicClusters : buildTrendClusters(posts);
     const repeatedPhrases = trendClusters.map((cluster) => ({
@@ -512,7 +597,7 @@ async function fetchReddit() {
   }
 
   if (process.env.BROWSE_AI_CSV_FILE) {
-    const posts = await readBrowseAiCsv(path.resolve(process.cwd(), process.env.BROWSE_AI_CSV_FILE));
+    const posts = filterEligibleRedditPosts(await readBrowseAiCsv(path.resolve(process.cwd(), process.env.BROWSE_AI_CSV_FILE)));
     const thematicClusters = buildThematicTrendClusters(posts);
     const trendClusters = thematicClusters.length > 0 ? thematicClusters : buildTrendClusters(posts);
     const repeatedPhrases = trendClusters.map((cluster) => ({
@@ -545,7 +630,7 @@ async function fetchReddit() {
   if (process.env.BROWSE_AI_REDDIT_FILE) {
     const raw = await safeReadJson(path.resolve(process.cwd(), process.env.BROWSE_AI_REDDIT_FILE), []);
     const items = readBrowseAiItems(raw);
-    const posts = items.map((post, index) => {
+    const posts = filterEligibleRedditPosts(items.map((post, index) => {
       const createdRaw =
         post.createdUtc ??
         post.created_at ??
@@ -576,7 +661,7 @@ async function fetchReddit() {
         linkedDomain: linkedDomain(url),
         velocityScore: Number(((score + numComments * 2.4 + Math.max(0, 40 - rank) * 1.5) / ageHours).toFixed(2))
       };
-    });
+    }));
 
     const trendClusters = buildTrendClusters(posts);
     const repeatedPhrases = trendClusters.map((cluster) => ({
@@ -626,7 +711,7 @@ async function fetchReddit() {
     return safeReadJson(path.join(DATA_DIR, "reddit.json"));
   }
 
-  const posts = items.map((post, index) => {
+  const posts = filterEligibleRedditPosts(items.map((post, index) => {
     const createdRaw = post.createdAt ?? post.created_utc ?? post.timestamp ?? Date.now();
     const createdAt = typeof createdRaw === "number" && createdRaw < 10_000_000_000 ? createdRaw * 1000 : Number(new Date(createdRaw));
     const ageHours = Math.max((Date.now() - createdAt) / 3_600_000, 1);
@@ -649,7 +734,7 @@ async function fetchReddit() {
       linkedDomain: linkedDomain(url),
       velocityScore: Number(((score + numComments * 2) / ageHours).toFixed(2))
     };
-  });
+  }));
 
   const trendClusters = buildTrendClusters(posts);
   const repeatedPhrases = extractPhrasesFromTitles(posts.map((post) => post.title)).map((entry) => ({
