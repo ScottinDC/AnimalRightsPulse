@@ -6,7 +6,15 @@ import { SourceBadge } from "../components/SourceBadge";
 import { loadDashboardData } from "../lib/data";
 import { formatNumber } from "../lib/format";
 import { evaluateStoryTopic, type StoryEvaluatorData } from "../lib/storyEvaluator";
-import type { DashboardData, GoogleNewsTrendRow, NormalizedSignalRow, RedditPostRow, SourceType, TrendLabel } from "../lib/types";
+import type {
+  DashboardData,
+  GoogleNewsTrendRow,
+  NormalizedSignalRow,
+  RedditPostRow,
+  RedditTrendClusterRow,
+  SourceType,
+  TrendLabel
+} from "../lib/types";
 
 interface ConsensusTopic {
   id: string;
@@ -23,69 +31,11 @@ interface ConsensusTopic {
   storyLink?: { headline: string; url: string; source: SourceType };
   evidence: string[];
   displaySignalCount?: number;
+  redditCluster?: RedditTrendClusterRow;
 }
 
 const EXCLUDED_TOPICS = new Set(["puppy mills", "puppy mills map"]);
 const MIN_CONSENSUS_SIGNALS = 3;
-const FALLBACK_CONSENSUS_TOPICS: ConsensusTopic[] = [
-  {
-    id: "factory-farming-protest-fallback",
-    term: "Seattle Factory Farming Protest",
-    normalizedTerm: "seattle factory farming protest",
-    score: 81,
-    averageSignalScore: 33,
-    sourceCount: 3,
-    status: "strong",
-    labels: ["rising", "breakout"],
-    sources: ["ga4", "reddit", "google-news"],
-    rows: [],
-    flags: ["internal-demand", "community-topic", "news-momentum"],
-    evidence: [
-      "On-site search demand is climbing around factory farming coverage.",
-      "Reddit conversation is reinforcing the same protest theme.",
-      "Google News is keeping the topic in circulation."
-    ],
-    displaySignalCount: 2
-  },
-  {
-    id: "animal-testing-fallback",
-    term: "Animal Testing",
-    normalizedTerm: "animal testing",
-    score: 74,
-    averageSignalScore: 28,
-    sourceCount: 3,
-    status: "watch",
-    labels: ["rising", "breakout"],
-    sources: ["ga4", "google-news", "google-trends"],
-    rows: [],
-    flags: ["internal-demand", "news-momentum", "breakout"],
-    evidence: [
-      "Internal search behavior suggests active demand for this topic.",
-      "Google News coverage is giving it mainstream lift.",
-      "Google Trends shows broader search momentum behind the term."
-    ],
-    displaySignalCount: 2
-  },
-  {
-    id: "fur-ban-fallback",
-    term: "Fur Ban",
-    normalizedTerm: "fur ban",
-    score: 69,
-    averageSignalScore: 24,
-    sourceCount: 3,
-    status: "watch",
-    labels: ["rising", "steady"],
-    sources: ["ga4", "google-news", "facebook"],
-    rows: [],
-    flags: ["internal-demand", "news-momentum", "social-movement"],
-    evidence: [
-      "On-site demand suggests people are actively looking for fur ban coverage.",
-      "News attention is helping the topic stay visible.",
-      "Social engagement adds a third confirming signal."
-    ],
-    displaySignalCount: 2
-  }
-];
 
 function titleCase(value: string): string {
   return value.replace(/\b\w/g, (char) => char.toUpperCase());
@@ -98,6 +48,31 @@ function formatSourceFamily(source: SourceType): string {
   if (source === "google-trends") return "Google Trends";
   if (source === "facebook") return "Facebook";
   return "Reddit";
+}
+
+function comparableTokens(value: string): string[] {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, " ")
+    .split(/\s+/)
+    .filter((token) => token.length > 2)
+    .map((token) => (token.endsWith("s") && token.length > 4 ? token.slice(0, -1) : token));
+}
+
+function termsAreRelated(left: string, right: string): boolean {
+  const a = left.trim().toLowerCase();
+  const b = right.trim().toLowerCase();
+  if (!a || !b) return false;
+  if (a === b) return true;
+  if (a.includes(b) || b.includes(a)) return true;
+
+  const aTokens = comparableTokens(a);
+  const bTokens = comparableTokens(b);
+  if (!aTokens.length || !bTokens.length) return false;
+
+  const overlap = aTokens.filter((token) => bTokens.includes(token));
+  const shorter = Math.min(aTokens.length, bTokens.length);
+  return overlap.length >= 2 && overlap.length / shorter >= 0.66;
 }
 
 function formatUpdatedAt(value: string): string {
@@ -130,7 +105,7 @@ function summarizeEvidence(rows: NormalizedSignalRow[]): string[] {
       return `${row.sourceLabel} search visibility is up ${Math.max(row.metrics.clicks ?? 0, row.metrics.impressions ?? 0).toFixed(0)}%.`;
     }
     if (row.source === "reddit") {
-      return `Reddit conversation velocity is up ${(row.metrics.redditVelocity ?? 0).toFixed(0)}%.`;
+      return `Reddit is ${row.trendLabel} across one-week subreddit conversation, with ${(row.metrics.redditVelocity ?? 0).toFixed(0)} momentum.`;
     }
     if (row.source === "facebook") {
       return `Facebook engagement movement is up ${(row.metrics.facebookVelocity ?? 0).toFixed(0)}%.`;
@@ -140,6 +115,73 @@ function summarizeEvidence(rows: NormalizedSignalRow[]): string[] {
     }
     return `Google News coverage momentum is up ${(row.metrics.googleNewsVelocity ?? 0).toFixed(0)}%.`;
   });
+}
+
+function pickTopicTerm(rows: NormalizedSignalRow[]): string {
+  const preferred = rows.find((row) => row.source === "reddit")
+    ?? rows.find((row) => row.source === "google-news")
+    ?? [...rows].sort((a, b) => a.term.length - b.term.length)[0];
+  return titleCase(preferred?.term ?? rows[0]?.normalizedTerm ?? "");
+}
+
+function bestMatchingRedditCluster(
+  normalizedTerm: string,
+  clusters: RedditTrendClusterRow[] | undefined
+): RedditTrendClusterRow | undefined {
+  return clusters?.find((cluster) => termsAreRelated(cluster.normalizedTerm, normalizedTerm));
+}
+
+function formatTrendDirection(direction: RedditTrendClusterRow["direction"]): string {
+  if (direction === "accelerating") return "Accelerating";
+  if (direction === "cooling") return "Cooling";
+  if (direction === "steady") return "Steady";
+  return "Rising";
+}
+
+function trimHeadline(value: string, maxLength = 88): string {
+  const cleaned = value.replace(/\s*\([^)]*\)\s*$/g, "").trim();
+  if (cleaned.length <= maxLength) return cleaned;
+  return `${cleaned.slice(0, maxLength).trimEnd()}...`;
+}
+
+function buildRedditFallbackTopics(data: DashboardData): ConsensusTopic[] {
+  return (data.reddit.trendClusters ?? [])
+    .filter((cluster) => !EXCLUDED_TOPICS.has(cluster.normalizedTerm))
+    .sort((a, b) => b.momentumScore - a.momentumScore)
+    .slice(0, 8)
+    .map((cluster) => {
+      const score = Math.min(100, Math.round(cluster.momentumScore));
+      const status: ConsensusTopic["status"] =
+        cluster.direction === "accelerating" || cluster.direction === "rising" ? "strong" : "watch";
+
+      return {
+        id: `${cluster.id}-fallback`,
+        term: cluster.label,
+        normalizedTerm: cluster.normalizedTerm,
+        score,
+        averageSignalScore: cluster.momentumScore,
+        sourceCount: 1,
+        status,
+        labels: [cluster.trendLabel],
+        sources: ["reddit"],
+        rows: [],
+        flags: ["community-topic", `reddit-${cluster.direction}`],
+        evidence: [
+          `${cluster.postCount} posts across ${cluster.subredditCount} subreddits are clustering around this theme.`,
+          `${formatNumber(cluster.totalScore)} total score and ${formatNumber(cluster.totalComments)} comments are keeping it active.`,
+          `The freshest matching post landed within ${cluster.freshnessHours} hours.`
+        ],
+        storyLink: cluster.urls?.[0]
+          ? {
+              headline: cluster.urls[0].title,
+              url: cluster.urls[0].url || `https://reddit.com${cluster.urls[0].permalink}`,
+              source: "reddit"
+            }
+          : undefined,
+        displaySignalCount: cluster.postCount,
+        redditCluster: cluster
+      };
+    });
 }
 
 function bestStoryLink(
@@ -172,9 +214,11 @@ function buildConsensusTopics(data: DashboardData): ConsensusTopic[] {
   const grouped = new Map<string, NormalizedSignalRow[]>();
 
   data.signals.signals.forEach((row) => {
-    const existing = grouped.get(row.normalizedTerm) ?? [];
+    const matchingKey = [...grouped.keys()].find((key) => termsAreRelated(key, row.normalizedTerm));
+    const groupKey = matchingKey ?? row.normalizedTerm;
+    const existing = grouped.get(groupKey) ?? [];
     existing.push(row);
-    grouped.set(row.normalizedTerm, existing);
+    grouped.set(groupKey, existing);
   });
 
   const topics = [...grouped.entries()]
@@ -190,9 +234,10 @@ function buildConsensusTopics(data: DashboardData): ConsensusTopic[] {
       const status: ConsensusTopic["status"] =
         score >= 62 || (sourceCount >= 3 && averageSignalScore >= 18) ? "strong" : score >= 38 || sourceCount >= 2 ? "watch" : "early";
 
+      const redditCluster = bestMatchingRedditCluster(normalizedTerm, data.reddit.trendClusters);
       return {
         id: normalizedTerm,
-        term: titleCase(sortedRows[0]?.term ?? normalizedTerm),
+        term: pickTopicTerm(sortedRows),
         normalizedTerm,
         score,
         averageSignalScore,
@@ -203,13 +248,17 @@ function buildConsensusTopics(data: DashboardData): ConsensusTopic[] {
         rows: sortedRows,
         flags,
         evidence: summarizeEvidence(sortedRows),
-        storyLink: bestStoryLink(normalizedTerm, data.googleNews.keywords, data.reddit.posts)
+        storyLink: bestStoryLink(normalizedTerm, data.googleNews.keywords, data.reddit.posts),
+        redditCluster
       };
     })
     .filter((topic) => topic.sourceCount >= MIN_CONSENSUS_SIGNALS)
     .sort((a, b) => b.score - a.score);
 
-  return topics.length > 0 ? topics : FALLBACK_CONSENSUS_TOPICS;
+  if (topics.length > 0) return topics;
+
+  const redditFallbacks = buildRedditFallbackTopics(data);
+  return redditFallbacks;
 }
 
 function MetricCard({ label, value, note }: { label: string; value: string; note: string }) {
@@ -302,6 +351,7 @@ export function Dashboard() {
   const actNowCount = consensusTopics.filter((topic) => topic.status === "strong").length;
   const watchCloselyCount = consensusTopics.filter((topic) => topic.status === "watch").length;
   const watchTopics = consensusTopics.slice(0, 8);
+  const topRedditTrend = [...(data.reddit.trendClusters ?? [])].sort((a, b) => b.momentumScore - a.momentumScore)[0];
   const evaluatorData: StoryEvaluatorData = {
     gscFiles: [data.gscSiteA, data.gscSiteB, data.gscCombined],
     ga4Files: [data.ga4SiteA, data.ga4SiteB, data.ga4Combined],
@@ -370,6 +420,22 @@ export function Dashboard() {
                     note="Topics gaining traction across signals that merit monitoring before they move into immediate action."
                   />
                 </div>
+
+                {topRedditTrend ? (
+                  <div className="mt-4 border border-[#99ADC6]/28 bg-[#F7FAFC] px-4 py-4 sm:px-5">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#99ADC6]">Reddit Signal</p>
+                    <p className="mt-2 text-sm leading-6 text-[#4A678F]/82">
+                      <span className="font-semibold text-[#111111]">
+                        {trimHeadline(topRedditTrend.urls?.[0]?.title ?? topRedditTrend.label)}
+                      </span>{" "}
+                      is{" "}
+                      <span className="font-semibold text-[#4A678F]">{formatTrendDirection(topRedditTrend.direction).toLowerCase()}</span>{" "}
+                      on Reddit under <span className="font-semibold text-[#4A678F]">{topRedditTrend.label}</span>, with{" "}
+                      {formatNumber(topRedditTrend.postCount)} posts, {formatNumber(topRedditTrend.totalComments)} comments, and the freshest match
+                      landing within {topRedditTrend.freshnessHours} hours.
+                    </p>
+                  </div>
+                ) : null}
               </>
             ) : (
               <div className="max-w-3xl">
@@ -480,6 +546,19 @@ export function Dashboard() {
                                   <p className="mt-2 text-sm leading-6 text-[#4A678F]/78">{row.context ?? row.timeWindow}</p>
                                 </div>
                               ))}
+                              {topic.redditCluster ? (
+                                <div className="border border-[#99ADC6]/28 bg-[#F7FAFC] px-4 py-3">
+                                  <div className="flex flex-wrap items-center gap-2">
+                                    <SourceBadge source="reddit" />
+                                    <span className="inline-flex border border-[#99ADC6]/28 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#4A678F]">
+                                      {topic.redditCluster.direction}
+                                    </span>
+                                  </div>
+                                  <p className="mt-2 text-sm leading-6 text-[#4A678F]/78">
+                                    Best rank #{topic.redditCluster.bestRank}, {topic.redditCluster.totalScore} combined score, {topic.redditCluster.totalComments} comments, {topic.redditCluster.postCount} grouped URLs inside the last week.
+                                  </p>
+                                </div>
+                              ) : null}
                             </div>
                           ) : (
                             <ul className="mt-3 space-y-2 text-sm leading-6 text-[#4A678F]/78">
@@ -494,7 +573,19 @@ export function Dashboard() {
                           <div className="h-full border border-[#99ADC6]/28 bg-white px-4 py-4">
                             <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#99ADC6]">Stories</p>
                             <div className="mt-3 space-y-2 text-sm">
-                              {topic.rows.length === 0 ? (
+                              {topic.redditCluster?.urls?.length ? (
+                                topic.redditCluster.urls.slice(0, 3).map((story) => (
+                                  <a
+                                    key={story.postId}
+                                    href={story.url || `https://reddit.com${story.permalink}`}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="block font-semibold text-[#4A678F] hover:text-[#CB693A]"
+                                  >
+                                    {story.url || `https://reddit.com${story.permalink}`}
+                                  </a>
+                                ))
+                              ) : topic.rows.length === 0 ? (
                                 <>
                                   <a href="https://example.com/seattle-factory-farming-protest" target="_blank" rel="noreferrer" className="block font-semibold text-[#4A678F] hover:text-[#CB693A]">
                                     https://example.com/seattle-factory-farming-protest

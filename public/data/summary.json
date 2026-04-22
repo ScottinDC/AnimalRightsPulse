@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-04-22T00:04:06.558Z",
+  "generatedAt": "2026-04-22T00:09:27.553Z",
   "summaryCards": [
     {
       "id": "top-signal",
       "title": "Top Signal",
       "metric": "factory farming protest",
-      "change": "Rising at 48.0",
+      "change": "Breakout at 52.0",
       "narrative": "The highest scoring signal blends momentum, novelty, and cross-source confirmation."
     },
     {
@@ -18,14 +18,14 @@
     {
       "id": "internal-search",
       "title": "Internal Demand Gaps",
-      "metric": "4",
+      "metric": "3",
       "change": "GA4 terms with rising on-site demand",
       "narrative": "These terms often point to navigation gaps or missing explainers."
     },
     {
       "id": "watch-list",
       "title": "Watch List",
-      "metric": "1",
+      "metric": "4",
       "change": "New or breakout topics",
       "narrative": "These deserve a faster newsroom review loop than steady demand terms."
     }
@@ -51,32 +51,32 @@
     {
       "id": "monitor",
       "category": "Monitor",
-      "headline": "Track whether puppy mills graduates from social chatter to search demand",
+      "headline": "Track whether Wildlife Conservation graduates from social chatter to search demand",
       "rationale": "Signals with strong Reddit, Google News, or Google Trends movement but lighter site demand may be early indicators rather than immediate assignments.",
       "relatedTerms": [
-        "puppy mills",
-        "animal testing",
-        "puppy mills map"
+        "Wildlife Conservation",
+        "Euthanasia Rescue Alerts",
+        "Cat Rescue & Foster"
       ],
       "sources": [
-        "google-trends",
-        "google-news",
-        "ga4"
+        "reddit",
+        "reddit",
+        "reddit"
       ],
       "priority": 2
     },
     {
       "id": "evergreen",
       "category": "Evergreen update",
-      "headline": "Refresh foundational coverage around animal cruelty ",
+      "headline": "Refresh foundational coverage around Veterinary Rescue Needs ",
       "rationale": "If a term rises in GSC and internal search at the same time, a clearer evergreen explainer or FAQ often pays off faster than net-new reporting.",
       "relatedTerms": [
-        "animal cruelty",
-        "slaughterhouse conditions",
-        "fur ban"
+        "Veterinary Rescue Needs",
+        "Dog Rescue & Adoption",
+        "animal testing"
       ],
       "sources": [
-        "google-trends",
+        "reddit",
         "reddit",
         "google-news"
       ],
@@ -90,8 +90,7 @@
       "relatedTerms": [
         "factory farming protest",
         "state fur bans",
-        "animal testing cosmetics",
-        "puppy mills map"
+        "animal testing cosmetics"
       ],
       "sources": [
         "ga4"

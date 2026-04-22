@@ -91,27 +91,59 @@ async function main() {
     }
   }
 
-  for (const phrase of reddit.repeatedPhrases) {
+  const redditTrendRows = Array.isArray(reddit.trendClusters) && reddit.trendClusters.length > 0
+    ? reddit.trendClusters.map((cluster) => ({
+        term: cluster.label,
+        normalizedTerm: cluster.normalizedTerm,
+        momentumScore: cluster.momentumScore,
+        postCount: cluster.postCount,
+        bestRank: cluster.bestRank,
+        totalScore: cluster.totalScore,
+        totalComments: cluster.totalComments,
+        freshnessHours: cluster.freshnessHours,
+        direction: cluster.direction,
+        trendLabel: cluster.trendLabel,
+        url: cluster.urls?.[0]?.url
+      }))
+    : reddit.repeatedPhrases.map((phrase) => ({
+        term: phrase.phrase,
+        normalizedTerm: phrase.normalizedTerm,
+        momentumScore: phrase.velocityScore,
+        postCount: phrase.count,
+        bestRank: null,
+        totalScore: null,
+        totalComments: null,
+        freshnessHours: null,
+        direction: "rising",
+        trendLabel: null,
+        url: null
+      }));
+
+  for (const row of redditTrendRows) {
     const metrics = {
-      redditVelocity: phrase.velocityScore,
+      redditVelocity: row.momentumScore,
       sourceCount: 1,
-      novelty: phrase.count > 2 ? 1 : 0
+      novelty: row.postCount > 2 || (row.freshnessHours ?? 999) <= 24 ? 1 : 0
     };
     const trendScore = scoreTrend(metrics);
     signals.push({
-      id: buildSignalId("reddit", "global", phrase.normalizedTerm),
-      term: phrase.phrase,
-      normalizedTerm: phrase.normalizedTerm,
+      id: buildSignalId("reddit", "global", row.normalizedTerm),
+      term: row.term,
+      normalizedTerm: row.normalizedTerm,
       source: "reddit",
       site: "global",
       sourceLabel: "Reddit",
       trendScore,
-      trendLabel: classifyTrend(trendScore, metrics),
+      trendLabel: row.trendLabel ?? classifyTrend(trendScore, metrics),
       crossSourceCount: 1,
-      timeWindow: "reddit:24h",
+      timeWindow: "reddit:7d",
       metrics,
-      flags: ["community-topic"],
-      context: `${phrase.count} repeated title matches`
+      flags: ["community-topic", `reddit-${row.direction}`],
+      context:
+        row.bestRank
+          ? `Rank #${row.bestRank}, ${row.postCount} URLs, ${row.totalScore} score, ${row.totalComments} comments, fresh within ${row.freshnessHours}h`
+          : `${row.postCount} repeated title matches`,
+      url: row.url ?? undefined
     });
   }
 

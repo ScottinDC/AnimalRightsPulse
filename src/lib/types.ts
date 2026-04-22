@@ -88,6 +88,8 @@ export interface RedditPostRow {
   url: string;
   author: string;
   flair?: string;
+  subreddit?: string;
+  rank?: number;
   linkedDomain: string;
   velocityScore: number;
 }
@@ -98,6 +100,38 @@ export interface RedditPhraseRow {
   count: number;
   postIds: string[];
   velocityScore: number;
+}
+
+export type RedditTrendDirection = "accelerating" | "rising" | "steady" | "cooling";
+
+export interface RedditTrendClusterLink {
+  postId: string;
+  title: string;
+  url: string;
+  permalink: string;
+  subreddit?: string;
+  score: number;
+  numComments: number;
+  createdUtc: string;
+  rank?: number;
+}
+
+export interface RedditTrendClusterRow {
+  id: string;
+  label: string;
+  normalizedTerm: string;
+  postCount: number;
+  subredditCount: number;
+  avgRank: number;
+  bestRank: number;
+  totalScore: number;
+  totalComments: number;
+  freshnessHours: number;
+  freshnessScore: number;
+  momentumScore: number;
+  direction: RedditTrendDirection;
+  trendLabel: TrendLabel;
+  urls: RedditTrendClusterLink[];
 }
 
 export interface GoogleTrendsSeriesPoint {
@@ -205,6 +239,7 @@ export interface RedditDataFile {
   subreddit: string;
   posts: RedditPostRow[];
   repeatedPhrases: RedditPhraseRow[];
+  trendClusters?: RedditTrendClusterRow[];
   linkedDomains: Array<{ domain: string; count: number }>;
   recurringTopics: Array<{ topic: string; count: number }>;
 }

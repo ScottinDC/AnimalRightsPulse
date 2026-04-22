@@ -13,6 +13,7 @@
     "fetch:reddit": "node scripts/fetch-reddit.mjs",
     "fetch:google-trends": "node scripts/fetch-google-trends.mjs",
     "fetch:google-news": "node scripts/fetch-google-news.mjs",
+    "write:browse-ai-payload": "node scripts/write-browse-ai-payload.mjs",
     "normalize:data": "node scripts/normalize-data.mjs",
     "build:summary": "node scripts/build-summary.mjs",
     "pipeline": "npm run fetch:gsc && npm run fetch:ga4-site-search && npm run fetch:reddit && npm run fetch:google-trends && npm run fetch:google-news && npm run normalize:data && npm run build:summary"

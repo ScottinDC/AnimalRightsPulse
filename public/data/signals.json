@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-22T00:04:06.387Z",
+  "generatedAt": "2026-04-22T00:08:49.921Z",
   "signals": [
     {
       "id": "ga4:site-b:factory farming protest",
@@ -8,15 +8,15 @@
       "source": "ga4",
       "site": "site-b",
       "sourceLabel": "GA4 AWA",
-      "trendScore": 48,
-      "trendLabel": "rising",
-      "crossSourceCount": 1,
+      "trendScore": 52,
+      "trendLabel": "breakout",
+      "crossSourceCount": 2,
       "timeWindow": "current:2026-03-31:2026-04-06|previous:2026-03-24:2026-03-30",
       "metrics": {
         "searches": 200,
         "repeatRate": 250,
         "novelty": 0,
-        "sourceCount": 1
+        "sourceCount": 2
       },
       "flags": [
         "new",
@@ -31,15 +31,15 @@
       "source": "ga4",
       "site": "site-a",
       "sourceLabel": "GA4 CHE",
-      "trendScore": 31.151999999999997,
-      "trendLabel": "rising",
-      "crossSourceCount": 1,
+      "trendScore": 35.152,
+      "trendLabel": "breakout",
+      "crossSourceCount": 2,
       "timeWindow": "current:2026-03-31:2026-04-06|previous:2026-03-24:2026-03-30",
       "metrics": {
         "searches": 134.6,
         "repeatRate": 137.5,
         "novelty": 0,
-        "sourceCount": 1
+        "sourceCount": 2
       },
       "flags": [
         "breakout",
@@ -54,15 +54,15 @@
       "source": "ga4",
       "site": "site-a",
       "sourceLabel": "GA4 CHE",
-      "trendScore": 30.336,
-      "trendLabel": "rising",
-      "crossSourceCount": 1,
+      "trendScore": 34.336,
+      "trendLabel": "breakout",
+      "crossSourceCount": 2,
       "timeWindow": "current:2026-03-31:2026-04-06|previous:2026-03-24:2026-03-30",
       "metrics": {
         "searches": 112.8,
         "repeatRate": 160,
         "novelty": 0,
-        "sourceCount": 1
+        "sourceCount": 2
       },
       "flags": [
         "breakout",
@@ -71,25 +71,142 @@
       "context": "Internal site search"
     },
     {
-      "id": "google-trends:global:puppy mills",
-      "term": "puppy mills",
-      "normalizedTerm": "puppy mills",
-      "source": "google-trends",
-      "site": "global",
-      "sourceLabel": "Google Trends",
-      "trendScore": 23,
+      "id": "ga4:site-b:puppy mills map",
+      "term": "puppy mills map",
+      "normalizedTerm": "puppy mills map",
+      "source": "ga4",
+      "site": "site-b",
+      "sourceLabel": "GA4 AWA",
+      "trendScore": 23.356,
       "trendLabel": "rising",
       "crossSourceCount": 2,
-      "timeWindow": "today 1-m",
+      "timeWindow": "current:2026-03-31:2026-04-06|previous:2026-03-24:2026-03-30",
       "metrics": {
-        "googleTrendsVelocity": 100,
-        "sourceCount": 2,
+        "searches": 90.9,
+        "repeatRate": 55.6,
+        "novelty": 0,
+        "sourceCount": 2
+      },
+      "flags": [
+        "rising",
+        "internal-demand"
+      ],
+      "context": "Internal site search"
+    },
+    {
+      "id": "reddit:global:wildlife conservation",
+      "term": "Wildlife Conservation",
+      "normalizedTerm": "wildlife conservation",
+      "source": "reddit",
+      "site": "global",
+      "sourceLabel": "Reddit",
+      "trendScore": 22,
+      "trendLabel": "rising",
+      "crossSourceCount": 1,
+      "timeWindow": "reddit:7d",
+      "metrics": {
+        "redditVelocity": 100,
+        "sourceCount": 1,
         "novelty": 1
       },
       "flags": [
-        "breakout"
+        "community-topic",
+        "reddit-accelerating"
       ],
-      "context": "US"
+      "context": "Rank #2, 6 URLs, 3206 score, 132 comments, fresh within 1h",
+      "url": "https://www.hcn.org/articles/interior-department-crafted-talking-points-for-public-lands-sell-off-agenda/"
+    },
+    {
+      "id": "reddit:global:euthanasia rescue alerts",
+      "term": "Euthanasia Rescue Alerts",
+      "normalizedTerm": "euthanasia rescue alerts",
+      "source": "reddit",
+      "site": "global",
+      "sourceLabel": "Reddit",
+      "trendScore": 22,
+      "trendLabel": "rising",
+      "crossSourceCount": 1,
+      "timeWindow": "reddit:7d",
+      "metrics": {
+        "redditVelocity": 100,
+        "sourceCount": 1,
+        "novelty": 1
+      },
+      "flags": [
+        "community-topic",
+        "reddit-accelerating"
+      ],
+      "context": "Rank #3, 7 URLs, 3353 score, 498 comments, fresh within 1h",
+      "url": "https://v.redd.it/iyr5qmjkvevg1"
+    },
+    {
+      "id": "reddit:global:cat rescue foster",
+      "term": "Cat Rescue & Foster",
+      "normalizedTerm": "cat rescue foster",
+      "source": "reddit",
+      "site": "global",
+      "sourceLabel": "Reddit",
+      "trendScore": 22,
+      "trendLabel": "rising",
+      "crossSourceCount": 1,
+      "timeWindow": "reddit:7d",
+      "metrics": {
+        "redditVelocity": 100,
+        "sourceCount": 1,
+        "novelty": 1
+      },
+      "flags": [
+        "community-topic",
+        "reddit-accelerating"
+      ],
+      "context": "Rank #4, 14 URLs, 6119 score, 741 comments, fresh within 1h",
+      "url": "https://www.reddit.com/gallery/1sma4q2"
+    },
+    {
+      "id": "reddit:global:veterinary rescue needs",
+      "term": "Veterinary Rescue Needs",
+      "normalizedTerm": "veterinary rescue needs",
+      "source": "reddit",
+      "site": "global",
+      "sourceLabel": "Reddit",
+      "trendScore": 22,
+      "trendLabel": "rising",
+      "crossSourceCount": 1,
+      "timeWindow": "reddit:7d",
+      "metrics": {
+        "redditVelocity": 100,
+        "sourceCount": 1,
+        "novelty": 1
+      },
+      "flags": [
+        "community-topic",
+        "reddit-accelerating"
+      ],
+      "context": "Rank #5, 11 URLs, 5519 score, 642 comments, fresh within 1h",
+      "url": "https://www.reddit.com/gallery/1so6br3"
+    },
+    {
+      "id": "reddit:global:dog rescue adoption",
+      "term": "Dog Rescue & Adoption",
+      "normalizedTerm": "dog rescue adoption",
+      "source": "reddit",
+      "site": "global",
+      "sourceLabel": "Reddit",
+      "trendScore": 22,
+      "trendLabel": "rising",
+      "crossSourceCount": 1,
+      "timeWindow": "reddit:7d",
+      "metrics": {
+        "redditVelocity": 100,
+        "sourceCount": 1,
+        "novelty": 1
+      },
+      "flags": [
+        "community-topic",
+        "reddit-accelerating"
+      ],
+      "context": "Rank #13, 10 URLs, 4682 score, 508 comments, fresh within 1h",
+      "url": "https://v.redd.it/foiebnzu2ovg1"
     },
     {
       "id": "google-news:global:animal testing",
@@ -113,29 +230,6 @@
       "context": "18 coverage units"
     },
     {
-      "id": "ga4:site-b:puppy mills map",
-      "term": "puppy mills map",
-      "normalizedTerm": "puppy mills map",
-      "source": "ga4",
-      "site": "site-b",
-      "sourceLabel": "GA4 AWA",
-      "trendScore": 19.356,
-      "trendLabel": "rising",
-      "crossSourceCount": 1,
-      "timeWindow": "current:2026-03-31:2026-04-06|previous:2026-03-24:2026-03-30",
-      "metrics": {
-        "searches": 90.9,
-        "repeatRate": 55.6,
-        "novelty": 0,
-        "sourceCount": 1
-      },
-      "flags": [
-        "rising",
-        "internal-demand"
-      ],
-      "context": "Internal site search"
-    },
-    {
       "id": "google-trends:global:animal cruelty",
       "term": "animal cruelty",
       "normalizedTerm": "animal cruelty",
@@ -157,25 +251,25 @@
       "context": "US"
     },
     {
-      "id": "reddit:global:slaughterhouse conditions",
-      "term": "slaughterhouse conditions",
-      "normalizedTerm": "slaughterhouse conditions",
-      "source": "reddit",
+      "id": "google-trends:global:puppy mills",
+      "term": "puppy mills",
+      "normalizedTerm": "puppy mills",
+      "source": "google-trends",
       "site": "global",
-      "sourceLabel": "Reddit",
-      "trendScore": 16.962,
-      "trendLabel": "steady",
+      "sourceLabel": "Google Trends",
+      "trendScore": 19,
+      "trendLabel": "rising",
       "crossSourceCount": 1,
-      "timeWindow": "reddit:24h",
+      "timeWindow": "today 1-m",
       "metrics": {
-        "redditVelocity": 54.2,
+        "googleTrendsVelocity": 100,
         "sourceCount": 1,
         "novelty": 1
       },
       "flags": [
-        "community-topic"
+        "breakout"
       ],
-      "context": "3 repeated title matches"
+      "context": "US"
     },
     {
       "id": "google-news:global:fur ban",
@@ -199,61 +293,19 @@
       "context": "12 coverage units"
     },
     {
-      "id": "reddit:global:puppy mills",
-      "term": "puppy mills",
-      "normalizedTerm": "puppy mills",
-      "source": "reddit",
-      "site": "global",
-      "sourceLabel": "Reddit",
-      "trendScore": 12.818,
-      "trendLabel": "steady",
-      "crossSourceCount": 2,
-      "timeWindow": "reddit:24h",
-      "metrics": {
-        "redditVelocity": 43.8,
-        "sourceCount": 2,
-        "novelty": 0
-      },
-      "flags": [
-        "community-topic"
-      ],
-      "context": "2 repeated title matches"
-    },
-    {
-      "id": "reddit:global:factory farming",
-      "term": "factory farming",
-      "normalizedTerm": "factory farming",
-      "source": "reddit",
-      "site": "global",
-      "sourceLabel": "Reddit",
-      "trendScore": 12.367,
-      "trendLabel": "steady",
-      "crossSourceCount": 2,
-      "timeWindow": "reddit:24h",
-      "metrics": {
-        "redditVelocity": 39.7,
-        "sourceCount": 2,
-        "novelty": 0
-      },
-      "flags": [
-        "community-topic"
-      ],
-      "context": "2 repeated title matches"
-    },
-    {
       "id": "google-trends:global:factory farming",
       "term": "factory farming",
       "normalizedTerm": "factory farming",
       "source": "google-trends",
       "site": "global",
       "sourceLabel": "Google Trends",
-      "trendScore": 11.904,
+      "trendScore": 7.904,
       "trendLabel": "steady",
-      "crossSourceCount": 2,
+      "crossSourceCount": 1,
       "timeWindow": "today 1-m",
       "metrics": {
         "googleTrendsVelocity": 48.8,
-        "sourceCount": 2,
+        "sourceCount": 1,
         "novelty": 0
       },
       "flags": [

@@ -52,6 +52,75 @@ Each script writes deterministic JSON into [`/public/data`](/Users/scottstadum/D
 - [`scripts/normalize-data.mjs`](/Users/scottstadum/Desktop/Projects/Apps/Animal%20Rights%20Pulse/scripts/normalize-data.mjs)
 - [`scripts/build-summary.mjs`](/Users/scottstadum/Desktop/Projects/Apps/Animal%20Rights%20Pulse/scripts/build-summary.mjs)
 
+## Browse.ai hosted flow
+
+Recommended production path:
+
+`Browse.ai -> Make.com or Zapier -> GitHub repository_dispatch -> GitHub Action -> updated JSON -> GitHub Pages`
+
+This avoids hosting a server on your computer.
+
+### GitHub Action trigger
+
+The trend refresh workflow now accepts:
+
+- scheduled runs
+- manual `workflow_dispatch`
+- `repository_dispatch` with type `browse_ai_reddit`
+
+The Action writes the incoming Browse.ai payload to [`public/data/browse-ai-reddit.json`](/Users/scottstadum/Desktop/Projects/Apps/AWE%20CHE%20/Animal%20Rights%20Pulse/public/data/browse-ai-reddit.json), rebuilds [`public/data/reddit.json`](/Users/scottstadum/Desktop/Projects/Apps/AWE%20CHE%20/Animal%20Rights%20Pulse/public/data/reddit.json), then regenerates [`public/data/signals.json`](/Users/scottstadum/Desktop/Projects/Apps/AWE%20CHE%20/Animal%20Rights%20Pulse/public/data/signals.json) and [`public/data/summary.json`](/Users/scottstadum/Desktop/Projects/Apps/AWE%20CHE%20/Animal%20Rights%20Pulse/public/data/summary.json).
+
+### Make.com or Zapier request
+
+Send a `POST` request to:
+
+`https://api.github.com/repos/ScottinDC/AnimalRightsPulse/dispatches`
+
+Headers:
+
+- `Accept: application/vnd.github+json`
+- `Authorization: Bearer YOUR_GITHUB_TOKEN`
+- `X-GitHub-Api-Version: 2022-11-28`
+
+Body:
+
+```json
+{
+  "event_type": "browse_ai_reddit",
+  "client_payload": {
+    "browse_ai_payload": {
+      "items": [
+        {
+          "title": "Seattle factory farming protest draws larger crowd after footage release",
+          "url": "https://example.org/seattle-factory-farming-protest",
+          "permalink": "/r/AnimalRights/comments/rr1",
+          "subreddit": "AnimalRights",
+          "rank": 1,
+          "score": 328,
+          "numComments": 74,
+          "createdUtc": "2026-04-20T18:10:00.000Z"
+        }
+      ]
+    }
+  }
+}
+```
+
+Expected row fields from Browse.ai:
+
+- `title`
+- `url`
+- `permalink`
+- `subreddit`
+- `rank`
+- `score`
+- `numComments`
+- `createdUtc`
+
+### Manual fallback
+
+You can also trigger the workflow manually in GitHub Actions and paste the payload into the `browse_ai_payload` input.
+
 ## GitHub Actions
 
 [`/.github/workflows/update-trends.yml`](/Users/scottstadum/Desktop/Projects/Apps/Animal%20Rights%20Pulse/.github/workflows/update-trends.yml) runs on `workflow_dispatch` plus a recurring cron. It:

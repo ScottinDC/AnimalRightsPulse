@@ -1,13 +1,15 @@
 import path from "node:path";
 import { DATA_DIR, safeReadJson, safeWriteJson } from "./lib.mjs";
 
+const EXCLUDED_TERMS = new Set(["puppy mills", "puppy mills map"]);
+
 function makeStoryIdea(id, category, headline, rationale, relatedTerms, sources, priority) {
   return { id, category, headline, rationale, relatedTerms, sources, priority };
 }
 
 async function main() {
   const signalsFile = await safeReadJson(path.join(DATA_DIR, "signals.json"));
-  const topSignals = signalsFile.signals.slice(0, 20);
+  const topSignals = signalsFile.signals.filter((signal) => !EXCLUDED_TERMS.has(String(signal.normalizedTerm ?? "").toLowerCase())).slice(0, 20);
   const cards = [
     {
       id: "top-signal",

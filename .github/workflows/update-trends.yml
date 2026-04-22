@@ -2,6 +2,14 @@ name: Update Trends
 
 on:
   workflow_dispatch:
+    inputs:
+      browse_ai_payload:
+        description: "Optional Browse.ai Reddit payload JSON"
+        required: false
+        type: string
+  repository_dispatch:
+    types:
+      - browse_ai_reddit
   schedule:
     - cron: "0 */3 * * *"
 
@@ -24,6 +32,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Write Browse.ai payload
+        if: ${{ github.event_name == 'repository_dispatch' || inputs.browse_ai_payload != '' }}
+        env:
+          BROWSE_AI_PAYLOAD: ${{ github.event_name == 'repository_dispatch' && toJson(github.event.client_payload) || inputs.browse_ai_payload }}
+        run: npm run write:browse-ai-payload
+
       - name: Fetch Search Console data
         env:
           GSC_CLIENT_ID: ${{ secrets.GSC_CLIENT_ID }}
@@ -44,6 +58,7 @@ jobs:
       - name: Fetch Reddit data
         env:
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          BROWSE_AI_REDDIT_FILE: ${{ (github.event_name == 'repository_dispatch' || inputs.browse_ai_payload != '') && 'public/data/browse-ai-reddit.json' || '' }}
         run: npm run fetch:reddit
 
       - name: Fetch Google Trends
