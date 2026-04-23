@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-04-22T21:43:52.245Z",
+  "generatedAt": "2026-04-23T01:58:02.076Z",
   "site": "site-b",
   "window": {
-    "currentStart": "2026-04-15",
-    "currentEnd": "2026-04-21",
-    "previousStart": "2026-04-08",
-    "previousEnd": "2026-04-14"
+    "currentStart": "2026-04-16",
+    "currentEnd": "2026-04-22",
+    "previousStart": "2026-04-09",
+    "previousEnd": "2026-04-15"
   },
   "queries": [],
   "pages": []
